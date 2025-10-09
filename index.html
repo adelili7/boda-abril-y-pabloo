@@ -1,98 +1,102 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Invitación de Boda Abril & Pablo</title>
+<title>Invitación de Boda - Abril y Pablo</title>
 
-<!-- Fuentes -->
+<!-- Fuentes románticas -->
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Great+Vibes&family=Playfair+Display&display=swap" rel="stylesheet">
 
-<!-- Swiper.js -->
+<!-- Swiper.js para galería -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"/>
 
 <!-- Lightbox -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/css/lightbox.min.css"/>
+<link href="https://cdn.jsdelivr.net/npm/simplelightbox@2.14.1/dist/simple-lightbox.min.css" rel="stylesheet">
 
-<!-- Turn.js -->
+<!-- Turn.js para flip book -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.js"></script>
 
 <style>
   *{margin:0;padding:0;box-sizing:border-box;}
-  body{font-family:'Playfair Display', serif;background:#f5f5f5;overflow-x:hidden;cursor:none;}
+  body{
+    font-family:'Playfair Display', serif;
+    background:#f5f5f5;
+    overflow-x:hidden;
+    color:#333;
+  }
   h1,h2,h3,h4,h5,h6{font-family:'Great Vibes', cursive;}
   h2.subtitle{font-family:'Dancing Script', cursive;}
-  p, input, textarea{font-family:'Playfair Display', serif;}
+  p{text-align:center; line-height:1.6;}
 
-  /* Cursor mágico */
-  #magic-cursor{
-    width:15px; height:15px; border-radius:50%; position:fixed; pointer-events:none;
-    background: radial-gradient(circle, #00f6ff, #0044ff); z-index:9999;
-    box-shadow:0 0 15px #00f6ff,0 0 30px #00f6ff,0 0 50px #00f6ff;
-    transition: transform 0.1s ease-out;
-  }
-
-  /* Portada */
+  /* Fondos */
   #cover{
-    width:100vw;height:100vh;
+    width:100vw; height:100vh;
     background:url('fondo_floral1.jpg') center/cover no-repeat;
     display:flex; flex-direction:column; justify-content:center; align-items:center;
     position:relative; overflow:hidden;
   }
-
-  #ring{
-    width:160px;height:160px;
-    border-radius:50%;
-    background: radial-gradient(circle at top left, #e0e0e0, #a0a0a0);
-    position:relative;
-    cursor:pointer;
-    animation: spin 5s linear infinite;
-    box-shadow:0 0 30px rgba(255,255,255,0.6), inset 0 0 10px #fff;
-    display:flex; justify-content:center; align-items:flex-start;
+  #book{width:90%; max-width:900px; margin:50px auto; display:none; background:url('fondo_floral2.jpg') center/cover no-repeat; border-radius:15px;}
+  .page{
+    width:100%; height:80vh; background:rgba(255,255,255,0.85); border-radius:10px;
+    padding:20px; box-shadow:0 10px 30px rgba(0,0,0,0.2);
+    position:relative; display:flex; flex-direction:column; justify-content:center;
   }
 
-  #diamond{
-    width:40px; height:40px;
-    background: radial-gradient(circle at top, #00f6ff, #0044ff);
+  /* Portada */
+  #ring{
+    width:180px; height:180px;
     border-radius:50%;
-    margin-top:10px;
-    box-shadow:0 0 15px #00f6ff,0 0 30px #00f6ff,0 0 50px #00f6ff;
+    background: radial-gradient(circle at top left, #d9d9d9, #999);
+    position:relative;
+    cursor:pointer;
+    animation: ringSpin 6s linear infinite;
+    box-shadow:0 0 20px rgba(255,255,255,0.8);
+  }
+  #ring::after{
+    content:'';
+    position:absolute;
+    top:20px; left:50%; transform:translateX(-50%);
+    width:50px; height:50px;
+    background: radial-gradient(circle, #0af, #06f);
+    border-radius:50%;
+    box-shadow:0 0 15px #0af,0 0 25px #0af,0 0 35px #0af;
     animation: sparkle 1.5s infinite alternate;
   }
 
-  @keyframes spin{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
-  @keyframes sparkle{from{opacity:0.7; transform:scale(1);}to{opacity:1; transform:scale(1.3);}}
-
-  #yes-text{margin-top:20px;font-size:2rem;color:#ff1493;text-shadow:2px 2px 8px rgba(255,255,255,0.7);}
-  #countdown{margin-top:15px;font-size:2rem;color:#fff;text-shadow:0 0 10px #00aaff,0 0 20px #00aaff;}
-
-  /* Flip book */
-  #book{width:90%;max-width:900px;margin:50px auto; display:none;}
-  .page{
-    width:100%; height:80vh; background:url('fondo_floral3.jpg') center/cover no-repeat; border-radius:10px;
-    padding:20px; box-shadow:0 10px 30px rgba(0,0,0,0.2);
-    position:relative;
+  @keyframes ringSpin{
+    from{transform:rotate(0deg);} to{transform:rotate(360deg);}
+  }
+  @keyframes sparkle{
+    from{opacity:0.7; transform:scale(1);}
+    to{opacity:1; transform:scale(1.3);}
   }
 
-  /* Padres y novios */
-  .parents-container{display:flex; justify-content:space-between; margin-top:50px;}
-  .parent{width:45%; text-align:center;}
-  .bible-verse{font-family:'Great Vibes',cursive;font-size:1.8rem;color:#ff1493;text-align:center;margin:20px 0;text-shadow:2px 2px 8px rgba(0,0,0,0.3);}
-  .novios{font-size:2rem;text-align:center;color:#0044ff;text-shadow:2px 2px 10px rgba(0,0,0,0.3);margin:20px 0;}
+  #accept-text{
+    margin-top:20px; font-size:2.5rem; color:#fff;
+    text-shadow:2px 2px 10px rgba(0,0,0,0.5);
+    font-family:'Great Vibes', cursive;
+  }
 
-  /* Itinerario SVG */
-  .itinerary{display:flex; justify-content:space-around; margin:20px 0;}
+  /* Contador */
+  #countdown{
+    font-size:2rem; text-align:center; margin:20px 0;
+    color:#fff; text-shadow:0 0 10px #00aaff, 0 0 20px #00aaff;
+  }
+
+  /* Itinerario */
+  .itinerary{display:flex; justify-content:space-around; margin:20px 0; flex-wrap:wrap;}
   .itinerary div{text-align:center;}
-  .itinerary svg{width:60px;height:60px; margin-bottom:5px; fill:#0044ff;}
+  .itinerary svg{width:80px; height:80px; margin-bottom:10px;}
 
-  /* Swiper */
+  /* Galería Swiper */
   .swiper{width:100%; height:300px; margin:20px 0;}
   .swiper-slide img{width:100%; height:100%; object-fit:cover; border-radius:10px; cursor:pointer;}
 
   /* RSVP */
   form{display:flex; flex-direction:column; gap:10px; margin:20px 0;}
-  input, textarea{padding:10px; border-radius:5px; border:1px solid #ccc;}
-  button{padding:10px; background:#00aaff; color:#fff; border:none; border-radius:5px; cursor:pointer;}
+  input, textarea{padding:10px; border-radius:5px; border:1px solid #ccc; font-family:'Playfair Display', serif;}
+  button{padding:10px; background:#00aaff; color:#fff; border:none; border-radius:5px; cursor:pointer; font-weight:bold;}
 
   /* WhatsApp */
   .whatsapp{position:fixed; bottom:20px; right:20px; display:flex; flex-direction:column; gap:10px;}
@@ -100,86 +104,100 @@
     display:flex; align-items:center; gap:10px; background:#25D366; color:#fff;
     padding:10px 15px; border-radius:50px; text-decoration:none; font-weight:bold;
   }
+
+  /* Frase romántica final */
+  #final-message{font-family:'Great Vibes', cursive; font-size:2rem; text-align:center; margin:30px 0; color:#333;}
+
+  /* Partículas mágicas */
+  #particles-js{position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0;}
 </style>
 </head>
 <body>
 
-<div id="magic-cursor"></div>
-
 <!-- Portada -->
 <div id="cover">
   <div id="particles-js"></div>
-  <div id="ring"><div id="diamond"></div></div>
-  <div id="yes-text">¡Sí acepto!</div>
+  <div id="ring"></div>
+  <div id="accept-text">¡Sí acepto!</div>
   <div id="countdown"></div>
 </div>
 
 <!-- Flip Book -->
 <div id="book">
-  <!-- Sección Padres y Novios -->
+  <!-- Página Padres y Novios -->
   <div class="page">
-    <div class="bible-verse">Quien halla esposa halla el bien, y alcanza la benevolencia de Jehová – Proverbios 18:22</div>
-    <div class="parents-container">
-      <div class="parent">
+    <h2 style="text-align:center; font-family:'Dancing Script', cursive;">Quien halla esposa halla el bien, y alcanza la benevolencia de Jehová – Proverbios 18:22</h2>
+    <div style="display:flex; justify-content:space-between; margin-top:40px; font-size:1.3rem;">
+      <div>
         <h2 class="subtitle">Padres de la Novia</h2>
         <p>Eva Aguilar Rendón<br>Pedro Pérez Hernández</p>
       </div>
-      <div class="parent">
+      <div>
         <h2 class="subtitle">Padres del Novio</h2>
         <p>Saray Hernández Santana<br>Pablo Tinoco Carranza ✝</p>
       </div>
     </div>
-    <div class="novios">Abril Pérez Aguilar & Pablo Eliel Tinoco Hernández</div>
-    <p class="bible-verse">“Tienen el honor de compartir la dicha que enlaza a sus amados hijos.”</p>
+    <h1 style="text-align:center; margin-top:30px; font-family:'Great Vibes', cursive; font-size:2rem;">Abril Pérez Aguilar & Pablo Eliel Tinoco Hernández</h1>
+    <p style="margin-top:20px; font-size:1.3rem; font-family:'Dancing Script', cursive;">Tienen el honor de compartir la dicha que enlaza a sus amados hijos.</p>
   </div>
 
-  <!-- Fecha y contador -->
+  <!-- Página Fecha y Contador -->
   <div class="page">
-    <h1 style="text-align:center;color:#0044ff;">28 de diciembre de 2025</h1>
-    <div id="countdown-book" style="font-size:2rem;text-align:center;color:#00aaff;text-shadow:0 0 10px #00aaff,0 0 20px #00aaff;"></div>
+    <h1 style="text-align:center; font-family:'Great Vibes', cursive;">28 de diciembre de 2025</h1>
+    <div id="countdown-book" style="font-size:2rem; text-align:center; margin-top:20px; color:#333;"></div>
   </div>
 
-  <!-- Itinerario -->
+  <!-- Página Itinerario -->
   <div class="page">
-    <h2 class="subtitle">Itinerario</h2>
+    <h2 class="subtitle" style="text-align:center;">Itinerario</h2>
     <div class="itinerary">
+      <!-- Preparativos -->
       <div>
-        <!-- SVG Ramo -->
-        <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="20"/></svg>
+        <svg viewBox="0 0 64 64">
+          <circle cx="32" cy="32" r="30" fill="#d1c4e9"/>
+          <path d="M20 32c0 6 24 6 24 0" stroke="#fff" stroke-width="2"/>
+        </svg>
         <p>Preparativos</p>
       </div>
+      <!-- Ceremonia Religiosa -->
       <div>
-        <!-- SVG Iglesia -->
-        <svg viewBox="0 0 64 64"><rect x="20" y="20" width="24" height="24"/></svg>
-        <p><a href="https://maps.app.goo.gl/V6iKXzWRPjJbE4ESA" target="_blank">Ceremonia Religiosa 2pm</a></p>
+        <svg viewBox="0 0 64 64">
+          <rect x="20" y="20" width="24" height="24" fill="#90caf9"/>
+          <polygon points="32,8 16,20 48,20" fill="#42a5f5"/>
+        </svg>
+        <p>Ceremonia Religiosa<br>Palabra de Vida 2pm<br><a href="https://maps.app.goo.gl/V6iKXzWRPjJbE4ESA" target="_blank">Ver mapa</a></p>
       </div>
+      <!-- Recepción -->
       <div>
-        <!-- SVG Copas -->
-        <svg viewBox="0 0 64 64"><path d="M20 20 L44 20 L32 44 Z"/></svg>
-        <p><a href="https://maps.app.goo.gl/Anv4gGfQzcGtykZh8" target="_blank">Recepción 4pm</a></p>
+        <svg viewBox="0 0 64 64">
+          <line x1="20" y1="40" x2="44" y2="40" stroke="#f48fb1" stroke-width="4"/>
+          <circle cx="24" cy="32" r="4" fill="#f48fb1"/>
+          <circle cx="40" cy="32" r="4" fill="#f48fb1"/>
+        </svg>
+        <p>Recepción<br>Jardín El Abuelo 4pm<br><a href="https://maps.app.goo.gl/Anv4gGfQzcGtykZh8" target="_blank">Ver mapa</a></p>
       </div>
     </div>
   </div>
 
-  <!-- Galería -->
+  <!-- Página Galería -->
   <div class="page">
-    <h2 class="subtitle">Mejores momentos de los novios</h2>
+    <h2 class="subtitle" style="text-align:center;">Mejores momentos de los novios</h2>
+    <p style="text-align:center; margin-bottom:10px;">Tu amor es lo que he anhelado y el regalo que Dios me ha dado</p>
     <div class="swiper">
       <div class="swiper-wrapper">
-        <div class="swiper-slide"><a href="momento1.jpg" data-lightbox="gallery"><img src="momento1.jpg" alt=""></a></div>
-        <div class="swiper-slide"><a href="momento2.jpg" data-lightbox="gallery"><img src="momento2.jpg" alt=""></a></div>
-        <div class="swiper-slide"><a href="momento3.jpg" data-lightbox="gallery"><img src="momento3.jpg" alt=""></a></div>
-        <div class="swiper-slide"><a href="momento4.jpg" data-lightbox="gallery"><img src="momento4.jpg" alt=""></a></div>
-        <div class="swiper-slide"><a href="momento5.jpg" data-lightbox="gallery"><img src="momento5.jpg" alt=""></a></div>
+        <div class="swiper-slide"><a href="momento1.jpg"><img src="momento1.jpg" alt=""></a></div>
+        <div class="swiper-slide"><a href="momento2.jpg"><img src="momento2.jpg" alt=""></a></div>
+        <div class="swiper-slide"><a href="momento3.jpg"><img src="momento3.jpg" alt=""></a></div>
+        <div class="swiper-slide"><a href="momento4.jpg"><img src="momento4.jpg" alt=""></a></div>
+        <div class="swiper-slide"><a href="momento5.jpg"><img src="momento5.jpg" alt=""></a></div>
       </div>
       <div class="swiper-pagination"></div>
     </div>
-    <p style="text-align:center; margin-top:10px;">“Tu amor es lo que he anhelado y el regalo que Dios me ha dado”</p>
   </div>
 
-  <!-- RSVP -->
+  <!-- Página RSVP -->
   <div class="page">
-    <h2 class="subtitle">Confirmar asistencia</h2>
+    <h2 class="subtitle" style="text-align:center;">Confirmación de asistencia</h2>
     <form id="rsvp-form">
       <input type="text" placeholder="Tu nombre" required>
       <input type="number" placeholder="Número de personas" required>
@@ -188,22 +206,23 @@
     </form>
   </div>
 
-  <!-- Paleta de colores -->
+  <!-- Página Paleta de colores -->
   <div class="page">
-    <h2 class="subtitle">Paleta de colores recomendada</h2>
-    <p>Azul, Celeste, Gris, Verde, Beige, Plateado o Rosa. Dejemos el blanco para la novia.</p>
+    <h2 class="subtitle" style="text-align:center;">Paleta de colores recomendada</h2>
+    <p style="text-align:center;">Te recomendamos la siguiente paleta de colores; dejemos el blanco para la novia</p>
+    <div style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-top:10px;">
+      <div style="width:40px; height:40px; background:#1e88e5; border-radius:50%;"></div>
+      <div style="width:40px; height:40px; background:#81d4fa; border-radius:50%;"></div>
+      <div style="width:40px; height:40px; background:#90a4ae; border-radius:50%;"></div>
+      <div style="width:40px; height:40px; background:#43a047; border-radius:50%;"></div>
+      <div style="width:40px; height:40px; background:#c0c0c0; border-radius:50%;"></div>
+      <div style="width:40px; height:40px; background:#f48fb1; border-radius:50%;"></div>
+    </div>
   </div>
 
-  <!-- Mensajes -->
+  <!-- Página Frase Final -->
   <div class="page">
-    <h2 class="subtitle">Mensajes y buenos deseos</h2>
-    <textarea placeholder="Escribe tu mensaje..." rows="6" style="width:100%;border-radius:5px;"></textarea>
-  </div>
-
-  <!-- Frase final romántica -->
-  <div class="page">
-    <h1 style="text-align:center;">Con amor eterno</h1>
-    <h2 style="text-align:center;color:#ff1493;">Abril & Pablo</h2>
+    <h2 id="final-message">Con amor eterno, Abril y Pablo</h2>
   </div>
 </div>
 
@@ -213,83 +232,81 @@
   <a href="https://wa.me/5217341123645" target="_blank">Pablo</a>
 </div>
 
+<!-- Música -->
+<audio id="marcha" src="marcha_nupcial.mp3" loop autoplay></audio>
+<audio id="eternamente" src="eternamente.mp3" loop></audio>
+
 <!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simplelightbox@2.14.1/dist/simple-lightbox.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.4/js/lightbox.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
 <script>
-  // Cursor mágico
-  const magicCursor = document.getElementById('magic-cursor');
-  document.addEventListener('mousemove', e=>{
-    magicCursor.style.transform = `translate(${e.clientX-7.5}px, ${e.clientY-7.5}px)`;
-  });
-
-  // Partículas
+  // Partículas mágicas
   particlesJS('particles-js',{
-    particles:{number:{value:50},color:{value:"#fff"},shape:{type:"circle"},opacity:{value:0.7},size:{value:3},move:{enable:true,speed:2}}
+    particles:{
+      number:{value:50, density:{enable:true,value_area:800}},
+      color:{value:["#0af","#c0c0c0","#f48fb1","#fff"]},
+      shape:{type:"circle"},
+      opacity:{value:0.8, random:true},
+      size:{value:4, random:true},
+      move:{enable:true, speed:2, direction:"none", out_mode:"out"}
+    },
+    interactivity:{
+      detect_on:"canvas",
+      events:{onhover:{enable:true, mode:"repulse"}, onclick:{enable:true, mode:"push"}}
+    }
   });
 
-  // Música
-  const ringMusic = new Audio('marcha_nupcial.mp3'); ringMusic.loop=true;
-  const bgMusic = new Audio('eternamente.mp3'); bgMusic.loop=true;
-  window.addEventListener('load',()=>{ringMusic.play().catch(()=>{});});
-
-  // Partículas al pasar sobre el anillo
-  const ring = document.getElementById('ring');
-  ring.addEventListener('mousemove', (e)=>{
-    const particle = document.createElement('div');
-    particle.style.width='6px'; particle.style.height='6px';
-    particle.style.position='fixed'; particle.style.borderRadius='50%';
-    particle.style.background='#00f6ff'; particle.style.left=`${e.clientX}px`;
-    particle.style.top=`${e.clientY}px`; particle.style.zIndex=9999;
-    particle.style.opacity=1;
-    document.body.appendChild(particle);
-    let x=0,y=0;
-    const interval=setInterval(()=>{
-      y-=1.5; x+=(Math.random()-0.5)*2;
-      particle.style.transform=`translate(${x}px,${y}px)`;
-      particle.style.opacity-=0.05;
-      if(particle.style.opacity<=0){particle.remove(); clearInterval(interval);}
-    },16);
-  });
-
-  // Click en anillo
+  // Portada y anillo
   const cover = document.getElementById('cover');
   const book = document.getElementById('book');
+  const ring = document.getElementById('ring');
+  const marcha = document.getElementById('marcha');
+  const eternamente = document.getElementById('eternamente');
+
   ring.addEventListener('click', ()=>{
     cover.style.display='none';
     book.style.display='block';
-    ringMusic.pause(); ringMusic.currentTime=0;
-    bgMusic.play();
-    $('#book').turn({width:900,height:600,autoCenter:true});
+    marcha.pause();
+    eternamente.play();
+    $('#book').turn({width:900, height:600, autoCenter:true});
   });
 
   // Contador portada
   const countdown = document.getElementById('countdown');
-  // Contador flip book
-  const countdownBook = document.getElementById('countdown-book');
   const weddingDate = new Date("2025-12-28T00:00:00");
   function updateCountdown(){
     const now = new Date();
     const diff = weddingDate - now;
-    if(diff<0){countdown.innerHTML="¡Es el día!"; countdownBook.innerHTML="¡Es el día!"; return;}
+    if(diff<0){countdown.innerHTML="¡Es el día!"; return;}
     const days = Math.floor(diff/(1000*60*60*24));
     const hours = Math.floor((diff/(1000*60*60))%24);
     const mins = Math.floor((diff/(1000*60))%60);
     const secs = Math.floor((diff/1000)%60);
     countdown.innerHTML = `${days}d ${hours}h ${mins}m ${secs}s`;
-    countdownBook.innerHTML = `${days}d ${hours}h ${mins}m ${secs}s`;
   }
   setInterval(updateCountdown,1000);
+
+  // Contador flipbook
+  const countdownBook = document.getElementById('countdown-book');
+  function updateCountdownBook(){
+    const now = new Date();
+    const diff = weddingDate - now;
+    if(diff<0){countdownBook.innerHTML="¡Es el día!"; return;}
+    const days = Math.floor(diff/(1000*60*60*24));
+    countdownBook.innerHTML = `${days} días`;
+  }
+  setInterval(updateCountdownBook,1000);
 
   // Swiper
   const swiper = new Swiper('.swiper',{
     loop:true,
-    pagination:{el:'.swiper-pagination',clickable:true},
+    pagination:{el:'.swiper-pagination', clickable:true},
     autoplay:{delay:3000}
   });
+
+  // Lightbox
+  const lightbox = new SimpleLightbox('.swiper-slide a',{});
 
   // RSVP
   document.getElementById('rsvp-form').addEventListener('submit', e=>{
@@ -298,7 +315,5 @@
     e.target.reset();
   });
 </script>
-
 </body>
 </html>
- 
