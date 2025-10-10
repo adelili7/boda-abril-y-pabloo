@@ -1,116 +1,56 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Invitación: Abril & Pablo — Cuento de Princesas</title>
 
 <!-- Fuentes -->
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Great+Vibes&family=Playfair+Display&display=swap" rel="stylesheet">
 
-<!-- Swiper (galería) -->
+<!-- Swiper & Lightbox -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"/>
-
-<!-- SimpleLightbox -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplelightbox@2.12.1/dist/simple-lightbox.min.css" />
 
-<!-- jQuery & Turn.js (flipbook) -->
+<!-- jQuery & Turn.js -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.js"></script>
 
 <style>
-  /* ---------- Reset & base ---------- */
   *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%}
-  body{
-    font-family:'Playfair Display', serif;
-    background:#f7f6f4;
-    color:#222;
-    -webkit-font-smoothing:antialiased;
-    -moz-osx-font-smoothing:grayscale;
-  }
+  html,body{height:100%; font-family:'Playfair Display', serif; background:#f7f6f4; color:#222;}
   h1,h2,h3,h4{font-family:'Great Vibes',cursive}
   h2.subtitle{font-family:'Dancing Script',cursive}
 
-  /* ---------- Portada ---------- */
-  #cover{
-    width:100vw;height:100vh;
-    background: url('fondo_floral1.jpg') center/cover no-repeat;
-    background-color:#f2efe9; /* fallback if image missing */
-    display:flex;flex-direction:column;align-items:center;justify-content:center;
-    position:relative;overflow:hidden;
-  }
-  /* canvas for particles */
+  /* ---------- PORTADA ---------- */
+  #cover{width:100vw;height:100vh; display:flex;flex-direction:column;align-items:center;justify-content:center; position:relative; overflow:hidden;}
   #cursor-canvas{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:2}
 
-  /* ring (princess style) */
+  /* anillo 2D */
   #ring-wrap{position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;gap:18px}
-  .ring{
-    width:220px;height:220px;border-radius:50%;
-    background: radial-gradient(circle at 28% 28%, #dcdcdc, #9b9b9b);
-    position:relative;display:flex;align-items:center;justify-content:center;
-    box-shadow:0 0 30px rgba(0,150,255,0.18), inset 0 -6px 18px rgba(0,0,0,0.12);
-    cursor:pointer; transition:transform .25s ease;
-    overflow:visible;
-  }
+  .ring{width:220px;height:220px;border-radius:50%; background: radial-gradient(circle at 28% 28%, #dcdcdc, #9b9b9b); display:flex;align-items:center;justify-content:center; box-shadow:0 0 30px rgba(0,150,255,0.18), inset 0 -6px 18px rgba(0,0,0,0.12); cursor:pointer; transition:transform .25s ease; overflow:visible;}
   .ring:hover{transform:scale(1.06)}
-  /* gemstone (blue) */
-  .gem{
-    width:86px;height:86px;border-radius:50%;
-    background: radial-gradient(circle at 35% 30%, #69a8ff 0%, #1a6bff 45%, #0058d6 100%);
-    box-shadow: 0 0 18px rgba(0,150,255,0.9), 0 0 36px rgba(0,110,255,0.55);
-    position:relative;
-    z-index:4;
-    animation:gem-pulse 2s ease-in-out infinite alternate;
-  }
-  @keyframes gem-pulse{
-    0%{transform:scale(1);filter:brightness(1)}
-    100%{transform:scale(1.06);filter:brightness(1.12)}
-  }
-
-  /* orbiting sparkles around ring */
-  .sparkle-orbit{
-    position:absolute;
-    width:12px;height:12px;border-radius:50%;
-    background: radial-gradient(circle,#ffffff,#aeefff,#1e90ff);
-    box-shadow:0 0 12px rgba(30,144,255,0.9);
-    opacity:0;pointer-events:none;
-  }
-
-  /* "Sí acepto!" text */
+  .gem{width:86px;height:86px;border-radius:50%; background: radial-gradient(circle at 35% 30%, #69a8ff 0%, #1a6bff 45%, #0058d6 100%); box-shadow: 0 0 18px rgba(0,150,255,0.9), 0 0 36px rgba(0,110,255,0.55); animation:gem-pulse 2s ease-in-out infinite alternate; z-index:4;}
+  @keyframes gem-pulse{0%{transform:scale(1);filter:brightness(1)}100%{transform:scale(1.06);filter:brightness(1.12)}}
+  .sparkle-orbit{position:absolute;width:12px;height:12px;border-radius:50%; background: radial-gradient(circle,#ffffff,#aeefff,#1e90ff); box-shadow:0 0 12px rgba(30,144,255,0.9); opacity:0;pointer-events:none;}
   #yes-text{font-family:'Great Vibes',cursive;color:#fff;font-size:44px;text-shadow:0 6px 20px rgba(0,0,0,0.45);z-index:3}
-
-  /* cover countdown (small) */
   #cover-count{color:#fff;font-size:18px;margin-top:6px;text-shadow:0 4px 14px rgba(0,0,0,0.45);z-index:3}
 
-  /* ---------- audio control ---------- */
-  #audio-btn{
-    position:fixed;top:18px;right:18px;z-index:9999;
-    width:54px;height:54px;border-radius:999px;background:linear-gradient(180deg,#fff,#f1f5ff);
-    box-shadow:0 6px 18px rgba(0,0,0,0.12);display:flex;align-items:center;justify-content:center;cursor:pointer;
-  }
-
-  /* ---------- Book container ---------- */
+  /* ---------- BOOK ---------- */
   #book-container{width:92%;max-width:1100px;margin:36px auto;display:none;z-index:10}
   #book{width:100%;height:640px;margin:0 auto}
-  #book .page{background:url('fondo_floral3.jpg') center/cover no-repeat;border-radius:12px;overflow:hidden;padding:26px;box-shadow:0 14px 40px rgba(0,0,0,0.18); background-color: rgba(255,255,255,0.6);}
+  #book .page{border-radius:12px; overflow:hidden; padding:26px; box-shadow:0 14px 40px rgba(0,0,0,0.18); position:relative; background-size:cover; background-position:center;}
+  .page-inner{background:rgba(255,255,255,0.92);border-radius:10px;padding:28px;height:100%;overflow:auto; box-shadow:inset 0 2px 10px rgba(0,0,0,0.04)}
 
-  /* page inner content container */
-  .page-inner{background:rgba(255,255,255,0.95);border-radius:10px;padding:28px;height:100%;overflow:auto;box-shadow:inset 0 2px 10px rgba(0,0,0,0.04)}
-
-  /* families section */
+  /* familias */
   .family-row{display:flex;justify-content:space-between;gap:12px;font-size:18px}
   .family-col{width:48%;display:flex;flex-direction:column;gap:6px}
-  .family-col p{margin:0;font-size:18px}
   .center-phrase{margin:20px 0;text-align:center;font-size:20px;color:#333;font-family:'Great Vibes',cursive}
-
   .couple-names{text-align:center;font-size:36px;color:#2b2b2b;margin-top:6px;text-shadow:0 6px 18px rgba(170,51,119,0.12)}
-
-  /* countdown highlighted on book */
   .big-count{text-align:center;font-size:28px;color:#0a7fff;margin-top:18px;text-shadow:0 0 18px rgba(10,127,255,0.25)}
 
   /* itinerary 2d icons */
-  .itinerary{display:flex;gap:18px;justify-content:space-around;align-items:flex-start;margin-top:18px;flex-wrap:wrap}
+  .itinerary{display:flex;gap:18px;justify-content:space-around;align-items:flex-start;margin-top:18px}
   .it-item{text-align:center;width:30%}
   .it-item p{margin-top:8px}
 
@@ -118,12 +58,10 @@
   .swiper{width:100%;height:320px;margin-top:10px;border-radius:10px}
   .swiper-slide img{width:100%;height:100%;object-fit:cover;border-radius:10px;display:block}
 
-  /* RSVP */
+  /* RSVP & wishes */
   .form-group{display:flex;flex-direction:column;gap:8px;margin-top:10px}
   input[type=text],input[type=number],textarea{padding:10px;border-radius:8px;border:1px solid #ccc;font-size:16px}
   button.btn{padding:10px 14px;background:#0a84ff;color:#fff;border:none;border-radius:8px;font-weight:600}
-
-  /* wishes list */
   #wishes-list{list-style:none;margin-top:12px;padding-left:0}
   #wishes-list li{background:rgba(255,255,255,0.9);padding:8px 10px;border-radius:6px;margin-bottom:8px;animation:fade-in .4s ease}
   @keyframes fade-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
@@ -132,13 +70,16 @@
   .palette{display:flex;gap:10px;align-items:center;justify-content:center;margin-top:20px}
   .swatch{width:44px;height:44px;border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,0.08)}
 
-  /* responsive */
+  /* page nav */
+  .page-nav{display:flex;justify-content:center;gap:24px;margin-top:18px}
+  .page-nav button{padding:8px 14px;border:none;border-radius:6px;background:#0a84ff;color:#fff;font-weight:600;cursor:pointer}
+
   @media (max-width:900px){
     .family-row{flex-direction:column}
     .it-item{width:100%}
     #book{height:calc(80vh)}
     .couple-names{font-size:28px}
-    .ring{width:150px;height:150px}
+    #ring{width:150px;height:150px}
     .gem{width:64px;height:64px}
   }
 </style>
@@ -148,436 +89,151 @@
 <!-- AUDIO CONTROL -->
 <div id="audio-btn" title="Control audio">🎵</div>
 
-<!-- COVER / PORTADA -->
+<!-- COVER -->
 <section id="cover" aria-label="Portada">
-  <canvas id="cursor-canvas" aria-hidden="true"></canvas>
-
-  <div id="ring-wrap" aria-hidden="false">
+  <canvas id="cursor-canvas"></canvas>
+  <div id="ring-wrap">
     <div class="ring" id="ring" role="button" aria-label="Abrir invitación">
-      <!-- orbiting sparkles (we will position with JS) -->
-      <div class="gem" id="gem" aria-hidden="true"></div>
+      <div class="gem" id="gem"></div>
     </div>
-
-    <!-- orbit sparkles placeholders -->
     <div id="orbits" aria-hidden="true"></div>
-
     <div id="yes-text">¡Sí acepto!</div>
-    <div id="cover-count" aria-live="polite"></div>
+    <div id="cover-count"></div>
   </div>
 </section>
 
-<!-- BOOK (hidden until ring click) -->
+<!-- BOOK -->
 <section id="book-container" aria-hidden="true">
   <div id="book">
-    <!-- page 1: families + bible verse will be revealed after click -->
-    <div class="page">
+    <!-- Página 1: Familias -->
+    <div class="page" data-bg="fondo_floral1.jpg">
       <div class="page-inner">
-        <h2 id="bible-verse" class="subtitle" style="display:none;text-align:center;margin-bottom:18px;">
-          “Quien halla esposa halla el bien, y alcanza la benevolencia de Jehová – Proverbios 18:22”
-        </h2>
-
+        <h2 id="bible-verse" class="subtitle" style="display:none;text-align:center;margin-bottom:18px;">“Quien halla esposa halla el bien… – Proverbios 18:22”</h2>
         <div class="family-row">
-          <div class="family-col">
-            <p><strong>Eva Aguilar Rendón</strong></p>
-            <p><strong>Pedro Pérez Hernández</strong></p>
-          </div>
-          <div class="family-col" style="text-align:right">
-            <p><strong>Saray Hernández Santana</strong></p>
-            <p><strong>Pablo Tinoco Carranza ✝</strong></p>
-          </div>
+          <div class="family-col"><p><strong>Eva Aguilar Rendón</strong></p><p><strong>Pedro Pérez Hernández</strong></p></div>
+          <div class="family-col" style="text-align:right"><p><strong>Saray Hernández Santana</strong></p><p><strong>Pablo Tinoco Carranza ✝</strong></p></div>
         </div>
-
         <div class="center-phrase">Tienen el honor de compartir la dicha que enlaza a sus amados hijos.</div>
         <div class="couple-names">Abril Pérez Aguilar & Pablo Eliel Tinoco Hernández</div>
-        <div class="big-count" id="book-count" aria-live="polite"></div>
+        <div class="big-count" id="book-count"></div>
       </div>
     </div>
 
-    <!-- page 2: itinerary -->
-    <div class="page">
+    <!-- Página 2: Itinerario -->
+    <div class="page" data-bg="fondo_floral2.jpg">
       <div class="page-inner">
         <h2 class="subtitle" style="text-align:center">Itinerario</h2>
         <div class="itinerary">
-          <div class="it-item" title="Preparativos">
-            <!-- ramo SVG 2D -->
-            <svg width="120" height="120" viewBox="0 0 64 64" aria-hidden="true">
-              <circle cx="32" cy="32" r="18" fill="#FFB6C1"/>
-              <g fill="#8B5E68"><path d="M32 18c-6 8-6 18 0 26 6-8 6-18 0-26z"/></g>
-            </svg>
-            <p>Preparativos / Ceremonia inicial</p>
-          </div>
-          <div class="it-item" title="Ceremonia Religiosa">
-            <!-- iglesia SVG -->
-            <svg width="120" height="120" viewBox="0 0 64 64" aria-hidden="true">
-              <polygon points="32,6 8,22 18,22 18,56 46,56 46,22 56,22" fill="#9FC5E8"/>
-              <rect x="26" y="28" width="12" height="22" fill="#fff"/>
-              <path d="M32 6 L32 18" stroke="#fff" stroke-width="1.4"/>
-            </svg>
-            <p><strong>Ceremonia Religiosa</strong><br>2pm — Iglesia Cristiana "Palabra de Vida"</p>
-            <p><a href="https://maps.app.goo.gl/JYTirH62EEM2VvD96" target="_blank" rel="noopener">Ver en Google Maps</a></p>
-          </div>
-          <div class="it-item" title="Recepción">
-            <!-- copas SVG -->
-            <svg width="120" height="120" viewBox="0 0 64 64" aria-hidden="true">
-              <g fill="#c0c0c0"><path d="M18 16c6 0 10 4 10 10 0 2-1 4-2 6H20c-1-2-2-4-2-6 0-6 4-10 0-10z"/></g>
-              <g fill="#F6D365"><circle cx="44" cy="26" r="8"/></g>
-              <line x1="24" y1="44" x2="40" y2="44" stroke="#8A6B3F" stroke-width="2"/>
-            </svg>
-            <p><strong>Recepción</strong><br>4pm — Jardín El Abuelo</p>
-            <p><a href="https://maps.app.goo.gl/kuYmUMoTuaj3XAjz9" target="_blank" rel="noopener">Ver en Google Maps</a></p>
-          </div>
+          <div class="it-item" title="Preparativos"><svg width="120" height="120" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="18" fill="#FFB6C1"/><g fill="#8B5E68"><path d="M32 18c-6 8-6 18 0 26"/></g></svg><p>Preparativos</p></div>
+          <div class="it-item" title="Ceremonia"><svg width="120" height="120" viewBox="0 0 64 64"><circle cx="32" cy="32" r="18" fill="#FFD700"/><path d="M24 24l16 16M24 40l16-16" stroke="#DAA520" stroke-width="2"/></svg><p>Ceremonia</p></div>
+          <div class="it-item" title="Recepción"><svg width="120" height="120" viewBox="0 0 64 64"><circle cx="32" cy="32" r="18" fill="#98FB98"/><path d="M32 20v24M20 32h24" stroke="#2E8B57" stroke-width="2"/></svg><p>Recepción</p></div>
         </div>
       </div>
     </div>
 
-    <!-- page 3: gallery -->
-    <div class="page">
+    <!-- Página 3: Galería -->
+    <div class="page" data-bg="fondo_floral3.jpg">
       <div class="page-inner">
-        <h2 class="subtitle" style="text-align:center">Mejores Momentos</h2>
+        <h2 class="subtitle" style="text-align:center">Galería</h2>
         <div class="swiper">
           <div class="swiper-wrapper">
-            <div class="swiper-slide"><a href="momento1.jpg"><img src="momento1.jpg" alt="Momento 1"></a></div>
-            <div class="swiper-slide"><a href="momento2.jpg"><img src="momento2.jpg" alt="Momento 2"></a></div>
-            <div class="swiper-slide"><a href="momento3.jpg"><img src="momento3.jpg" alt="Momento 3"></a></div>
-            <div class="swiper-slide"><a href="momento4.jpg"><img src="momento4.jpg" alt="Momento 4"></a></div>
-            <div class="swiper-slide"><a href="momento5.jpg"><img src="momento5.jpg" alt="Momento 5"></a></div>
+            <div class="swiper-slide"><a href="img1.jpg"><img src="img1.jpg"/></a></div>
+            <div class="swiper-slide"><a href="img2.jpg"><img src="img2.jpg"/></a></div>
           </div>
-          <div class="swiper-pagination"></div>
         </div>
-        <div class="center-phrase">“Tu amor es lo que he anhelado y el regalo que Dios me ha dado”</div>
       </div>
     </div>
 
-    <!-- page 4: RSVP -->
-    <div class="page">
+    <!-- Página 4: RSVP -->
+    <div class="page" data-bg="fondo_floral1.jpg">
       <div class="page-inner">
-        <h2 class="subtitle" style="text-align:center">Confirmación de asistencia</h2>
-        <form id="rsvp" class="form-group" autocomplete="off">
-          <input type="text" name="nombre" placeholder="Tu nombre" required />
-          <input type="number" name="acompanantes" placeholder="Número de personas" min="0" required />
-          <textarea name="mensaje" placeholder="Mensaje / deseo (opcional)"></textarea>
-          <button class="btn" type="submit">Enviar confirmación</button>
-          <div id="rsvp-ok" style="color:green;margin-top:8px;display:none">Confirmación guardada en la base de datos ✅</div>
+        <h2 class="subtitle" style="text-align:center">Confirmación</h2>
+        <form id="rsvp-form" class="form-group">
+          <input type="text" placeholder="Nombre completo" required/>
+          <input type="number" placeholder="Número de invitados" required/>
+          <button type="submit" class="btn">Enviar</button>
         </form>
       </div>
     </div>
 
-    <!-- page 5: wishes -->
-    <div class="page">
+    <!-- Página 5: Deseos -->
+    <div class="page" data-bg="fondo_floral2.jpg">
       <div class="page-inner">
-        <h2 class="subtitle" style="text-align:center">Escribe tus buenos deseos</h2>
+        <h2 class="subtitle" style="text-align:center">Deseos</h2>
         <form id="wish-form" class="form-group">
-          <input id="wish-text" type="text" placeholder="Tu mensaje..." required />
-          <button class="btn" type="submit">Enviar deseo</button>
+          <input type="text" placeholder="Escribe tu deseo" required/>
+          <button type="submit" class="btn">Añadir</button>
         </form>
         <ul id="wishes-list"></ul>
-        <div style="margin-top:12px;text-align:center">
-          <button id="download-wishes" class="btn">Descargar deseos (.csv)</button>
-        </div>
       </div>
     </div>
 
-    <!-- page 6: palette & final -->
-    <div class="page">
+    <!-- Página 6: Paleta de colores -->
+    <div class="page" data-bg="fondo_floral3.jpg">
       <div class="page-inner">
-        <h2 class="subtitle" style="text-align:center">Paleta recomendada</h2>
-        <div class="palette" aria-hidden="true">
-          <div class="swatch" style="background:#87CEEB"></div>
-          <div class="swatch" style="background:#C0C0C0"></div>
-          <div class="swatch" style="background:#B76E79"></div>
-          <div class="swatch" style="background:#F5DEB3"></div>
-          <div class="swatch" style="background:#FFC0CB"></div>
+        <h2 class="subtitle" style="text-align:center">Paleta de colores</h2>
+        <div class="palette">
+          <div class="swatch" style="background:#FFB6C1"></div>
+          <div class="swatch" style="background:#FFD700"></div>
           <div class="swatch" style="background:#98FB98"></div>
-        </div>
-
-        <p style="text-align:center;margin-top:18px">Te recomendamos la siguiente paleta de colores; dejemos el blanco para la novia.</p>
-
-        <div style="text-align:center;margin-top:36px">
-          <h1 class="subtitle">Con amor eterno... Abril y Pablo</h1>
-          <div style="margin-top:18px;display:flex;gap:12px;justify-content:center">
-            <a href="https://wa.me/5217774914500" target="_blank"><button class="btn">WhatsApp Abril</button></a>
-            <a href="https://wa.me/5217341123645" target="_blank"><button class="btn">WhatsApp Pablo</button></a>
-          </div>
+          <div class="swatch" style="background:#FF69B4"></div>
         </div>
       </div>
     </div>
   </div>
+
+  <div class="page-nav"><button id="prev-page">Anterior</button><button id="next-page">Siguiente</button></div>
 </section>
 
-<!-- Audio elements (files must exist in repo) -->
-<audio id="audio-march" src="marcha_nupcial.mp3" loop preload="auto"></audio>
-<audio id="audio-eternally" src="eternamente.mp3" loop preload="auto"></audio>
-
-<!-- External scripts -->
+<!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/simplelightbox@2.12.1/dist/simple-lightbox.min.js"></script>
-
 <script>
-/* ------------------------------ Utilities ------------------------------ */
-const gsScriptUrl = 'https://script.google.com/macros/s/AKfycbyeIsfOd4ugH3DerKdBooOjEoZDOrYlTgD2oHQmMxRqfSCIx9UPDPQeGs1sI8KpKoWLTQ/exec'; // RSVP endpoint (as provided)
-
-/* ------------------------------ Particles (canvas) ------------------------------ */
-const canvas = document.getElementById('cursor-canvas');
-const ctx = canvas && canvas.getContext ? canvas.getContext('2d') : null;
-function resizeCanvas(){ if(!canvas) return; canvas.width = window.innerWidth; canvas.height = window.innerHeight;}
-resizeCanvas(); window.addEventListener('resize', resizeCanvas);
-
-let particles = [];
-function addParticle(x,y){
-  if(!ctx) return;
-  const p = {
-    x, y,
-    vx: (Math.random()-0.5)*1.6,
-    vy: (Math.random()-0.8)*1.6,
-    r: 2 + Math.random()*4,
-    life: 40 + Math.random()*60,
-    color: ['#87CEEB','#C0C0C0','#B76E79','#ffffff'][Math.floor(Math.random()*4)]
-  };
-  particles.push(p);
-}
-function updateParticles(){
-  if(!ctx) return;
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  for(let i=particles.length-1;i>=0;i--){
-    const p=particles[i];
-    p.x+=p.vx; p.y+=p.vy; p.life--;
-    ctx.globalAlpha = Math.max(0, p.life/100);
-    ctx.fillStyle = p.color;
-    ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
-    if(p.life<=0) particles.splice(i,1);
-  }
-  ctx.globalAlpha=1;
-  requestAnimationFrame(updateParticles);
-}
-updateParticles();
-document.addEventListener('mousemove', e => {
-  // reduce particles on small screens
-  if(window.innerWidth < 600){ if(Math.random()>0.35) return; }
-  addParticle(e.clientX + (Math.random()-0.5)*16, e.clientY + (Math.random()-0.5)*16);
-});
-
-/* ---------- Ring interactivity and sparkle orbits ---------- */
-const ring = document.getElementById('ring');
-const gem = document.getElementById('gem');
-const orbits = document.getElementById('orbits');
-const coverCount = document.getElementById('cover-count');
-const audioMarch = document.getElementById('audio-march');
-const audioEternally = document.getElementById('audio-eternally');
-const cover = document.getElementById('cover');
-const bookContainer = document.getElementById('book-container');
-const bibleVerse = document.getElementById('bible-verse');
-
-function createOrbitSparkles(){
-  if(!orbits) return;
-  orbits.innerHTML = '';
-  for(let i=0;i<6;i++){
-    const s = document.createElement('div');
-    s.className = 'sparkle-orbit';
-    s.style.left = '50%';
-    s.style.top = '50%';
-    s.style.transform = `translate(-50%,-50%) rotate(${i*(360/6)}deg) translateX(110px)`;
-    s.style.opacity = 0;
-    orbits.appendChild(s);
-  }
-}
-createOrbitSparkles();
-
-function triggerOrbitAnimation(){
-  if(!orbits) return;
-  const nodes = orbits.querySelectorAll('.sparkle-orbit');
-  nodes.forEach((n,idx)=> {
-    n.style.transition = `transform 900ms cubic-bezier(.2,.9,.2,1), opacity 900ms`;
-    n.style.opacity = 1;
-    n.style.transform = `translate(-50%,-50%) rotate(${idx*(360/6)}deg) translateX(130px) scale(1)`;
-    setTimeout(()=>{ n.style.opacity = 0; }, 900);
-  });
-}
-
-/* show cover countdown */
-function computeCoverCountdown(){
-  const target = new Date('2025-12-28T00:00:00');
-  const now = new Date();
-  const diff = Math.max(0, Math.floor((target - now)/(1000*60*60*24)));
-  if(coverCount) coverCount.textContent = `Faltan ${diff} días para nuestro gran día`;
-}
-computeCoverCountdown();
-setInterval(computeCoverCountdown, 60*60*1000);
-
-/* try autoplay march (may be blocked) */
-try{ audioMarch && audioMarch.play().catch(()=>{}); }catch(e){}
-
-/* Utility: page sparkles */
-function triggerPageSparkles(){
-  const rect = document.getElementById('book')?.getBoundingClientRect();
-  if(!rect) return;
-  const cx = rect.left + rect.width/2;
-  const cy = rect.top + rect.height/2;
-  for(let i=0;i<16;i++){
-    const p = document.createElement('div');
-    p.className='particle';
-    p.style.position='fixed';
-    p.style.left = (cx + (Math.random()-0.5)*220) + 'px';
-    p.style.top = (cy + (Math.random()-0.5)*100) + 'px';
-    p.style.width = p.style.height = (4 + Math.random()*8) + 'px';
-    p.style.borderRadius = '50%';
-    p.style.background = ['#87CEEB','#C0C0C0','#B76E79','#ffffff'][Math.floor(Math.random()*4)];
-    p.style.opacity = 1;
-    p.style.transition = 'transform 900ms ease-out, opacity 900ms ease-out';
-    document.body.appendChild(p);
-    requestAnimationFrame(()=>{ p.style.transform = `translateY(-40px) scale(${1+Math.random()*0.6})`; p.style.opacity = 0; });
-    setTimeout(()=>p.remove(),1000);
-  }
-}
-
-/* ---------- Setup flipbook initialization flag ---------- */
-let flipInitialized = false;
-
-/* ring click: open book, pause march, play eternally, show bible phrase */
-if(ring) {
-  ring.addEventListener('click', async () => {
-    try{ triggerOrbitAnimation(); }catch(e){}
-    try{
-      if(cover) cover.style.display = 'none';
-      if(bookContainer) { bookContainer.style.display = 'block'; bookContainer.setAttribute('aria-hidden','false'); }
-      if(bibleVerse){ bibleVerse.style.display = 'block'; bibleVerse.style.opacity = 0; bibleVerse.animate([{opacity:0, transform:'translateY(10px)'},{opacity:1, transform:'translateY(0)'}], {duration:700, easing:'ease-out', fill:'forwards'}); }
-      try{ if(audioMarch) audioMarch.pause(); }catch(e){}
-      try{ if(audioEternally) await audioEternally.play(); }catch(e){}
-      triggerPageSparkles();
-      // initialize turn only once and guard errors
-      if(!flipInitialized && typeof $ === 'function' && $('#book').turn){
-        try{
-          $('#book').turn({width:900,height:600,autoCenter:true});
-          flipInitialized = true;
-        }catch(e){ console.warn('turn.js init failed:', e); }
-      }
-    }catch(err){
-      console.error('error opening book:', err);
-    }
-  });
-}
-
-/* audio toggle button */
-const audioBtn = document.getElementById('audio-btn');
-if(audioBtn){
-  audioBtn.addEventListener('click', ()=>{
-    try{
-      if(audioMarch && !audioMarch.paused){ audioMarch.pause(); if(audioEternally) audioEternally.pause(); audioBtn.textContent='🔈'; }
-      else { audioMarch && audioMarch.play().catch(()=>{}); audioBtn.textContent='🎵'; }
-    }catch(e){ console.warn(e); }
-  });
-}
-
-/* ---------- Swiper gallery & Lightbox ---------- */
-let swiper=null;
-try{
-  swiper = new Swiper('.swiper', {
-    loop:true,
-    pagination:{el:'.swiper-pagination', clickable:true},
-    autoplay:{delay:3000},
-    slidesPerView:1,
-    spaceBetween:10
-  });
-}catch(e){ console.warn('Swiper init failed:', e); }
-
-document.addEventListener('DOMContentLoaded', ()=>{
-  try{ new SimpleLightbox('.swiper-slide a'); }catch(e){ /* ignore */ }
-});
-
-/* ---------- Countdown in book ---------- */
-function updateBookCountdown(){
-  const el = document.getElementById('book-count');
-  if(!el) return;
-  const target = new Date('2025-12-28T00:00:00');
-  const now = new Date();
-  const diffDays = Math.max(0, Math.floor((target - now)/(1000*60*60*24)));
-  el.textContent = `Faltan ${diffDays} días para nuestro gran día`;
-}
-updateBookCountdown();
-setInterval(updateBookCountdown, 60*60*1000);
-
-/* ---------- Page sparkle on page change (turn.js event) ---------- */
-try{
-  if(typeof $ === 'function' && $('#book').on){
-    $('#book').on('turned', function(event, page, view){
-      triggerPageSparkles();
+$(document).ready(function(){
+  // Abrir invitación
+  $('#ring').on('click', function(){
+    $('#cover').fadeOut(600, function(){
+      $('#book-container').fadeIn(600);
+      initBook();
     });
+  });
+
+  // Inicializar Turn.js
+  function initBook(){
+    $("#book").turn({
+      width: '100%',
+      height: 640,
+      autoCenter: true,
+      display: 'double',
+      duration: 800,
+      acceleration: true,
+      gradients: true
+    });
+
+    // Asignar fondos según data-bg
+    $('#book .page').each(function(){
+      let bg = $(this).data('bg');
+      $(this).css('background', `url('${bg}') center/cover no-repeat`);
+    });
+
+    // Next / Prev
+    $('#next-page').on('click', function(){ $("#book").turn('next'); });
+    $('#prev-page').on('click', function(){ $("#book").turn('previous'); });
+
+    // Swiper Gallery
+    new Swiper('.swiper', {slidesPerView:1, spaceBetween:12, loop:true, pagination:{el:'.swiper-pagination',clickable:true}});
+    new SimpleLightbox({elements:'.swiper-slide a'});
   }
-}catch(e){ /* ignore if turn not present */ }
 
-/* For keyboard fallback */
-document.addEventListener('keydown', e=>{
-  if(e.key === 'ArrowRight' || e.key === 'ArrowLeft') triggerPageSparkles();
-});
+  // RSVP form
+  $('#rsvp-form').on('submit', function(e){ e.preventDefault(); alert('¡Gracias por confirmar tu asistencia!'); this.reset(); });
 
-/* ---------- RSVP: POST to Google Apps Script ---------- */
-const rsvpForm = document.getElementById('rsvp');
-if(rsvpForm){
-  rsvpForm.addEventListener('submit', async (ev)=>{
-    ev.preventDefault();
-    const formData = new FormData(rsvpForm);
-    const btn = rsvpForm.querySelector('button');
-    if(btn){ btn.disabled = true; btn.textContent = 'Enviando...'; }
-    try{
-      // send as FormData (Apps Script accepts this)
-      const res = await fetch(gsScriptUrl, { method:'POST', body: formData });
-      // visual feedback
-      const ok = document.getElementById('rsvp-ok');
-      if(ok) ok.style.display = 'block';
-      const note = document.createElement('div'); note.textContent='Confirmación guardada ✅';
-      note.style.position='fixed'; note.style.bottom='24px'; note.style.left='24px'; note.style.padding='8px 10px';
-      note.style.background='rgba(10,160,80,0.95)'; note.style.color='#fff'; note.style.borderRadius='8px'; note.style.zIndex=9999;
-      document.body.appendChild(note);
-      setTimeout(()=>note.remove(),4000);
-      rsvpForm.reset();
-    }catch(err){
-      console.error(err);
-      alert('Error al enviar la confirmación. Intenta nuevamente.');
-    }finally{
-      if(btn){ btn.disabled=false; btn.textContent = 'Enviar confirmación'; }
-    }
-  });
-}
-
-/* ---------- Wishes: localStorage + download ---------- */
-const wishForm = document.getElementById('wish-form');
-const wishesListEl = document.getElementById('wishes-list');
-function loadWishes(){
-  const arr = JSON.parse(localStorage.getItem('wishes')||'[]');
-  wishesListEl.innerHTML = '';
-  arr.forEach(w=>{
-    const li = document.createElement('li'); li.textContent = w;
-    wishesListEl.appendChild(li);
-  });
-}
-loadWishes();
-
-if(wishForm){
-  wishForm.addEventListener('submit', e=>{
+  // Wishes form
+  $('#wish-form').on('submit', function(e){
     e.preventDefault();
-    const val = document.getElementById('wish-text').value.trim();
-    if(!val) return;
-    const arr = JSON.parse(localStorage.getItem('wishes')||'[]');
-    arr.push(val);
-    localStorage.setItem('wishes', JSON.stringify(arr));
-    loadWishes();
-    wishForm.reset();
-    triggerPageSparkles();
+    let val = $(this).find('input').val().trim();
+    if(val){ $('#wishes-list').append('<li>'+val+'</li>'); $(this)[0].reset(); }
   });
-}
-
-const downloadBtn = document.getElementById('download-wishes');
-if(downloadBtn){
-  downloadBtn.addEventListener('click', ()=>{
-    const arr = JSON.parse(localStorage.getItem('wishes')||'[]');
-    const csv = 'Mensaje\n' + arr.map(s => `"${s.replace(/"/g,'""')}"`).join('\n');
-    const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
-    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'buenos_deseos.csv'; a.click();
-  });
-}
-
-/* ---------- Helpful note: if images missing show fallback border in console ---------- */
-['fondo_floral1.jpg','fondo_floral3.jpg','momento1.jpg','momento2.jpg','momento3.jpg','momento4.jpg','momento5.jpg','marcha_nupcial.mp3','eternamente.mp3'].forEach(p=>{
-  fetch(p, {method:'HEAD'}).then(r=>{ if(!r.ok) console.warn('Recurso no encontrado (revisa ruta):', p); }).catch(()=>{ console.warn('No se pudo verificar recurso:', p); });
 });
 </script>
 </body>
