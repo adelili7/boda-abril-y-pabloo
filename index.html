@@ -35,7 +35,8 @@
   /* ---------- Portada ---------- */
   #cover{
     width:100vw;height:100vh;
-    background:url('fondo_floral1.jpg') center/cover no-repeat;
+    background: url('fondo_floral1.jpg') center/cover no-repeat;
+    background-color:#f2efe9; /* fallback if image missing */
     display:flex;flex-direction:column;align-items:center;justify-content:center;
     position:relative;overflow:hidden;
   }
@@ -92,10 +93,10 @@
   /* ---------- Book container ---------- */
   #book-container{width:92%;max-width:1100px;margin:36px auto;display:none;z-index:10}
   #book{width:100%;height:640px;margin:0 auto}
-  #book .page{background:url('fondo_floral3.jpg') center/cover no-repeat;border-radius:12px;overflow:hidden;padding:26px;box-shadow:0 14px 40px rgba(0,0,0,0.18)}
+  #book .page{background:url('fondo_floral3.jpg') center/cover no-repeat;border-radius:12px;overflow:hidden;padding:26px;box-shadow:0 14px 40px rgba(0,0,0,0.18); background-color: rgba(255,255,255,0.6);}
 
   /* page inner content container */
-  .page-inner{background:rgba(255,255,255,0.92);border-radius:10px;padding:28px;height:100%;overflow:auto;box-shadow:inset 0 2px 10px rgba(0,0,0,0.04)}
+  .page-inner{background:rgba(255,255,255,0.95);border-radius:10px;padding:28px;height:100%;overflow:auto;box-shadow:inset 0 2px 10px rgba(0,0,0,0.04)}
 
   /* families section */
   .family-row{display:flex;justify-content:space-between;gap:12px;font-size:18px}
@@ -109,7 +110,7 @@
   .big-count{text-align:center;font-size:28px;color:#0a7fff;margin-top:18px;text-shadow:0 0 18px rgba(10,127,255,0.25)}
 
   /* itinerary 2d icons */
-  .itinerary{display:flex;gap:18px;justify-content:space-around;align-items:flex-start;margin-top:18px}
+  .itinerary{display:flex;gap:18px;justify-content:space-around;align-items:flex-start;margin-top:18px;flex-wrap:wrap}
   .it-item{text-align:center;width:30%}
   .it-item p{margin-top:8px}
 
@@ -137,7 +138,7 @@
     .it-item{width:100%}
     #book{height:calc(80vh)}
     .couple-names{font-size:28px}
-    #ring{width:150px;height:150px}
+    .ring{width:150px;height:150px}
     .gem{width:64px;height:64px}
   }
 </style>
@@ -149,19 +150,19 @@
 
 <!-- COVER / PORTADA -->
 <section id="cover" aria-label="Portada">
-  <canvas id="cursor-canvas"></canvas>
+  <canvas id="cursor-canvas" aria-hidden="true"></canvas>
 
   <div id="ring-wrap" aria-hidden="false">
     <div class="ring" id="ring" role="button" aria-label="Abrir invitación">
       <!-- orbiting sparkles (we will position with JS) -->
-      <div class="gem" id="gem"></div>
+      <div class="gem" id="gem" aria-hidden="true"></div>
     </div>
 
     <!-- orbit sparkles placeholders -->
     <div id="orbits" aria-hidden="true"></div>
 
     <div id="yes-text">¡Sí acepto!</div>
-    <div id="cover-count"></div>
+    <div id="cover-count" aria-live="polite"></div>
   </div>
 </section>
 
@@ -188,7 +189,7 @@
 
         <div class="center-phrase">Tienen el honor de compartir la dicha que enlaza a sus amados hijos.</div>
         <div class="couple-names">Abril Pérez Aguilar & Pablo Eliel Tinoco Hernández</div>
-        <div class="big-count" id="book-count"></div>
+        <div class="big-count" id="book-count" aria-live="polite"></div>
       </div>
     </div>
 
@@ -313,16 +314,17 @@
 
 <script>
 /* ------------------------------ Utilities ------------------------------ */
-const gsScriptUrl = 'https://script.google.com/macros/s/AKfycbyeIsfOd4ugH3DerKdBooOjEoZDOrYlTgD2oHQmMxRqfSCIx9UPDPQeGs1sI8KpKoWLTQ/exec'; // RSVP endpoint
+const gsScriptUrl = 'https://script.google.com/macros/s/AKfycbyeIsfOd4ugH3DerKdBooOjEoZDOrYlTgD2oHQmMxRqfSCIx9UPDPQeGs1sI8KpKoWLTQ/exec'; // RSVP endpoint (as provided)
 
 /* ------------------------------ Particles (canvas) ------------------------------ */
 const canvas = document.getElementById('cursor-canvas');
-const ctx = canvas.getContext('2d');
-function resizeCanvas(){canvas.width = window.innerWidth; canvas.height = window.innerHeight;}
+const ctx = canvas && canvas.getContext ? canvas.getContext('2d') : null;
+function resizeCanvas(){ if(!canvas) return; canvas.width = window.innerWidth; canvas.height = window.innerHeight;}
 resizeCanvas(); window.addEventListener('resize', resizeCanvas);
 
 let particles = [];
 function addParticle(x,y){
+  if(!ctx) return;
   const p = {
     x, y,
     vx: (Math.random()-0.5)*1.6,
@@ -334,6 +336,7 @@ function addParticle(x,y){
   particles.push(p);
 }
 function updateParticles(){
+  if(!ctx) return;
   ctx.clearRect(0,0,canvas.width,canvas.height);
   for(let i=particles.length-1;i>=0;i--){
     const p=particles[i];
@@ -364,8 +367,8 @@ const cover = document.getElementById('cover');
 const bookContainer = document.getElementById('book-container');
 const bibleVerse = document.getElementById('bible-verse');
 
-/* create 6 orbiting sparkles */
 function createOrbitSparkles(){
+  if(!orbits) return;
   orbits.innerHTML = '';
   for(let i=0;i<6;i++){
     const s = document.createElement('div');
@@ -380,6 +383,7 @@ function createOrbitSparkles(){
 createOrbitSparkles();
 
 function triggerOrbitAnimation(){
+  if(!orbits) return;
   const nodes = orbits.querySelectorAll('.sparkle-orbit');
   nodes.forEach((n,idx)=> {
     n.style.transition = `transform 900ms cubic-bezier(.2,.9,.2,1), opacity 900ms`;
@@ -394,54 +398,90 @@ function computeCoverCountdown(){
   const target = new Date('2025-12-28T00:00:00');
   const now = new Date();
   const diff = Math.max(0, Math.floor((target - now)/(1000*60*60*24)));
-  coverCount.textContent = `Faltan ${diff} días para nuestro gran día`;
+  if(coverCount) coverCount.textContent = `Faltan ${diff} días para nuestro gran día`;
 }
 computeCoverCountdown();
 setInterval(computeCoverCountdown, 60*60*1000);
 
 /* try autoplay march (may be blocked) */
-audioMarch.play().catch(()=>{ /* autoplay blocked until user interacts */ });
+try{ audioMarch && audioMarch.play().catch(()=>{}); }catch(e){}
+
+/* Utility: page sparkles */
+function triggerPageSparkles(){
+  const rect = document.getElementById('book')?.getBoundingClientRect();
+  if(!rect) return;
+  const cx = rect.left + rect.width/2;
+  const cy = rect.top + rect.height/2;
+  for(let i=0;i<16;i++){
+    const p = document.createElement('div');
+    p.className='particle';
+    p.style.position='fixed';
+    p.style.left = (cx + (Math.random()-0.5)*220) + 'px';
+    p.style.top = (cy + (Math.random()-0.5)*100) + 'px';
+    p.style.width = p.style.height = (4 + Math.random()*8) + 'px';
+    p.style.borderRadius = '50%';
+    p.style.background = ['#87CEEB','#C0C0C0','#B76E79','#ffffff'][Math.floor(Math.random()*4)];
+    p.style.opacity = 1;
+    p.style.transition = 'transform 900ms ease-out, opacity 900ms ease-out';
+    document.body.appendChild(p);
+    requestAnimationFrame(()=>{ p.style.transform = `translateY(-40px) scale(${1+Math.random()*0.6})`; p.style.opacity = 0; });
+    setTimeout(()=>p.remove(),1000);
+  }
+}
+
+/* ---------- Setup flipbook initialization flag ---------- */
+let flipInitialized = false;
 
 /* ring click: open book, pause march, play eternally, show bible phrase */
-ring.addEventListener('click', async () => {
-  // make magic sparkle
-  triggerOrbitAnimation();
-
-  // hide cover, show book
-  cover.style.display = 'none';
-  bookContainer.style.display = 'block';
-  bookContainer.setAttribute('aria-hidden', 'false');
-
-  // show Bible verse smoothly
-  bibleVerse.style.display = 'block';
-  bibleVerse.style.opacity = 0;
-  bibleVerse.animate([{opacity:0, transform:'translateY(10px)'},{opacity:1, transform:'translateY(0)'}], {duration:700, easing:'ease-out', fill:'forwards'});
-
-  // audio behavior
-  try{ audioMarch.pause(); }catch(e){}
-  try{ await audioEternally.play(); }catch(e){ /* some browsers require interaction, but click is interaction */ }
-
-  // initial sparkle effect around pages (so ring glows when opening)
-  triggerPageSparkles();
-  // initialize turn.js flipbook once visible
-  $('#book').turn({width:900,height:600,autoCenter:true});
-});
+if(ring) {
+  ring.addEventListener('click', async () => {
+    try{ triggerOrbitAnimation(); }catch(e){}
+    try{
+      if(cover) cover.style.display = 'none';
+      if(bookContainer) { bookContainer.style.display = 'block'; bookContainer.setAttribute('aria-hidden','false'); }
+      if(bibleVerse){ bibleVerse.style.display = 'block'; bibleVerse.style.opacity = 0; bibleVerse.animate([{opacity:0, transform:'translateY(10px)'},{opacity:1, transform:'translateY(0)'}], {duration:700, easing:'ease-out', fill:'forwards'}); }
+      try{ if(audioMarch) audioMarch.pause(); }catch(e){}
+      try{ if(audioEternally) await audioEternally.play(); }catch(e){}
+      triggerPageSparkles();
+      // initialize turn only once and guard errors
+      if(!flipInitialized && typeof $ === 'function' && $('#book').turn){
+        try{
+          $('#book').turn({width:900,height:600,autoCenter:true});
+          flipInitialized = true;
+        }catch(e){ console.warn('turn.js init failed:', e); }
+      }
+    }catch(err){
+      console.error('error opening book:', err);
+    }
+  });
+}
 
 /* audio toggle button */
-document.getElementById('audio-btn').addEventListener('click', ()=>{
-  if(!audioMarch.paused){ audioMarch.pause(); audioEternally.pause(); document.getElementById('audio-btn').textContent='🔈'; }
-  else { audioMarch.play().catch(()=>{}); document.getElementById('audio-btn').textContent='🎵'; }
-});
+const audioBtn = document.getElementById('audio-btn');
+if(audioBtn){
+  audioBtn.addEventListener('click', ()=>{
+    try{
+      if(audioMarch && !audioMarch.paused){ audioMarch.pause(); if(audioEternally) audioEternally.pause(); audioBtn.textContent='🔈'; }
+      else { audioMarch && audioMarch.play().catch(()=>{}); audioBtn.textContent='🎵'; }
+    }catch(e){ console.warn(e); }
+  });
+}
 
 /* ---------- Swiper gallery & Lightbox ---------- */
-const swiper = new Swiper('.swiper', {
-  loop:true,
-  pagination:{el:'.swiper-pagination', clickable:true},
-  autoplay:{delay:3000},
-  slidesPerView:1,
-  spaceBetween:10
+let swiper=null;
+try{
+  swiper = new Swiper('.swiper', {
+    loop:true,
+    pagination:{el:'.swiper-pagination', clickable:true},
+    autoplay:{delay:3000},
+    slidesPerView:1,
+    spaceBetween:10
+  });
+}catch(e){ console.warn('Swiper init failed:', e); }
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  try{ new SimpleLightbox('.swiper-slide a'); }catch(e){ /* ignore */ }
 });
-const lightbox = new SimpleLightbox('.swiper-slide a', { /* options */ });
 
 /* ---------- Countdown in book ---------- */
 function updateBookCountdown(){
@@ -455,62 +495,48 @@ function updateBookCountdown(){
 updateBookCountdown();
 setInterval(updateBookCountdown, 60*60*1000);
 
-/* ---------- Page sparkle on page change ---------- */
-function triggerPageSparkles(){
-  // create ephemeral sparkles in center of book container / current page
-  const rect = document.getElementById('book').getBoundingClientRect();
-  const cx = rect.left + rect.width/2;
-  const cy = rect.top + rect.height/2;
-  for(let i=0;i<16;i++){
-    const p = document.createElement('div');
-    p.className='particle';
-    p.style.left = (cx + (Math.random()-0.5)*220) + 'px';
-    p.style.top = (cy + (Math.random()-0.5)*100) + 'px';
-    p.style.width = p.style.height = (4 + Math.random()*8) + 'px';
-    p.style.borderRadius = '50%';
-    p.style.background = ['#87CEEB','#C0C0C0','#B76E79','#ffffff'][Math.floor(Math.random()*4)];
-    p.style.opacity = 1;
-    p.style.transition = 'transform 900ms ease-out, opacity 900ms ease-out';
-    document.body.appendChild(p);
-    requestAnimationFrame(()=> p.style.transform = `translateY(-40px) scale(${1+Math.random()*0.6})`, p.style.opacity = 0);
-    setTimeout(()=>p.remove(),1000);
+/* ---------- Page sparkle on page change (turn.js event) ---------- */
+try{
+  if(typeof $ === 'function' && $('#book').on){
+    $('#book').on('turned', function(event, page, view){
+      triggerPageSparkles();
+    });
   }
-}
+}catch(e){ /* ignore if turn not present */ }
 
-/* when turning pages with turn.js, listen and sparkle (turn.js triggers 'turned') */
-$('#book').on('turned', function(event, page, view){
-  triggerPageSparkles();
-});
-
-/* For our fallback page navigation (keyboard arrows) show sparkle too */
+/* For keyboard fallback */
 document.addEventListener('keydown', e=>{
   if(e.key === 'ArrowRight' || e.key === 'ArrowLeft') triggerPageSparkles();
 });
 
 /* ---------- RSVP: POST to Google Apps Script ---------- */
 const rsvpForm = document.getElementById('rsvp');
-rsvpForm.addEventListener('submit', async (ev)=>{
-  ev.preventDefault();
-  const formData = new FormData(rsvpForm);
-  // show loading/disable
-  const btn = rsvpForm.querySelector('button');
-  btn.disabled = true; btn.textContent = 'Enviando...';
-  try{
-    // Google Apps Script often expects form-encoded; we send FormData
-    const res = await fetch(gsScriptUrl, { method:'POST', body: formData });
-    // show confirmation
-    document.getElementById('rsvp-ok').style.display = 'block';
-    // temporary indicator visual near ring (tiny)
-    const note = document.createElement('div'); note.textContent='Confirmación guardada ✅';
-    note.style.position='fixed'; note.style.bottom='24px'; note.style.left='24px'; note.style.padding='8px 10px';
-    note.style.background='rgba(10,160,80,0.95)'; note.style.color='#fff'; note.style.borderRadius='8px';
-    document.body.appendChild(note);
-    setTimeout(()=>note.remove(),4000);
-    rsvpForm.reset();
-  }catch(err){
-    alert('Error al enviar la confirmación. Intenta nuevamente.');
-  } finally{ btn.disabled=false; btn.textContent='Enviar confirmación'; }
-});
+if(rsvpForm){
+  rsvpForm.addEventListener('submit', async (ev)=>{
+    ev.preventDefault();
+    const formData = new FormData(rsvpForm);
+    const btn = rsvpForm.querySelector('button');
+    if(btn){ btn.disabled = true; btn.textContent = 'Enviando...'; }
+    try{
+      // send as FormData (Apps Script accepts this)
+      const res = await fetch(gsScriptUrl, { method:'POST', body: formData });
+      // visual feedback
+      const ok = document.getElementById('rsvp-ok');
+      if(ok) ok.style.display = 'block';
+      const note = document.createElement('div'); note.textContent='Confirmación guardada ✅';
+      note.style.position='fixed'; note.style.bottom='24px'; note.style.left='24px'; note.style.padding='8px 10px';
+      note.style.background='rgba(10,160,80,0.95)'; note.style.color='#fff'; note.style.borderRadius='8px'; note.style.zIndex=9999;
+      document.body.appendChild(note);
+      setTimeout(()=>note.remove(),4000);
+      rsvpForm.reset();
+    }catch(err){
+      console.error(err);
+      alert('Error al enviar la confirmación. Intenta nuevamente.');
+    }finally{
+      if(btn){ btn.disabled=false; btn.textContent = 'Enviar confirmación'; }
+    }
+  });
+}
 
 /* ---------- Wishes: localStorage + download ---------- */
 const wishForm = document.getElementById('wish-form');
@@ -525,36 +551,34 @@ function loadWishes(){
 }
 loadWishes();
 
-wishForm.addEventListener('submit', e=>{
-  e.preventDefault();
-  const val = document.getElementById('wish-text').value.trim();
-  if(!val) return;
-  const arr = JSON.parse(localStorage.getItem('wishes')||'[]');
-  arr.push(val);
-  localStorage.setItem('wishes', JSON.stringify(arr));
-  loadWishes();
-  wishForm.reset();
-  // small sparkle feedback
-  triggerPageSparkles();
+if(wishForm){
+  wishForm.addEventListener('submit', e=>{
+    e.preventDefault();
+    const val = document.getElementById('wish-text').value.trim();
+    if(!val) return;
+    const arr = JSON.parse(localStorage.getItem('wishes')||'[]');
+    arr.push(val);
+    localStorage.setItem('wishes', JSON.stringify(arr));
+    loadWishes();
+    wishForm.reset();
+    triggerPageSparkles();
+  });
+}
+
+const downloadBtn = document.getElementById('download-wishes');
+if(downloadBtn){
+  downloadBtn.addEventListener('click', ()=>{
+    const arr = JSON.parse(localStorage.getItem('wishes')||'[]');
+    const csv = 'Mensaje\n' + arr.map(s => `"${s.replace(/"/g,'""')}"`).join('\n');
+    const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'buenos_deseos.csv'; a.click();
+  });
+}
+
+/* ---------- Helpful note: if images missing show fallback border in console ---------- */
+['fondo_floral1.jpg','fondo_floral3.jpg','momento1.jpg','momento2.jpg','momento3.jpg','momento4.jpg','momento5.jpg','marcha_nupcial.mp3','eternamente.mp3'].forEach(p=>{
+  fetch(p, {method:'HEAD'}).then(r=>{ if(!r.ok) console.warn('Recurso no encontrado (revisa ruta):', p); }).catch(()=>{ console.warn('No se pudo verificar recurso:', p); });
 });
-
-document.getElementById('download-wishes').addEventListener('click', ()=>{
-  const arr = JSON.parse(localStorage.getItem('wishes')||'[]');
-  const csv = 'Mensaje\n' + arr.map(s => '"' + s.replace(/"/g,'""') + '"').join('\n');
-  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'buenos_deseos.csv'; a.click();
-});
-
-/* ---------- Swiper lightbox init after DOM content ---------- */
-document.addEventListener('DOMContentLoaded', ()=>{
-  // lightbox for gallery
-  try { new SimpleLightbox('.swiper-slide a'); } catch(e){}
-});
-
-/* ---------- UX: helpful notes ---------- */
-/* If autoplay blocked, audio will play when user interacts (click ring or audio button). */
-
-/* ---------- END ---------- */
 </script>
 </body>
 </html>
