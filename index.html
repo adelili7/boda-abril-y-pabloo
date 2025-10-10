@@ -1,248 +1,315 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Invitación Mágica - Abril & Pablo</title>
+<title>Invitación Boda Abril & Pablo</title>
+
+<!-- Fuentes románticas -->
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Great+Vibes&family=Playfair+Display&display=swap" rel="stylesheet">
+
+<!-- Swiper.js para galería -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"/>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightbox2@2.11.4/dist/css/lightbox.min.css">
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'Playfair Display', serif;overflow-x:hidden;background:#f5f5f5;}
-.section{width:100%;min-height:100vh;background:url('fondo_floral3.jpg') center/cover no-repeat;display:flex;flex-direction:column;align-items:center;justify-content:center;backface-visibility:hidden;transform-style:preserve-3d;transition:transform 1s ease, opacity 1s ease;}
-.section.hidden{opacity:0;transform:rotateY(90deg);pointer-events:none;}
-.section.active{opacity:1;transform:rotateY(0deg);pointer-events:all;}
-h1,h2,h3,h4,h5,h6{font-family:'Great Vibes', cursive;text-align:center;color:#2a2a2a;}
-h2.subtitle{font-family:'Dancing Script',cursive;color:#2a2a2a;}
-#cover{width:100vw;height:100vh;background:url('fondo_floral1.jpg') center/cover no-repeat;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden;}
-#ring{width:180px;height:180px;cursor:pointer;position:relative;display:flex;justify-content:center;align-items:center;}
-#cover h1{color:#fff;font-size:3rem;text-shadow:2px 2px 10px #000;margin-top:20px;}
-#countdown-cover{font-size:2rem;color:#fff;text-shadow:0 0 10px #00aaff,0 0 20px #00aaff;margin-top:20px;}
-.parents{display:flex;justify-content:space-around;width:80%;margin:20px 0;font-size:1.2rem;transition:all 1s;}
-#names{font-size:3rem;margin:20px 0;text-shadow:0 0 10px #ffb6c1,0 0 20px #87ceeb;}
-#central-phrase,#biblical-verse{text-align:center;font-family:'Dancing Script',cursive;color:#2a2a2a;margin:10px 0;font-size:1.5rem;text-shadow:0 0 5px #fff;opacity:0;transition:opacity 2s;}
-#biblical-verse.active{opacity:1;}
-.itinerary{display:flex;justify-content:space-around;width:80%;margin:20px 0;}
-.itinerary div{text-align:center;transition:transform 0.3s;}
-.itinerary div:hover{transform:scale(1.1);}
-.itinerary svg{width:80px;height:80px;margin-bottom:10px;}
-.swiper{width:90%;max-width:900px;height:300px;margin:20px 0;}
+
+h1,h2,h3,h4,h5,h6{font-family:'Great Vibes', cursive;}
+h2.subtitle{font-family:'Dancing Script', cursive;}
+
+/* Portada */
+#cover{
+  width:100vw; height:100vh;
+  background:url('fondo_floral1.jpg') center/cover no-repeat;
+  display:flex; flex-direction:column; justify-content:center; align-items:center;
+  position:relative; overflow:hidden;
+}
+
+#ring-container{position:relative;cursor:pointer;}
+#ring{
+  width:160px; height:160px; border-radius:50%;
+  background: radial-gradient(circle at top left, #c0c0c0, #808080);
+  position:relative; box-shadow:0 0 30px rgba(255,255,255,0.8);
+}
+#gem{position:absolute;top:35%;left:35%;width:30%;height:30%;border-radius:50%;
+background: radial-gradient(circle at top left, #00f,#0af);box-shadow:0 0 20px #0af,0 0 40px #0af,0 0 60px #0af;}
+
+#yes-text{color:#fff;font-size:3rem;text-shadow:1px 1px 10px #000;margin-top:20px;}
+
+#countdown{font-size:2rem;color:#fff;text-shadow:0 0 10px #00aaff,0 0 20px #0af;margin-top:15px;}
+
+/* Cursor partículas */
+.particle{position:absolute;width:10px;height:10px;border-radius:50%;pointer-events:none;opacity:0.7;}
+
+/* Flip book estilo cuento */
+#book{width:90%;max-width:900px;margin:50px auto; display:none; perspective:1500px;}
+.page{
+  width:100%; height:80vh; background:url('fondo_floral3.jpg') center/cover no-repeat;
+  border-radius:10px; padding:20px; box-shadow:0 10px 30px rgba(0,0,0,0.2);
+  position:absolute; top:0; left:0; backface-visibility:hidden;
+  transform-origin:left center; transform-style:preserve-3d; transition: transform 1s ease, opacity 1s ease; opacity:0;
+}
+.page.show{display:block;opacity:1;transform: rotateY(0deg);z-index:2;}
+.page.hide{opacity:0;transform: rotateY(-120deg);z-index:1;}
+
+/* Destellos mágicos */
+.magic-flare{position:absolute;width:30px;height:30px;border-radius:50%;
+background: radial-gradient(circle,#00aaff,#fff,#ffc0cb,#c0c0c0);opacity:0.7;pointer-events:none;
+animation: flare 0.8s forwards;}
+@keyframes flare{0%{transform:scale(0);opacity:0.7;}50%{transform:scale(1.5);opacity:0.9;}100%{transform:scale(0);opacity:0;}}
+
+/* Texto animado estilo cuento */
+.page h1,.page h2,.subtitle{animation: textAppear 1s ease forwards;opacity:0;}
+@keyframes textAppear{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+
+/* Itinerario */
+.itinerary{display:flex;justify-content:space-around;margin:20px 0;}
+.itinerary div{text-align:center;}
+.itinerary svg{width:60px;height:60px;transition:0.3s;}
+.itinerary svg:hover{transform:scale(1.2);filter:drop-shadow(0 0 10px #00aaff);}
+
+/* Galería */
+.swiper{width:100%;height:300px;margin:20px 0;}
 .swiper-slide img{width:100%;height:100%;object-fit:cover;border-radius:10px;cursor:pointer;}
-form{display:flex;flex-direction:column;gap:10px;margin:20px 0;width:80%;max-width:500px;}
-input,textarea,button{padding:10px;border-radius:5px;border:1px solid #ccc;font-family:'Playfair Display', serif;}
-button{background:#00aaff;color:#fff;cursor:pointer;border:none;}
-#wishes-list p{margin:5px 0;opacity:0;animation:fadeIn 1s forwards;}
-@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
-#audio-control{position:fixed;top:20px;right:20px;padding:10px;border-radius:50%;background:#00aaff;color:#fff;font-size:1.5rem;cursor:pointer;z-index:9999;}
-.whatsapp{position:fixed;bottom:20px;right:20px;display:flex;flex-direction:column;gap:10px;}
-.whatsapp a{display:flex;align-items:center;gap:10px;background:#25D366;color:#fff;padding:10px 15px;border-radius:50px;text-decoration:none;font-weight:bold;}
-.particle{position:absolute;width:8px;height:8px;border-radius:50%;pointer-events:none;opacity:0.8;animation:floatMagic 3s infinite;}
-@keyframes floatMagic{0%{transform:translateY(0) rotate(0deg);}50%{transform:translateY(-20px) rotate(180deg);}100%{transform:translateY(0) rotate(360deg);}}
+
+/* RSVP y buenos deseos */
+form{display:flex;flex-direction:column;gap:10px;margin:20px 0;}
+input,textarea{padding:10px;border-radius:5px;border:1px solid #ccc;font-family:'Playfair Display', serif;}
+button{padding:10px;background:#00aaff;color:#fff;border:none;border-radius:5px;cursor:pointer;}
+#wishes-list .wish-item{margin:5px 0;background:rgba(255,255,255,0.7);padding:5px;border-radius:5px;}
+
+/* Música */
+#music-control{position:fixed;top:20px;right:20px;background:#00aaff;color:#fff;padding:10px;border-radius:50%;cursor:pointer;z-index:1000;}
 </style>
 </head>
 <body>
 
-<!-- Portada mágica -->
+<!-- Portada -->
 <div id="cover">
-  <div id="ring">
-    <svg viewBox="0 0 200 200">
-      <circle cx="100" cy="100" r="70" fill="silver" stroke="white" stroke-width="4"/>
-      <circle cx="100" cy="60" r="30" fill="blue">
-        <animate attributeName="r" values="30;32;30" dur="1.5s" repeatCount="indefinite"/>
-        <animate attributeName="fill-opacity" values="0.8;1;0.8" dur="1.5s" repeatCount="indefinite"/>
-      </circle>
-    </svg>
+  <div id="ring-container">
+    <div id="ring"><div id="gem"></div></div>
   </div>
-  <h1>¡Sí acepto!</h1>
-  <div id="countdown-cover"></div>
+  <div id="yes-text">¡Sí acepto!</div>
+  <div id="countdown"></div>
 </div>
 
-<!-- Secciones del libro -->
-<div class="section hidden" id="main">
-  <div id="biblical-verse">“Quien halla esposa halla el bien, y alcanza la benevolencia de Jehová – Proverbios 18:22”</div>
-  <div class="parents">
-    <div>Eva Aguilar Rendón<br>Pedro Pérez Hernández</div>
-    <div>Saray Hernández Santana ✝<br>Pablo Tinoco Carranza</div>
-  </div>
-  <div id="central-phrase">Tienen el honor de compartir la dicha que enlaza a sus amados hijos.</div>
-  <div id="names">Abril Pérez Aguilar & Pablo Eliel Tinoco Hernández</div>
-  <h2>28 de diciembre del 2025</h2>
-  <div id="countdown-book"></div>
-</div>
+<!-- Botón control música -->
+<div id="music-control">▶</div>
 
-<div class="section hidden" id="itinerary">
-  <h2 class="subtitle">Itinerario</h2>
-  <div class="itinerary">
-    <div>
-      <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="pink"/></svg>
-      <p>Preparativos / Ceremonia Inicial</p>
+<!-- Flip Book -->
+<div id="book">
+  <div class="page">
+    <h2 class="subtitle">“Quien halla esposa halla el bien, y alcanza la benevolencia de Jehová – Proverbios 18:22”</h2>
+    <div style="display:flex;justify-content:space-between;margin-top:20px;">
+      <div>Eva Aguilar Rendón<br>Pedro Pérez Hernández</div>
+      <div>Saray Hernández Santana ✝<br>Pablo Tinoco Carranza</div>
     </div>
-    <div>
-      <svg viewBox="0 0 64 64"><rect x="16" y="16" width="32" height="32" fill="lightblue"/></svg>
-      <p>Ceremonia Religiosa 2pm<br><a href="https://maps.app.goo.gl/JYTirH62EEM2VvD96" target="_blank">Ubicación</a></p>
-    </div>
-    <div>
-      <svg viewBox="0 0 64 64"><ellipse cx="32" cy="32" rx="20" ry="30" fill="gold"/></svg>
-      <p>Recepción 4pm<br><a href="https://maps.app.goo.gl/kuYmUMoTuaj3XAjz9" target="_blank">Ubicación</a></p>
+    <h1 style="text-align:center;margin-top:20px;">Tienen el honor de compartir la dicha que enlaza a sus amados hijos.</h1>
+    <h1 style="text-align:center;margin-top:20px;">Abril Pérez Aguilar & Pablo Eliel Tinoco Hernández</h1>
+  </div>
+
+  <div class="page">
+    <h1>28 de diciembre del 2025</h1>
+    <div id="countdown-days" style="font-size:2rem;margin-top:10px;color:#00aaff;text-shadow:0 0 10px #00aaff;"></div>
+  </div>
+
+  <div class="page">
+    <h2 class="subtitle">Itinerario</h2>
+    <div class="itinerary">
+      <div>
+        <!-- Ramo SVG -->
+        <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="10" fill="#00aaff"/></svg>
+        <p>Preparativos</p>
+      </div>
+      <div>
+        <!-- Iglesia SVG -->
+        <svg viewBox="0 0 64 64"><rect x="20" y="20" width="24" height="24" fill="#c0c0c0"/></svg>
+        <p>Ceremonia Religiosa <br> 2pm<br><a href="https://maps.app.goo.gl/JYTirH62EEM2VvD96" target="_blank">Ubicación</a></p>
+      </div>
+      <div>
+        <!-- Copas SVG -->
+        <svg viewBox="0 0 64 64"><polygon points="32,10 42,50 22,50" fill="#ffc0cb"/></svg>
+        <p>Recepción <br> 4pm<br><a href="https://maps.app.goo.gl/kuYmUMoTuaj3XAjz9" target="_blank">Ubicación</a></p>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="section hidden" id="gallery">
-  <h2 class="subtitle">Mejores momentos</h2>
-  <div class="swiper">
-    <div class="swiper-wrapper">
-      <div class="swiper-slide"><a href="momento1.jpg" data-lightbox="gallery"><img src="momento1.jpg"></a></div>
-      <div class="swiper-slide"><a href="momento2.jpg" data-lightbox="gallery"><img src="momento2.jpg"></a></div>
-      <div class="swiper-slide"><a href="momento3.jpg" data-lightbox="gallery"><img src="momento3.jpg"></a></div>
-      <div class="swiper-slide"><a href="momento4.jpg" data-lightbox="gallery"><img src="momento4.jpg"></a></div>
-      <div class="swiper-slide"><a href="momento5.jpg" data-lightbox="gallery"><img src="momento5.jpg"></a></div>
+  <div class="page">
+    <h2 class="subtitle">Galería de Fotos</h2>
+    <div class="swiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide"><img src="momento1.jpg" alt=""></div>
+        <div class="swiper-slide"><img src="momento2.jpg" alt=""></div>
+        <div class="swiper-slide"><img src="momento3.jpg" alt=""></div>
+        <div class="swiper-slide"><img src="momento4.jpg" alt=""></div>
+        <div class="swiper-slide"><img src="momento5.jpg" alt=""></div>
+      </div>
+      <div class="swiper-pagination"></div>
     </div>
-    <div class="swiper-pagination"></div>
+    <p style="text-align:center;margin-top:10px;">“Tu amor es lo que he anhelado y el regalo que Dios me ha dado”</p>
   </div>
-</div>
 
-<!-- RSVP -->
-<div class="section hidden" id="rsvp">
-  <h2 class="subtitle">Confirmar asistencia</h2>
-  <form id="rsvp-form">
-    <input type="text" placeholder="Tu nombre" required>
-    <input type="number" placeholder="Número de personas" required>
-    <textarea placeholder="Mensaje / deseo" rows="4"></textarea>
-    <button type="submit">Enviar</button>
+  <div class="page">
+    <h2 class="subtitle">Confirmación de asistencia</h2>
+    <form id="rsvp-form">
+      <input type="text" placeholder="Tu nombre" required>
+      <input type="number" placeholder="Número de personas" required>
+      <textarea placeholder="Mensaje / deseo" rows="4"></textarea>
+      <button type="submit">Enviar</button>
+    </form>
     <div id="rsvp-status" style="color:green;margin-top:10px;"></div>
-  </form>
-</div>
+  </div>
 
-<!-- Buenos deseos -->
-<div class="section hidden" id="wishes">
-  <h2 class="subtitle">Escribe tus buenos deseos</h2>
-  <form id="wishes-form">
-    <textarea id="wish-text" rows="3" placeholder="Tu mensaje..."></textarea>
-    <button type="submit">Enviar deseo</button>
-  </form>
-  <div id="wishes-list"></div>
-  <button id="download-wishes">Descargar mensajes</button>
-</div>
+  <div class="page">
+    <h2 class="subtitle">Escribe tus buenos deseos</h2>
+    <form id="wishes-form">
+      <textarea placeholder="Deja tu deseo..." rows="4" required></textarea>
+      <button type="submit">Enviar deseo</button>
+    </form>
+    <button id="download-wishes">Descargar mensajes</button>
+    <div id="wishes-list"></div>
+  </div>
 
-<div class="section hidden" id="palette">
-  <h2 class="subtitle">Paleta de colores recomendada</h2>
-  <div style="display:flex;gap:10px;flex-wrap:wrap;">
-    <div style="width:40px;height:40px;background:#87ceeb;border-radius:50%;"></div>
-    <div style="width:40px;height:40px;background:#c0c0c0;border-radius:50%;"></div>
-    <div style="width:40px;height:40px;background:#b76e79;border-radius:50%;"></div>
-    <div style="width:40px;height:40px;background:#f5f5dc;border-radius:50%;"></div>
-    <div style="width:40px;height:40px;background:#ffb6c1;border-radius:50%;"></div>
-    <div style="width:40px;height:40px;background:#7fff00;border-radius:50%;"></div>
+  <div class="page">
+    <h2 class="subtitle">Paleta de colores recomendada</h2>
+    <div style="display:flex;gap:10px;margin-top:10px;">
+      <div style="width:30px;height:30px;background:#87CEEB;border-radius:50%;"></div>
+      <div style="width:30px;height:30px;background:#C0C0C0;border-radius:50%;"></div>
+      <div style="width:30px;height:30px;background:#B76E79;border-radius:50%;"></div>
+      <div style="width:30px;height:30px;background:#F5F5DC;border-radius:50%;"></div>
+      <div style="width:30px;height:30px;background:#FFC0CB;border-radius:50%;"></div>
+      <div style="width:30px;height:30px;background:#90EE90;border-radius:50%;"></div>
+    </div>
+    <p>“Te recomendamos la siguiente paleta de colores; dejemos el blanco para la novia”</p>
+  </div>
+
+  <div class="page">
+    <h1 style="text-align:center;">Con amor eterno... Abril y Pablo</h1>
+    <div style="display:flex;justify-content:center;gap:20px;margin-top:20px;">
+      <a href="https://wa.me/527774914500" target="_blank"><button>WhatsApp Abril</button></a>
+      <a href="https://wa.me/527341123645" target="_blank"><button>WhatsApp Pablo</button></a>
+    </div>
   </div>
 </div>
 
-<div class="section hidden" id="final">
-  <h2 class="subtitle">Con amor eterno... Abril y Pablo</h2>
-</div>
+<!-- Audio -->
+<audio id="music1" src="marcha_nupcial.mp3" autoplay loop></audio>
+<audio id="music2" src="eternamente.mp3" loop></audio>
 
-<div class="whatsapp">
-  <a href="https://wa.me/5217774914500" target="_blank">WhatsApp Abril</a>
-  <a href="https://wa.me/5217341123645" target="_blank">WhatsApp Pablo</a>
-</div>
-
-<div id="audio-control">⏯️</div>
-<audio id="audio-main" src="marcha_nupcial.mp3" autoplay loop></audio>
-<audio id="audio-ring" src="eternamente.mp3"></audio>
-
+<!-- Swiper.js -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/lightbox2@2.11.4/dist/js/lightbox.min.js"></script>
+
 <script>
-const sections=document.querySelectorAll('.section');
-let current=0;
-const showSection=(i)=>{
-    sections.forEach(s=>s.classList.add('hidden'));
-    sections[i].classList.remove('hidden');
-};
-document.getElementById('ring').addEventListener('click',()=>{
-    audioMain.pause();
-    audioRing.play();
-    document.getElementById('biblical-verse').classList.add('active');
-    setTimeout(()=>showSection(0),2000);
-});
-document.addEventListener('keydown',e=>{
-    if(e.key==='ArrowRight'){current=(current+1)%sections.length;showSection(current);}
-    if(e.key==='ArrowLeft'){current=(current-1+sections.length)%sections.length;showSection(current);}
-});
-// Contadores
-function countdown(endDate,id){
-    let x=setInterval(()=>{
-        let now=new Date().getTime();
-        let distance=endDate-now;
-        if(distance<0)distance=0;
-        let days=Math.floor(distance/(1000*60*60*24));
-        document.getElementById(id).innerHTML="Faltan "+days+" días para nuestro gran día ✨";
-    },1000);
-}
-let eventDate=new Date("Dec 28,2025 00:00:00").getTime();
-countdown(eventDate,'countdown-cover');
-countdown(eventDate,'countdown-book');
+// Flip book y páginas
+const pages = document.querySelectorAll('.page');
+let currentPage = 0;
 
 // Partículas mágicas
 document.addEventListener('mousemove',e=>{
-    let p=document.createElement('div');
-    p.className='particle';
-    p.style.left=e.pageX+'px';
-    p.style.top=e.pageY+'px';
-    p.style.background=['#87ceeb','#c0c0c0','#b76e79','#fff'][Math.floor(Math.random()*4)];
-    document.body.appendChild(p);
-    setTimeout(()=>p.remove(),4000);
+  for(let i=0;i<2;i++){
+    const particle = document.createElement('div');
+    particle.className='particle';
+    particle.style.left=e.clientX+'px';
+    particle.style.top=e.clientY+'px';
+    particle.style.backgroundColor=['#00aaff','#c0c0c0','#FFC0CB','#F5F5DC'][Math.floor(Math.random()*4)];
+    document.body.appendChild(particle);
+    setTimeout(()=>particle.remove(),1000);
+  }
 });
 
-// Swiper
-var swiper = new Swiper('.swiper',{pagination:{el:'.swiper-pagination'},loop:true,autoplay:{delay:3000}});
+// Contador inicial portada
+function updateCountdown(){
+  const eventDate=new Date('2025-12-28T00:00:00');
+  const now=new Date();
+  const diff=Math.floor((eventDate-now)/1000);
+  const days=Math.floor(diff/86400);
+  document.getElementById('countdown').innerText=`Faltan ${days} días para nuestro gran día`;
+}
+updateCountdown();
+setInterval(updateCountdown,60000);
 
-// RSVP
-document.getElementById('rsvp-form').addEventListener('submit',e=>{
-    e.preventDefault();
-    let form=e.target;
-    fetch("https://script.google.com/macros/s/AKfycbyeIsfOd4ugH3DerKdBooOjEoZDOrYlTgD2oHQmMxRqfSCIx9UPDPQeGs1sI8KpKoWLTQ/exec",{
-        method:"POST",
-        body:new FormData(form)
-    }).then(r=>{
-        document.getElementById('rsvp-status').innerText="✅ Confirmación guardada en la base de datos";
-        form.reset();
-    });
+// Control de música
+const music1=document.getElementById('music1');
+const music2=document.getElementById('music2');
+const musicControl=document.getElementById('music-control');
+musicControl.onclick=()=>{
+  if(music1.paused && music2.paused){music1.play();musicControl.innerText='⏸';}
+  else if(!music1.paused){music1.pause();music2.play();musicControl.innerText='⏸';}
+  else{music2.pause();musicControl.innerText='▶';}
+}
+
+// Al hacer clic en el anillo
+document.getElementById('ring-container').onclick=()=>{
+  document.getElementById('cover').style.display='none';
+  document.getElementById('book').style.display='block';
+  music1.pause();
+  music2.play();
+  musicControl.innerText='⏸';
+}
+
+// Mostrar páginas tipo libro
+function showPage(index){
+  pages.forEach((p,i)=>{
+    if(i===index){p.classList.remove('hide');p.classList.add('show');}
+    else{p.classList.remove('show');p.classList.add('hide');}
+  });
+  // Destello
+  const flare=document.createElement('div');
+  flare.className='magic-flare';
+  flare.style.left='50%';
+  flare.style.top='50px';
+  document.body.appendChild(flare);
+  setTimeout(()=>flare.remove(),800);
+}
+showPage(currentPage);
+document.addEventListener('click',e=>{
+  if(e.target.closest('#ring-container')) return;
+  currentPage++; if(currentPage>=pages.length) currentPage=pages.length-1;
+  showPage(currentPage);
 });
+
+// Inicializar Swiper
+const swiper = new Swiper('.swiper',{loop:true,pagination:{el:'.swiper-pagination',clickable:true},spaceBetween:10,grabCursor:true});
+
+// RSVP con Google Apps Script
+document.getElementById('rsvp-form').onsubmit=function(e){
+  e.preventDefault();
+  const data={nombre:this[0].value,acompanantes:this[1].value,mensaje:this[2].value};
+  fetch('https://script.google.com/macros/s/AKfycbyeIsfOd4ugH3DerKdBooOjEoZDOrYlTgD2oHQmMxRqfSCIx9UPDPQeGs1sI8KpKoWLTQ/exec',{
+    method:'POST',body:JSON.stringify(data),headers:{'Content-Type':'application/json'}
+  }).then(r=>r.json()).then(res=>{
+    document.getElementById('rsvp-status').innerText='Confirmación guardada en la base de datos ✅';
+    this.reset();
+  });
+}
 
 // Buenos deseos
-function loadWishes(){
-    let wishes=JSON.parse(localStorage.getItem('wishes')||'[]');
-    const container=document.getElementById('wishes-list'); container.innerHTML='';
-    wishes.forEach(w=>{
-        let p=document.createElement('p'); p.innerText=w; container.appendChild(p);
-        p.style.opacity='0'; setTimeout(()=>p.style.opacity='1',100);
-    });
+const wishesForm=document.getElementById('wishes-form');
+const wishesList=document.getElementById('wishes-list');
+function renderWishes(){
+  wishesList.innerHTML='';
+  const wishes=JSON.parse(localStorage.getItem('wishes')||'[]');
+  wishes.forEach(w=>{
+    const div=document.createElement('div');div.className='wish-item';div.innerText=w;
+    wishesList.appendChild(div);
+  });
 }
-document.getElementById('wishes-form').addEventListener('submit',e=>{
-    e.preventDefault();
-    let text=document.getElementById('wish-text').value;
-    if(text.trim()!==''){
-        let wishes=JSON.parse(localStorage.getItem('wishes')||'[]');
-        wishes.push(text); localStorage.setItem('wishes',JSON.stringify(wishes));
-        document.getElementById('wish-text').value='';
-        loadWishes();
-    }
-});
-document.getElementById('download-wishes').addEventListener('click',()=>{
-    let wishes=JSON.parse(localStorage.getItem('wishes')||'[]');
-    let csv=wishes.map(w=>'"'+w.replace(/"/g,'""')+'"').join('\n');
-    let blob=new Blob([csv],{type:'text/csv'});
-    let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='buenos_deseos.csv'; a.click();
-});
-
-// Audio control
-document.getElementById('audio-control').addEventListener('click',()=>{
-    if(audioMain.paused){audioMain.play();}else{audioMain.pause();}
-});
-loadWishes();
+wishesForm.onsubmit=function(e){
+  e.preventDefault();
+  const wishes=JSON.parse(localStorage.getItem('wishes')||'[]');
+  wishes.push(this[0].value); localStorage.setItem('wishes',JSON.stringify(wishes));
+  renderWishes(); this.reset();
+}
+renderWishes();
+document.getElementById('download-wishes').onclick=function(){
+  const wishes=JSON.parse(localStorage.getItem('wishes')||'[]');
+  const blob=new Blob([wishes.join('\n')],{type:'text/csv'}); 
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a'); a.href=url; a.download='wishes.csv'; a.click(); URL.revokeObjectURL(url);
+}
 </script>
+
 </body>
 </html>
- 
+
