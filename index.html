@@ -1,142 +1,162 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Invitación Boda Abril & Pablo</title>
-
-<!-- Fuentes románticas -->
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Great+Vibes&family=Playfair+Display&display=swap" rel="stylesheet">
 
-<!-- Swiper.js para galería -->
+<!-- Swiper.js -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"/>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Playfair Display', serif;overflow-x:hidden;background:#f5f5f5;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'Playfair Display', serif;background:#f5f5f5;overflow-x:hidden;}
 
-h1,h2,h3,h4,h5,h6{font-family:'Great Vibes', cursive;}
-h2.subtitle{font-family:'Dancing Script', cursive;}
+  h1,h2,h3,h4,h5,h6{font-family:'Great Vibes', cursive;}
+  h2.subtitle{font-family:'Dancing Script', cursive;}
 
-/* Portada */
-#cover{
-  width:100vw; height:100vh;
-  background:url('fondo_floral1.jpg') center/cover no-repeat;
-  display:flex; flex-direction:column; justify-content:center; align-items:center;
-  position:relative; overflow:hidden;
-}
+  /* Portada */
+  #cover{
+    width:100vw;height:100vh;
+    background:url('fondo_floral1.jpg') center/cover no-repeat;
+    display:flex; flex-direction:column; justify-content:center; align-items:center;
+    position:relative; overflow:hidden;
+  }
+  #ring{
+    width:180px;height:180px;
+    border-radius:50%;
+    background: radial-gradient(circle at top left, #c0c0c0, #808080);
+    position:relative;
+    cursor:pointer;
+    box-shadow:0 0 30px rgba(255,255,255,0.8), 0 0 60px rgba(0,150,255,0.6);
+  }
+  #ring::after{
+    content:'';
+    position:absolute;
+    top:20px; left:50%; transform:translateX(-50%);
+    width:60px; height:60px;
+    background: radial-gradient(circle, #00f, #0af);
+    border-radius:50%;
+    box-shadow:0 0 30px #0af,0 0 50px #0af,0 0 80px #0af;
+    animation: sparkle 1s infinite alternate;
+  }
+  @keyframes sparkle{
+    from{opacity:0.7; transform:scale(1);}
+    to{opacity:1; transform:scale(1.2);}
+  }
+  #yes-text{color:#fff;font-size:2rem;margin-top:20px;text-shadow:2px 2px 10px #000;text-align:center;}
 
-#ring-container{position:relative;cursor:pointer;}
-#ring{
-  width:160px; height:160px; border-radius:50%;
-  background: radial-gradient(circle at top left, #c0c0c0, #808080);
-  position:relative; box-shadow:0 0 30px rgba(255,255,255,0.8);
-}
-#gem{position:absolute;top:35%;left:35%;width:30%;height:30%;border-radius:50%;
-background: radial-gradient(circle at top left, #00f,#0af);box-shadow:0 0 20px #0af,0 0 40px #0af,0 0 60px #0af;}
+  #countdown{margin-top:20px;font-size:2rem;color:#fff;text-shadow:0 0 10px #00aaff, 0 0 20px #00aaff;}
 
-#yes-text{color:#fff;font-size:3rem;text-shadow:1px 1px 10px #000;margin-top:20px;}
+  /* Flip book */
+  #book{width:90%;max-width:900px;margin:50px auto; display:none;}
+  .page{
+    width:100%; height:80vh; background:url('fondo_floral3.jpg') center/cover no-repeat; border-radius:10px;
+    padding:20px; box-shadow:0 10px 30px rgba(0,0,0,0.2);
+    position:relative;
+    overflow:auto;
+  }
 
-#countdown{font-size:2rem;color:#fff;text-shadow:0 0 10px #00aaff,0 0 20px #0af;margin-top:15px;}
+  /* Padres y novios */
+  .family-container{display:flex;justify-content:space-between;font-size:1.2rem;color:#fff;text-shadow:1px 1px 5px rgba(0,0,0,0.5);}
+  .center-text{text-align:center;margin:20px 0;font-size:1.5rem;color:#fff;text-shadow:1px 1px 5px rgba(0,0,0,0.5);}
+  .novios{font-size:2rem;text-align:center;color:#ffd700;text-shadow:2px 2px 10px #000;margin-top:20px;}
 
-/* Cursor partículas */
-.particle{position:absolute;width:10px;height:10px;border-radius:50%;pointer-events:none;opacity:0.7;}
+  /* Itinerario */
+  .itinerary{display:flex; justify-content:space-around; margin:20px 0; flex-wrap:wrap;}
+  .itinerary-item{text-align:center; cursor:pointer; transition: transform 0.3s;}
+  .itinerary-item svg{transition: transform 0.5s, filter 0.3s; filter: drop-shadow(0 0 5px rgba(255,255,255,0.7));}
+  .itinerary-item:hover svg{transform: scale(1.2) rotate(-5deg); filter: drop-shadow(0 0 15px rgba(255,215,0,0.9));}
+  .itinerary-item p{margin-top:10px; font-size:1rem; color:#fff; text-shadow:1px 1px 5px rgba(0,0,0,0.5);}
+  .itinerary-item a{color:#FFD700;text-decoration:underline;}
 
-/* Flip book estilo cuento */
-#book{width:90%;max-width:900px;margin:50px auto; display:none; perspective:1500px;}
-.page{
-  width:100%; height:80vh; background:url('fondo_floral3.jpg') center/cover no-repeat;
-  border-radius:10px; padding:20px; box-shadow:0 10px 30px rgba(0,0,0,0.2);
-  position:absolute; top:0; left:0; backface-visibility:hidden;
-  transform-origin:left center; transform-style:preserve-3d; transition: transform 1s ease, opacity 1s ease; opacity:0;
-}
-.page.show{display:block;opacity:1;transform: rotateY(0deg);z-index:2;}
-.page.hide{opacity:0;transform: rotateY(-120deg);z-index:1;}
+  /* Galería */
+  .swiper{width:100%; height:300px; margin:20px 0;}
+  .swiper-slide img{width:100%; height:100%; object-fit:cover; border-radius:10px; cursor:pointer; transition: transform 0.3s;}
+  .swiper-slide img:hover{transform: scale(1.05);}
 
-/* Destellos mágicos */
-.magic-flare{position:absolute;width:30px;height:30px;border-radius:50%;
-background: radial-gradient(circle,#00aaff,#fff,#ffc0cb,#c0c0c0);opacity:0.7;pointer-events:none;
-animation: flare 0.8s forwards;}
-@keyframes flare{0%{transform:scale(0);opacity:0.7;}50%{transform:scale(1.5);opacity:0.9;}100%{transform:scale(0);opacity:0;}}
+  /* RSVP y mensajes */
+  form{display:flex; flex-direction:column; gap:10px; margin:20px 0;}
+  input, textarea{padding:10px; border-radius:5px; border:1px solid #ccc; font-family:'Playfair Display', serif;}
+  button{padding:10px; background:#00aaff; color:#fff; border:none; border-radius:5px; cursor:pointer;}
+  .success-msg{color:lime; font-weight:bold;margin-top:5px;}
 
-/* Texto animado estilo cuento */
-.page h1,.page h2,.subtitle{animation: textAppear 1s ease forwards;opacity:0;}
-@keyframes textAppear{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+  /* WhatsApp */
+  .whatsapp{position:fixed; bottom:20px; right:20px; display:flex; flex-direction:column; gap:10px;}
+  .whatsapp a{display:flex; align-items:center; gap:10px; background:#25D366; color:#fff; padding:10px 15px; border-radius:50px; text-decoration:none; font-weight:bold;}
 
-/* Itinerario */
-.itinerary{display:flex;justify-content:space-around;margin:20px 0;}
-.itinerary div{text-align:center;}
-.itinerary svg{width:60px;height:60px;transition:0.3s;}
-.itinerary svg:hover{transform:scale(1.2);filter:drop-shadow(0 0 10px #00aaff);}
-
-/* Galería */
-.swiper{width:100%;height:300px;margin:20px 0;}
-.swiper-slide img{width:100%;height:100%;object-fit:cover;border-radius:10px;cursor:pointer;}
-
-/* RSVP y buenos deseos */
-form{display:flex;flex-direction:column;gap:10px;margin:20px 0;}
-input,textarea{padding:10px;border-radius:5px;border:1px solid #ccc;font-family:'Playfair Display', serif;}
-button{padding:10px;background:#00aaff;color:#fff;border:none;border-radius:5px;cursor:pointer;}
-#wishes-list .wish-item{margin:5px 0;background:rgba(255,255,255,0.7);padding:5px;border-radius:5px;}
-
-/* Música */
-#music-control{position:fixed;top:20px;right:20px;background:#00aaff;color:#fff;padding:10px;border-radius:50%;cursor:pointer;z-index:1000;}
+  /* Botón música */
+  #music-control{position:fixed;top:20px;right:20px;background:#fff;padding:10px;border-radius:50%;cursor:pointer;box-shadow:0 0 10px rgba(0,0,0,0.3);}
 </style>
 </head>
 <body>
 
 <!-- Portada -->
 <div id="cover">
-  <div id="ring-container">
-    <div id="ring"><div id="gem"></div></div>
-  </div>
+  <div id="ring"></div>
   <div id="yes-text">¡Sí acepto!</div>
   <div id="countdown"></div>
 </div>
 
-<!-- Botón control música -->
-<div id="music-control">▶</div>
+<!-- Control de música -->
+<div id="music-control">⏯️</div>
 
 <!-- Flip Book -->
 <div id="book">
+
+  <!-- Padres y Novios -->
   <div class="page">
-    <h2 class="subtitle">“Quien halla esposa halla el bien, y alcanza la benevolencia de Jehová – Proverbios 18:22”</h2>
-    <div style="display:flex;justify-content:space-between;margin-top:20px;">
-      <div>Eva Aguilar Rendón<br>Pedro Pérez Hernández</div>
-      <div>Saray Hernández Santana ✝<br>Pablo Tinoco Carranza</div>
+    <div class="center-text" id="bible-verse" style="display:none;">
+      “Quien halla esposa halla el bien, y alcanza la benevolencia de Jehová – Proverbios 18:22”
     </div>
-    <h1 style="text-align:center;margin-top:20px;">Tienen el honor de compartir la dicha que enlaza a sus amados hijos.</h1>
-    <h1 style="text-align:center;margin-top:20px;">Abril Pérez Aguilar & Pablo Eliel Tinoco Hernández</h1>
+    <div class="family-container">
+      <div>Eva Aguilar Rendón<br>Pedro Pérez Hernández</div>
+      <div>Saray Hernández Santana<br>Pablo Tinoco Carranza ✝</div>
+    </div>
+    <div class="center-text">Tienen el honor de compartir la dicha que enlaza a sus amados hijos.</div>
+    <div class="novios">Abril Pérez Aguilar & Pablo Eliel Tinoco Hernández</div>
+    <div class="center-text" id="wedding-date">28 de diciembre del 2025</div>
+    <div class="center-text" id="countdown-days"></div>
   </div>
 
-  <div class="page">
-    <h1>28 de diciembre del 2025</h1>
-    <div id="countdown-days" style="font-size:2rem;margin-top:10px;color:#00aaff;text-shadow:0 0 10px #00aaff;"></div>
-  </div>
-
+  <!-- Itinerario -->
   <div class="page">
     <h2 class="subtitle">Itinerario</h2>
     <div class="itinerary">
-      <div>
-        <!-- Ramo SVG -->
-        <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="10" fill="#00aaff"/></svg>
+      <!-- SVG itinerario detallados, animados al pasar el cursor -->
+      <div class="itinerary-item">
+        <svg viewBox="0 0 64 64" width="80" height="80">
+          <circle cx="32" cy="32" r="30" fill="#f8f0e3" stroke="#cfae8c" stroke-width="3"/>
+          <path d="M32 16 L32 32 L48 32" stroke="#cfae8c" stroke-width="3" stroke-linecap="round"/>
+        </svg>
         <p>Preparativos</p>
       </div>
-      <div>
-        <!-- Iglesia SVG -->
-        <svg viewBox="0 0 64 64"><rect x="20" y="20" width="24" height="24" fill="#c0c0c0"/></svg>
-        <p>Ceremonia Religiosa <br> 2pm<br><a href="https://maps.app.goo.gl/JYTirH62EEM2VvD96" target="_blank">Ubicación</a></p>
+
+      <div class="itinerary-item">
+        <svg viewBox="0 0 64 64" width="80" height="80">
+          <rect x="16" y="24" width="32" height="24" fill="#7FB3D5" stroke="#1F618D" stroke-width="2"/>
+          <polygon points="32,8 16,24 48,24" fill="#2980B9"/>
+          <circle cx="32" cy="36" r="3" fill="#FFD700"/>
+        </svg>
+        <p>Ceremonia Religiosa <br>2pm - <a href="https://maps.app.goo.gl/JYTirH62EEM2VvD96" target="_blank">Palabra de Vida</a></p>
       </div>
-      <div>
-        <!-- Copas SVG -->
-        <svg viewBox="0 0 64 64"><polygon points="32,10 42,50 22,50" fill="#ffc0cb"/></svg>
-        <p>Recepción <br> 4pm<br><a href="https://maps.app.goo.gl/kuYmUMoTuaj3XAjz9" target="_blank">Ubicación</a></p>
+
+      <div class="itinerary-item">
+        <svg viewBox="0 0 64 64" width="80" height="80">
+          <path d="M20 40 C22 28, 42 28, 44 40 S22 52, 20 40 Z" fill="#F5CBA7" stroke="#E59866" stroke-width="2"/>
+          <circle cx="22" cy="36" r="4" fill="#F1C40F"/>
+          <circle cx="42" cy="36" r="4" fill="#F1C40F"/>
+          <line x1="22" y1="36" x2="42" y2="36" stroke="#E59866" stroke-width="2"/>
+        </svg>
+        <p>Recepción <br>4pm - <a href="https://maps.app.goo.gl/kuYmUMoTuaj3XAjz9" target="_blank">Jardín El Abuelo</a></p>
       </div>
     </div>
   </div>
 
+  <!-- Galería -->
   <div class="page">
-    <h2 class="subtitle">Galería de Fotos</h2>
+    <h2 class="subtitle">Galería de momentos</h2>
     <div class="swiper">
       <div class="swiper-wrapper">
         <div class="swiper-slide"><img src="momento1.jpg" alt=""></div>
@@ -147,169 +167,182 @@ button{padding:10px;background:#00aaff;color:#fff;border:none;border-radius:5px;
       </div>
       <div class="swiper-pagination"></div>
     </div>
-    <p style="text-align:center;margin-top:10px;">“Tu amor es lo que he anhelado y el regalo que Dios me ha dado”</p>
+    <p style="text-align:center; margin-top:10px;">“Tu amor es lo que he anhelado y el regalo que Dios me ha dado”</p>
   </div>
 
+  <!-- RSVP -->
   <div class="page">
     <h2 class="subtitle">Confirmación de asistencia</h2>
     <form id="rsvp-form">
-      <input type="text" placeholder="Tu nombre" required>
-      <input type="number" placeholder="Número de personas" required>
-      <textarea placeholder="Mensaje / deseo" rows="4"></textarea>
+      <input type="text" placeholder="Nombre" name="name" required>
+      <input type="number" placeholder="Número de acompañantes" name="guests" required>
+      <textarea placeholder="Mensaje" name="message"></textarea>
       <button type="submit">Enviar</button>
+      <div class="success-msg" id="rsvp-success"></div>
     </form>
-    <div id="rsvp-status" style="color:green;margin-top:10px;"></div>
   </div>
 
+  <!-- Buenos deseos -->
   <div class="page">
     <h2 class="subtitle">Escribe tus buenos deseos</h2>
     <form id="wishes-form">
-      <textarea placeholder="Deja tu deseo..." rows="4" required></textarea>
+      <textarea placeholder="Deja tu mensaje"></textarea>
       <button type="submit">Enviar deseo</button>
     </form>
+    <ul id="wishes-list" style="margin-top:20px;"></ul>
     <button id="download-wishes">Descargar mensajes</button>
-    <div id="wishes-list"></div>
   </div>
 
+  <!-- Paleta de colores -->
   <div class="page">
     <h2 class="subtitle">Paleta de colores recomendada</h2>
-    <div style="display:flex;gap:10px;margin-top:10px;">
-      <div style="width:30px;height:30px;background:#87CEEB;border-radius:50%;"></div>
-      <div style="width:30px;height:30px;background:#C0C0C0;border-radius:50%;"></div>
-      <div style="width:30px;height:30px;background:#B76E79;border-radius:50%;"></div>
-      <div style="width:30px;height:30px;background:#F5F5DC;border-radius:50%;"></div>
-      <div style="width:30px;height:30px;background:#FFC0CB;border-radius:50%;"></div>
-      <div style="width:30px;height:30px;background:#90EE90;border-radius:50%;"></div>
+    <div style="display:flex; gap:10px; margin-top:20px;">
+      <div style="width:40px;height:40px;background:#87CEEB;border-radius:50%;"></div>
+      <div style="width:40px;height:40px;background:#C0C0C0;border-radius:50%;"></div>
+      <div style="width:40px;height:40px;background:#B76E79;border-radius:50%;"></div>
+      <div style="width:40px;height:40px;background:#F5F5DC;border-radius:50%;"></div>
+      <div style="width:40px;height:40px;background:#FFC0CB;border-radius:50%;"></div>
+      <div style="width:40px;height:40px;background:#98FB98;border-radius:50%;"></div>
     </div>
-    <p>“Te recomendamos la siguiente paleta de colores; dejemos el blanco para la novia”</p>
+    <p>Te recomendamos la siguiente paleta de colores; dejemos el blanco para la novia</p>
   </div>
 
+  <!-- Frase final -->
   <div class="page">
-    <h1 style="text-align:center;">Con amor eterno... Abril y Pablo</h1>
-    <div style="display:flex;justify-content:center;gap:20px;margin-top:20px;">
-      <a href="https://wa.me/527774914500" target="_blank"><button>WhatsApp Abril</button></a>
-      <a href="https://wa.me/527341123645" target="_blank"><button>WhatsApp Pablo</button></a>
-    </div>
+    <h2 class="subtitle" style="text-align:center;">Con amor eterno... Abril y Pablo</h2>
   </div>
+
 </div>
 
-<!-- Audio -->
-<audio id="music1" src="marcha_nupcial.mp3" autoplay loop></audio>
-<audio id="music2" src="eternamente.mp3" loop></audio>
+<!-- WhatsApp -->
+<div class="whatsapp">
+  <a href="https://wa.me/5217774914500" target="_blank">Abril 💖</a>
+  <a href="https://wa.me/5217341123645" target="_blank">Pablo 💙</a>
+</div>
 
-<!-- Swiper.js -->
+<!-- Música -->
+<audio id="music-march" src="marcha_nupcial.mp3" autoplay loop></audio>
+<audio id="music-eternally" src="eternamente.mp3"></audio>
+
+<!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-
 <script>
-// Flip book y páginas
-const pages = document.querySelectorAll('.page');
-let currentPage = 0;
+  // Contador mágico
+  const countdownEl = document.getElementById('countdown');
+  const countdownDaysEl = document.getElementById('countdown-days');
+  const weddingDate = new Date('2025-12-28T00:00:00');
+  function updateCountdown(){
+    const now = new Date();
+    const diff = weddingDate - now;
+    const days = Math.floor(diff/1000/60/60/24);
+    countdownEl.textContent = `Faltan ${days} días para nuestro gran día`;
+    countdownDaysEl.textContent = `Faltan ${days} días para nuestro gran día`;
+  }
+  setInterval(updateCountdown,1000);
+  updateCountdown();
 
-// Partículas mágicas
-document.addEventListener('mousemove',e=>{
-  for(let i=0;i<2;i++){
+  // Flip book simple
+  const pages = document.querySelectorAll('.page');
+  let currentPage = 0;
+  function showPage(index){
+    pages.forEach((p,i)=>p.style.display=i===index?'block':'none');
+  }
+
+  // Portada - clic anillo
+  const ring = document.getElementById('ring');
+  const cover = document.getElementById('cover');
+  const book = document.getElementById('book');
+  const bibleVerse = document.getElementById('bible-verse');
+  const musicMarch = document.getElementById('music-march');
+  const musicEternally = document.getElementById('music-eternally');
+  ring.addEventListener('click', ()=>{
+    cover.style.display='none';
+    book.style.display='block';
+    bibleVerse.style.display='block';
+    musicMarch.pause();
+    musicEternally.play();
+    showPage(0);
+  });
+
+  // RSVP
+  const rsvpForm = document.getElementById('rsvp-form');
+  const rsvpSuccess = document.getElementById('rsvp-success');
+  rsvpForm.addEventListener('submit', e=>{
+    e.preventDefault();
+    const formData = new FormData(rsvpForm);
+    fetch('https://script.google.com/macros/s/AKfycbyeIsfOd4ugH3DerKdBooOjEoZDOrYlTgD2oHQmMxRqfSCIx9UPDPQeGs1sI8KpKoWLTQ/exec',{
+      method:'POST', body: formData
+    }).then(res=>rsvpSuccess.textContent='Confirmación guardada en la base de datos ✅')
+    .catch(err=>rsvpSuccess.textContent='Error al enviar');
+    rsvpForm.reset();
+  });
+
+  // Buenos deseos
+  const wishesForm = document.getElementById('wishes-form');
+  const wishesList = document.getElementById('wishes-list');
+  const downloadBtn = document.getElementById('download-wishes');
+
+  function loadWishes(){
+    const wishes = JSON.parse(localStorage.getItem('wishes')||'[]');
+    wishesList.innerHTML='';
+    wishes.forEach(w=>{
+      const li=document.createElement('li');
+      li.textContent=w; li.style.opacity=0; wishesList.appendChild(li);
+      setTimeout(()=>li.style.opacity=1,50);
+    });
+  }
+  wishesForm.addEventListener('submit', e=>{
+    e.preventDefault();
+    const msg = wishesForm.querySelector('textarea').value;
+    if(msg){
+      const wishes = JSON.parse(localStorage.getItem('wishes')||'[]');
+      wishes.push(msg);
+      localStorage.setItem('wishes', JSON.stringify(wishes));
+      wishesForm.querySelector('textarea').value='';
+      loadWishes();
+    }
+  });
+  downloadBtn.addEventListener('click', ()=>{
+    const wishes = JSON.parse(localStorage.getItem('wishes')||'[]');
+    let csv = 'Mensaje\n'+wishes.map(w=>`"${w}"`).join('\n');
+    const blob = new Blob([csv],{type:'text/csv'});
+    const a = document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download='buenos_deseos.csv';
+    a.click();
+  });
+  loadWishes();
+
+  // Swiper
+  new Swiper('.swiper',{pagination:{el:'.swiper-pagination'},loop:true,autoplay:{delay:3000}});
+
+  // Música control
+  const musicControl = document.getElementById('music-control');
+  musicControl.addEventListener('click', ()=>{
+    if(musicMarch.paused && musicEternally.paused){
+      musicMarch.play();
+    }else if(!musicMarch.paused){
+      musicMarch.pause();
+    }else{
+      musicEternally.pause();
+    }
+  });
+
+  // Cursor partículas simples
+  document.addEventListener('mousemove', e=>{
     const particle = document.createElement('div');
-    particle.className='particle';
-    particle.style.left=e.clientX+'px';
-    particle.style.top=e.clientY+'px';
-    particle.style.backgroundColor=['#00aaff','#c0c0c0','#FFC0CB','#F5F5DC'][Math.floor(Math.random()*4)];
+    particle.style.width='5px'; particle.style.height='5px';
+    particle.style.borderRadius='50%';
+    particle.style.background=['#00f','#fff','#b76e79','#c0c0c0'][Math.floor(Math.random()*4)];
+    particle.style.position='absolute';
+    particle.style.left=e.pageX+'px'; particle.style.top=e.pageY+'px';
+    particle.style.opacity=Math.random();
+    particle.style.pointerEvents='none';
     document.body.appendChild(particle);
     setTimeout(()=>particle.remove(),1000);
-  }
-});
-
-// Contador inicial portada
-function updateCountdown(){
-  const eventDate=new Date('2025-12-28T00:00:00');
-  const now=new Date();
-  const diff=Math.floor((eventDate-now)/1000);
-  const days=Math.floor(diff/86400);
-  document.getElementById('countdown').innerText=`Faltan ${days} días para nuestro gran día`;
-}
-updateCountdown();
-setInterval(updateCountdown,60000);
-
-// Control de música
-const music1=document.getElementById('music1');
-const music2=document.getElementById('music2');
-const musicControl=document.getElementById('music-control');
-musicControl.onclick=()=>{
-  if(music1.paused && music2.paused){music1.play();musicControl.innerText='⏸';}
-  else if(!music1.paused){music1.pause();music2.play();musicControl.innerText='⏸';}
-  else{music2.pause();musicControl.innerText='▶';}
-}
-
-// Al hacer clic en el anillo
-document.getElementById('ring-container').onclick=()=>{
-  document.getElementById('cover').style.display='none';
-  document.getElementById('book').style.display='block';
-  music1.pause();
-  music2.play();
-  musicControl.innerText='⏸';
-}
-
-// Mostrar páginas tipo libro
-function showPage(index){
-  pages.forEach((p,i)=>{
-    if(i===index){p.classList.remove('hide');p.classList.add('show');}
-    else{p.classList.remove('show');p.classList.add('hide');}
   });
-  // Destello
-  const flare=document.createElement('div');
-  flare.className='magic-flare';
-  flare.style.left='50%';
-  flare.style.top='50px';
-  document.body.appendChild(flare);
-  setTimeout(()=>flare.remove(),800);
-}
-showPage(currentPage);
-document.addEventListener('click',e=>{
-  if(e.target.closest('#ring-container')) return;
-  currentPage++; if(currentPage>=pages.length) currentPage=pages.length-1;
-  showPage(currentPage);
-});
-
-// Inicializar Swiper
-const swiper = new Swiper('.swiper',{loop:true,pagination:{el:'.swiper-pagination',clickable:true},spaceBetween:10,grabCursor:true});
-
-// RSVP con Google Apps Script
-document.getElementById('rsvp-form').onsubmit=function(e){
-  e.preventDefault();
-  const data={nombre:this[0].value,acompanantes:this[1].value,mensaje:this[2].value};
-  fetch('https://script.google.com/macros/s/AKfycbyeIsfOd4ugH3DerKdBooOjEoZDOrYlTgD2oHQmMxRqfSCIx9UPDPQeGs1sI8KpKoWLTQ/exec',{
-    method:'POST',body:JSON.stringify(data),headers:{'Content-Type':'application/json'}
-  }).then(r=>r.json()).then(res=>{
-    document.getElementById('rsvp-status').innerText='Confirmación guardada en la base de datos ✅';
-    this.reset();
-  });
-}
-
-// Buenos deseos
-const wishesForm=document.getElementById('wishes-form');
-const wishesList=document.getElementById('wishes-list');
-function renderWishes(){
-  wishesList.innerHTML='';
-  const wishes=JSON.parse(localStorage.getItem('wishes')||'[]');
-  wishes.forEach(w=>{
-    const div=document.createElement('div');div.className='wish-item';div.innerText=w;
-    wishesList.appendChild(div);
-  });
-}
-wishesForm.onsubmit=function(e){
-  e.preventDefault();
-  const wishes=JSON.parse(localStorage.getItem('wishes')||'[]');
-  wishes.push(this[0].value); localStorage.setItem('wishes',JSON.stringify(wishes));
-  renderWishes(); this.reset();
-}
-renderWishes();
-document.getElementById('download-wishes').onclick=function(){
-  const wishes=JSON.parse(localStorage.getItem('wishes')||'[]');
-  const blob=new Blob([wishes.join('\n')],{type:'text/csv'}); 
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a'); a.href=url; a.download='wishes.csv'; a.click(); URL.revokeObjectURL(url);
-}
 </script>
 
 </body>
 </html>
-
+ 
