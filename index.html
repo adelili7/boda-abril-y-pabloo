@@ -14,278 +14,259 @@
 <!-- SimpleLightbox -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplelightbox@2.12.1/dist/simple-lightbox.min.css" />
 
-<!-- jQuery & Turn.js -->
+<!-- jQuery & Turn.js (flipbook) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.js"></script>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
-body{font-family:'Playfair Display', serif;background:#f7f6f4;color:#222;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
-h1,h2,h3,h4{font-family:'Great Vibes',cursive}
-h2.subtitle{font-family:'Dancing Script',cursive}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:'Playfair Display', serif;
+    background:#f7f6f4;
+    color:#222;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+  h1,h2,h3,h4{font-family:'Great Vibes',cursive}
+  h2.subtitle{font-family:'Dancing Script',cursive}
 
-/* ---------- Portada ---------- */
-#cover{
-  width:100vw;height:100vh;
-  background:url('fondo_floral1.jpg') center/cover no-repeat;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  position:relative;overflow:hidden;
-}
-#cursor-canvas{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:2}
-#ring-wrap{position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;gap:18px}
-.ring{
-  width:220px;height:220px;border-radius:50%;
-  background: radial-gradient(circle at 28% 28%, #ffd700, #daa520);
-  position:relative;display:flex;align-items:center;justify-content:center;
-  box-shadow:0 0 50px rgba(255,223,0,0.4), inset 0 -6px 18px rgba(0,0,0,0.12);
-  cursor:pointer; transition:transform .25s ease;
-  overflow:visible;
-}
-.ring:hover{transform:scale(1.08)}
-.gem{
-  width:86px;height:86px;border-radius:50%;
-  background: radial-gradient(circle at 35% 30%, #69a8ff 0%, #1a6bff 45%, #0058d6 100%);
-  box-shadow: 0 0 30px rgba(0,150,255,0.9), 0 0 50px rgba(0,110,255,0.55);
-  position:relative; z-index:4;
-  animation:gem-pulse 2s ease-in-out infinite alternate;
-}
-@keyframes gem-pulse{
-  0%{transform:scale(1);filter:brightness(1)}
-  100%{transform:scale(1.08);filter:brightness(1.2)}
-}
-.sparkle-orbit{position:absolute;width:12px;height:12px;border-radius:50%;background: radial-gradient(circle,#ffffff,#aeefff,#1e90ff);box-shadow:0 0 12px rgba(30,144,255,0.9);opacity:0;pointer-events:none;}
-#yes-text{font-family:'Great Vibes',cursive;color:#fff;font-size:44px;text-shadow:0 6px 20px rgba(0,0,0,0.45);z-index:3}
-#cover-count{color:#fff;font-size:18px;margin-top:6px;text-shadow:0 4px 14px rgba(0,0,0,0.45);z-index:3}
+  /* ---------- Portada ---------- */
+  #cover{
+    width:100vw;height:100vh;
+    background:url('fondo_floral1.jpg') center/cover no-repeat;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    position:relative;overflow:hidden;
+  }
+  #cursor-canvas{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:2}
 
-/* ---------- Book ---------- */
-#book-container{width:92%;max-width:1100px;margin:36px auto;display:none;z-index:10}
-#book{width:100%;height:640px;margin:0 auto}
-#book .page{
-  background:url('fondo_floral3.jpg') center/cover no-repeat;
-  border-radius:12px;overflow:hidden;padding:26px;
-  box-shadow:0 14px 40px rgba(0,0,0,0.18)
-}
-.page-inner{
-  background:rgba(255,255,255,0.92);
-  border-radius:10px;
-  padding:28px;
-  height:100%;
-  overflow:auto;
-  box-shadow:inset 0 2px 10px rgba(0,0,0,0.04);
-}
-.family-row{display:flex;justify-content:space-between;gap:12px;font-size:18px}
-.family-col{width:48%;display:flex;flex-direction:column;gap:6px}
-.family-col p{margin:0;font-size:18px}
-.center-phrase{margin:20px 0;text-align:center;font-size:20px;color:#333;font-family:'Great Vibes',cursive}
-.couple-names{text-align:center;font-size:36px;color:#2b2b2b;margin-top:6px;text-shadow:0 6px 18px rgba(170,51,119,0.12)}
-.big-count{text-align:center;font-size:28px;color:#0a7fff;margin-top:18px;text-shadow:0 0 18px rgba(10,127,255,0.25)}
-.itinerary{display:flex;gap:18px;justify-content:space-around;align-items:flex-start;margin-top:18px}
-.it-item{text-align:center;width:30%}
-.it-item p{margin-top:8px}
-.swiper{width:100%;height:320px;margin-top:10px;border-radius:10px}
-.swiper-slide img{width:100%;height:100%;object-fit:cover;border-radius:10px;display:block}
-.form-group{display:flex;flex-direction:column;gap:8px;margin-top:10px}
-input[type=text],input[type=number],textarea{padding:10px;border-radius:8px;border:1px solid #ccc;font-size:16px}
-button.btn{padding:10px 14px;background:#0a84ff;color:#fff;border:none;border-radius:8px;font-weight:600}
-#wishes-list{list-style:none;margin-top:12px;padding-left:0}
-#wishes-list li{background:rgba(255,255,255,0.9);padding:8px 10px;border-radius:6px;margin-bottom:8px;animation:fade-in .4s ease}
-@keyframes fade-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-.palette{display:flex;gap:10px;align-items:center;justify-content:center;margin-top:20px}
-.swatch{width:44px;height:44px;border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,0.08)}
-.nav-btn{padding:6px 12px;background:#0a84ff;color:#fff;border:none;border-radius:6px;font-weight:600;margin:8px;cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,0.2)}
-@media (max-width:900px){
-  .family-row{flex-direction:column}
-  .it-item{width:100%}
-  #book{height:calc(80vh)}
-  .couple-names{font-size:28px}
-  #ring{width:150px;height:150px}
-  .gem{width:64px;height:64px}
-}
+  /* ring */
+  #ring-wrap{position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;gap:18px}
+  .ring{
+    width:220px;height:220px;border-radius:50%;
+    background: radial-gradient(circle at 28% 28%, #dcdcdc, #9b9b9b);
+    position:relative;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 0 30px rgba(0,150,255,0.18), inset 0 -6px 18px rgba(0,0,0,0.12);
+    cursor:pointer; transition:transform .25s ease;
+    overflow:visible;
+  }
+  .ring:hover{transform:scale(1.06)}
+  .gem{
+    width:86px;height:86px;border-radius:50%;
+    background: radial-gradient(circle at 35% 30%, #69a8ff 0%, #1a6bff 45%, #0058d6 100%);
+    box-shadow: 0 0 18px rgba(0,150,255,0.9), 0 0 36px rgba(0,110,255,0.55);
+    position:relative;
+    z-index:4;
+    animation:gem-pulse 2s ease-in-out infinite alternate;
+  }
+  @keyframes gem-pulse{
+    0%{transform:scale(1);filter:brightness(1)}
+    100%{transform:scale(1.06);filter:brightness(1.12)}
+  }
+  .sparkle-orbit{position:absolute;width:12px;height:12px;border-radius:50%;background: radial-gradient(circle,#ffffff,#aeefff,#1e90ff);box-shadow:0 0 12px rgba(30,144,255,0.9);opacity:0;pointer-events:none;}
+
+  #yes-text{font-family:'Great Vibes',cursive;color:#fff;font-size:44px;text-shadow:0 6px 20px rgba(0,0,0,0.45);z-index:3}
+  #cover-count{color:#fff;font-size:18px;margin-top:6px;text-shadow:0 4px 14px rgba(0,0,0,0.45);z-index:3}
+
+  /* ---------- audio control ---------- */
+  #audio-btn{
+    position:fixed;top:18px;right:18px;z-index:9999;
+    width:54px;height:54px;border-radius:999px;background:linear-gradient(180deg,#fff,#f1f5ff);
+    box-shadow:0 6px 18px rgba(0,0,0,0.12);display:flex;align-items:center;justify-content:center;cursor:pointer;
+  }
+
+  /* ---------- Book ---------- */
+  #book-container{width:92%;max-width:1100px;margin:36px auto;display:none;z-index:10}
+  #book{width:100%;height:640px;margin:0 auto}
+  #book .page{
+    background:url('fondo_floral3.jpg') center/cover no-repeat;
+    border-radius:12px;overflow:hidden;padding:26px;
+    box-shadow:0 14px 40px rgba(0,0,0,0.18);
+  }
+  .page-inner{background:rgba(255,255,255,0.92);border-radius:10px;padding:28px;height:100%;overflow:auto;box-shadow:inset 0 2px 10px rgba(0,0,0,0.04)}
+
+  /* families */
+  .family-row{display:flex;justify-content:space-between;gap:12px;font-size:18px}
+  .family-col{width:48%;display:flex;flex-direction:column;gap:6px}
+  .family-col p{margin:0;font-size:18px}
+  .center-phrase{margin:20px 0;text-align:center;font-size:20px;color:#333;font-family:'Great Vibes',cursive}
+  .couple-names{text-align:center;font-size:36px;color:#2b2b2b;margin-top:6px;text-shadow:0 6px 18px rgba(170,51,119,0.12)}
+  .big-count{text-align:center;font-size:28px;color:#0a7fff;margin-top:18px;text-shadow:0 0 18px rgba(10,127,255,0.25)}
+
+  /* itinerary icons */
+  .itinerary{display:flex;gap:18px;justify-content:space-around;align-items:flex-start;margin-top:18px}
+  .it-item{text-align:center;width:30%}
+  .it-item p{margin-top:8px}
+
+  /* gallery */
+  .swiper{width:100%;height:320px;margin-top:10px;border-radius:10px}
+  .swiper-slide img{width:100%;height:100%;object-fit:cover;border-radius:10px;display:block}
+
+  /* RSVP */
+  .form-group{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+  input[type=text],input[type=number],textarea{padding:10px;border-radius:8px;border:1px solid #ccc;font-size:16px}
+  button.btn{padding:10px 14px;background:#0a84ff;color:#fff;border:none;border-radius:8px;font-weight:600}
+
+  /* wishes */
+  #wishes-list{list-style:none;margin-top:12px;padding-left:0}
+  #wishes-list li{background:rgba(255,255,255,0.9);padding:8px 10px;border-radius:6px;margin-bottom:8px;animation:fade-in .4s ease}
+  @keyframes fade-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  /* palette */
+  .palette{display:flex;gap:10px;align-items:center;justify-content:center;margin-top:20px}
+  .swatch{width:44px;height:44px;border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,0.08)}
+
+  /* responsive */
+  @media (max-width:900px){
+    .family-row{flex-direction:column}
+    .it-item{width:100%}
+    #book{height:calc(80vh)}
+    .couple-names{font-size:28px}
+    #ring{width:150px;height:150px}
+    .gem{width:64px;height:64px}
+    .page-inner{padding:16px;height:calc(100% - 32px)}
+  }
 </style>
 </head>
 <body>
 
 <!-- AUDIO -->
-<audio id="audio" loop>
-  <source src="eternamente.mp3" type="audio/mpeg">
-</audio>
-<div id="audio-btn" title="Controlar música">🎵</div>
+<div id="audio-btn" title="Control audio">🎵</div>
 
-<!-- PORTADA -->
-<section id="cover">
+<!-- COVER -->
+<section id="cover" aria-label="Portada">
   <canvas id="cursor-canvas"></canvas>
-  <div id="ring-wrap">
-    <div class="ring" id="ring">
-      <div class="gem"></div>
+  <div id="ring-wrap" aria-hidden="false">
+    <div class="ring" id="ring" role="button" aria-label="Abrir invitación">
+      <div class="gem" id="gem"></div>
     </div>
+    <div id="orbits" aria-hidden="true"></div>
     <div id="yes-text">¡Sí acepto!</div>
+    <div id="cover-count"></div>
   </div>
 </section>
 
 <!-- BOOK -->
-<section id="book-container">
+<section id="book-container" aria-hidden="true">
   <div id="book">
-    <!-- Página 1: Familias -->
-    <div class="page" style="background:url('fondo_floral2.jpg') center/cover no-repeat;">
+    <!-- Portada extra (fondo_floral1) -->
+    <div class="page"><div class="page-inner"><h2 class="subtitle">Abril & Pablo</h2></div></div>
+
+    <!-- Familias (fondo_floral2) -->
+    <div class="page" style="background:url('fondo_floral2.jpg') center/cover no-repeat">
       <div class="page-inner">
-        <h2 class="subtitle" style="text-align:center;margin-bottom:18px;">“Quien halla esposa halla el bien – Proverbios 18:22”</h2>
+        <h2 class="subtitle">Familias</h2>
         <div class="family-row">
-          <div class="family-col">
-            <p><strong>Eva Aguilar Rendón</strong></p>
-            <p><strong>Pedro Pérez Hernández</strong></p>
-          </div>
-          <div class="family-col" style="text-align:right">
-            <p><strong>Saray Hernández Santana</strong></p>
-            <p><strong>Pablo Tinoco Carranza ✝</strong></p>
-          </div>
+          <div class="family-col"><p>Familia de Abril</p></div>
+          <div class="family-col"><p>Familia de Pablo</p></div>
         </div>
-        <div class="center-phrase">Tienen el honor de compartir la dicha que enlaza a sus amados hijos.</div>
-        <div class="couple-names">Abril Pérez Aguilar & Pablo Eliel Tinoco Hernández</div>
-        <div style="text-align:center;margin-top:16px;">
-          <button class="nav-btn" onclick="$('#book').turn('next')">Siguiente →</button>
-        </div>
+        <div class="center-phrase">“Quien halla esposa halla el bien, y alcanza la bendición del Señor”</div>
       </div>
     </div>
 
-    <!-- Página 2: Itinerario -->
+    <!-- Itinerario (fondo_floral3) -->
     <div class="page">
       <div class="page-inner">
-        <h2 class="subtitle" style="text-align:center">Itinerario</h2>
+        <h2 class="subtitle">Ceremonia & Recepción</h2>
         <div class="itinerary">
-          <!-- Aquí irían tus iconos 2D de recepción, ceremonia, etc. -->
-        </div>
-        <div style="text-align:center;margin-top:16px;">
-          <button class="nav-btn" onclick="$('#book').turn('previous')">← Anterior</button>
-          <button class="nav-btn" onclick="$('#book').turn('next')">Siguiente →</button>
+          <div class="it-item"><img src="icons/iglesia.png"/><p>Iglesia 5pm</p></div>
+          <div class="it-item"><img src="icons/copas.png"/><p>Recepción 7pm</p></div>
+          <div class="it-item"><img src="icons/ramo.png"/><p>Bendiciones</p></div>
         </div>
       </div>
     </div>
 
-    <!-- Página 3: Galería -->
+    <!-- Galería -->
     <div class="page">
       <div class="page-inner">
-        <h2 class="subtitle" style="text-align:center">Galería</h2>
-        <div class="swiper mySwiper">
+        <h2 class="subtitle">Galería</h2>
+        <div class="swiper">
           <div class="swiper-wrapper">
-            <div class="swiper-slide"><img src="foto1.jpg" alt="Foto 1"/></div>
-            <div class="swiper-slide"><img src="foto2.jpg" alt="Foto 2"/></div>
+            <div class="swiper-slide"><img src="galeria/1.jpg"/></div>
+            <div class="swiper-slide"><img src="galeria/2.jpg"/></div>
+            <div class="swiper-slide"><img src="galeria/3.jpg"/></div>
           </div>
-          <div class="swiper-button-next"></div>
-          <div class="swiper-button-prev"></div>
-          <div class="swiper-pagination"></div>
-        </div>
-        <div style="text-align:center;margin-top:16px;">
-          <button class="nav-btn" onclick="$('#book').turn('previous')">← Anterior</button>
-          <button class="nav-btn" onclick="$('#book').turn('next')">Siguiente →</button>
         </div>
       </div>
     </div>
 
-    <!-- Página 4: RSVP -->
+    <!-- RSVP -->
     <div class="page">
       <div class="page-inner">
-        <h2 class="subtitle" style="text-align:center">RSVP</h2>
+        <h2 class="subtitle">Confirma tu asistencia</h2>
         <form>
-          <div class="form-group">
-            <label>Nombre</label>
-            <input type="text" name="name"/>
-          </div>
-          <div class="form-group">
-            <label>Asistiré</label>
-            <input type="text" name="attend"/>
-          </div>
-          <div class="form-group">
-            <label>Mensaje</label>
-            <textarea name="message"></textarea>
-          </div>
+          <div class="form-group"><input type="text" placeholder="Nombre"/></div>
+          <div class="form-group"><input type="number" placeholder="Invitados"/></div>
+          <div class="form-group"><textarea placeholder="Mensaje"></textarea></div>
           <button type="submit" class="btn">Enviar</button>
         </form>
-        <div style="text-align:center;margin-top:16px;">
-          <button class="nav-btn" onclick="$('#book').turn('previous')">← Anterior</button>
-          <button class="nav-btn" onclick="$('#book').turn('next')">Siguiente →</button>
-        </div>
       </div>
     </div>
 
-    <!-- Página 5: Deseos -->
+    <!-- Deseos -->
     <div class="page">
       <div class="page-inner">
-        <h2 class="subtitle" style="text-align:center">Deseos</h2>
+        <h2 class="subtitle">Deseos</h2>
         <ul id="wishes-list">
           <li>¡Felicidades!</li>
-          <li>Mucho amor y felicidad</li>
+          <li>Mucho amor y alegría</li>
         </ul>
-        <div style="text-align:center;margin-top:16px;">
-          <button class="nav-btn" onclick="$('#book').turn('previous')">← Anterior</button>
-          <button class="nav-btn" onclick="$('#book').turn('next')">Siguiente →</button>
-        </div>
       </div>
     </div>
 
-    <!-- Página 6: Paleta & mapa -->
-    <div class="page">
-      <div class="page-inner">
-        <h2 class="subtitle" style="text-align:center">Paleta de Colores</h2>
-        <div class="palette">
-          <div class="swatch" style="background:#FFD0D0"></div>
-          <div class="swatch" style="background:#FFB6C1"></div>
-          <div class="swatch" style="background:#AEEFFF"></div>
-        </div>
-        <h2 class="subtitle" style="text-align:center;margin-top:18px">Ubicación</h2>
-        <iframe src="https://www.google.com/maps/embed?pb=..." width="100%" height="300" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-        <div style="text-align:center;margin-top:16px;">
-          <button class="nav-btn" onclick="$('#book').turn('previous')">← Anterior</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Página 7: Final -->
-    <div class="page" style="background:url('fondo_floral1.jpg') center/cover no-repeat;">
-      <div class="page-inner" style="display:flex;align-items:center;justify-content:center;height:100%">
-        <h2 class="subtitle" style="text-align:center">¡Los esperamos!</h2>
-      </div>
-    </div>
+    <!-- Página final (fondo_floral1) -->
+    <div class="page"><div class="page-inner"><h2 class="subtitle">Gracias por acompañarnos</h2></div></div>
   </div>
 </section>
 
-<!-- Swiper & Lightbox -->
+<!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/simplelightbox@2.12.1/dist/simple-lightbox.min.js"></script>
-
 <script>
 $(document).ready(function(){
-  // Turn.js init
+  // TURN.JS
   $("#book").turn({
-    width: 1100,
-    height: 640,
-    autoCenter: true,
-    duration: 1000
+    width: window.innerWidth<900?window.innerWidth*0.92:1100,
+    height: window.innerWidth<900?window.innerHeight*0.8:640,
+    autoCenter:true,duration:1000
   });
 
-  // Swiper
-  const swiper = new Swiper(".mySwiper", {
-    loop:true,
-    navigation:{nextEl:".swiper-button-next",prevEl:".swiper-button-prev"},
-    pagination:{el:".swiper-pagination",clickable:true}
+  // SWIPE móviles
+  let startX,endX;
+  $("#book-container").on('touchstart',function(e){startX=e.originalEvent.touches[0].clientX})
+  $("#book-container").on('touchend',function(e){endX=e.originalEvent.changedTouches[0].clientX;
+    if(startX-endX>30)$("#book").turn('next');else if(endX-startX>30)$("#book").turn('previous');
   });
 
-  // Ring click: abrir libro
-  $('#ring').click(function(){
-    $('#cover').fadeOut();
-    $('#book-container').fadeIn();
-    $('#audio')[0].play();
+  $(window).resize(function(){
+    let w=window.innerWidth<900?window.innerWidth*0.92:1100;
+    let h=window.innerWidth<900?window.innerHeight*0.8:640;
+    $("#book").turn('size',w,h);
   });
 
-  // Audio toggle
-  $('#audio-btn').click(function(){
-    const aud = $('#audio')[0];
-    if(aud.paused){aud.play(); $(this).text('🔊');}
-    else{aud.pause(); $(this).text('🎵');}
+  // SWIPER
+  const swiper=new Swiper('.swiper',{loop:true,autoplay:{delay:3500}});
+  const lightbox=new SimpleLightbox('.swiper-slide img',{});
+
+  // AUDIO
+  let audio1=new Audio('marcha_nupcial.mp3'),audio2=new Audio('eternamente.mp3'),playing1=true;
+  audio1.loop=true;audio1.volume=0.72;
+  audio2.loop=true;audio2.volume=0.72;
+  audio1.play();
+
+  $('#audio-btn').on('click',function(){
+    if(playing1){audio1.pause();audio2.pause();playing1=false;$(this).text('🔇');}
+    else{audio1.play();playing1=true;$(this).text('🎵');}
   });
 
-  // Lightbox
-  var lightbox = new SimpleLightbox('.swiper-wrapper a', {});
+  // Abrir libro desde portada
+  $('#ring').on('click',function(){
+    $('#cover').fadeOut(800,function(){
+      $('#book-container').fadeIn(800);
+      audio1.pause();
+      audio2.play();
+    });
+  });
 });
 </script>
 </body>
