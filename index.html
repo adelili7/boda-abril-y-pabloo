@@ -372,7 +372,7 @@ function createOrbitSparkles(){
     s.className = 'sparkle-orbit';
     s.style.left = '50%';
     s.style.top = '50%';
-    s.style.transform = translate(-50%,-50%) rotate(${i*(360/6)}deg) translateX(110px);
+    s.style.transform = `translate(-50%,-50%) rotate(${i*(360/6)}deg) translateX(110px)`;
     s.style.opacity = 0;
     orbits.appendChild(s);
   }
@@ -382,9 +382,9 @@ createOrbitSparkles();
 function triggerOrbitAnimation(){
   const nodes = orbits.querySelectorAll('.sparkle-orbit');
   nodes.forEach((n,idx)=> {
-    n.style.transition = transform 900ms cubic-bezier(.2,.9,.2,1), opacity 900ms;
+    n.style.transition = `transform 900ms cubic-bezier(.2,.9,.2,1), opacity 900ms`;
     n.style.opacity = 1;
-    n.style.transform = translate(-50%,-50%) rotate(${idx*(360/6)}deg) translateX(130px) scale(1);
+    n.style.transform = `translate(-50%,-50%) rotate(${idx*(360/6)}deg) translateX(130px) scale(1)`;
     setTimeout(()=>{ n.style.opacity = 0; }, 900);
   });
 }
@@ -394,7 +394,7 @@ function computeCoverCountdown(){
   const target = new Date('2025-12-28T00:00:00');
   const now = new Date();
   const diff = Math.max(0, Math.floor((target - now)/(1000*60*60*24)));
-  coverCount.textContent = Faltan ${diff} días para nuestro gran día;
+  coverCount.textContent = `Faltan ${diff} días para nuestro gran día`;
 }
 computeCoverCountdown();
 setInterval(computeCoverCountdown, 60*60*1000);
@@ -450,7 +450,7 @@ function updateBookCountdown(){
   const target = new Date('2025-12-28T00:00:00');
   const now = new Date();
   const diffDays = Math.max(0, Math.floor((target - now)/(1000*60*60*24)));
-  el.textContent = Faltan ${diffDays} días para nuestro gran día;
+  el.textContent = `Faltan ${diffDays} días para nuestro gran día`;
 }
 updateBookCountdown();
 setInterval(updateBookCountdown, 60*60*1000);
@@ -472,7 +472,7 @@ function triggerPageSparkles(){
     p.style.opacity = 1;
     p.style.transition = 'transform 900ms ease-out, opacity 900ms ease-out';
     document.body.appendChild(p);
-    requestAnimationFrame(()=> p.style.transform = translateY(-40px) scale(${1+Math.random()*0.6}), p.style.opacity = 0);
+    requestAnimationFrame(()=> p.style.transform = `translateY(-40px) scale(${1+Math.random()*0.6})`, p.style.opacity = 0);
     setTimeout(()=>p.remove(),1000);
   }
 }
@@ -557,4 +557,5 @@ document.addEventListener('DOMContentLoaded', ()=>{
 /* ---------- END ---------- */
 </script>
 </body>
-</html> 
+</html>
+ 
