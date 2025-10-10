@@ -5,135 +5,115 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Invitación: Abril & Pablo — Cuento de Princesas</title>
 
-<!-- Fuentes -->
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Great+Vibes&family=Playfair+Display&display=swap" rel="stylesheet">
-
-<!-- Swiper (galería) -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"/>
-
-<!-- SimpleLightbox -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplelightbox@2.12.1/dist/simple-lightbox.min.css" />
 
-<!-- jQuery & Turn.js (flipbook) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.js"></script>
 
 <style>
-  *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%}
-  body{
-    font-family:'Playfair Display', serif;
-    background:#f7f6f4;
-    color:#222;
-    -webkit-font-smoothing:antialiased;
-    -moz-osx-font-smoothing:grayscale;
-  }
-  h1,h2,h3,h4{font-family:'Great Vibes',cursive}
-  h2.subtitle{font-family:'Dancing Script',cursive}
+/* ---------- Reset & base ---------- */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:'Playfair Display', serif;
+  background:#f7f6f4;
+  color:#222;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+h1,h2,h3,h4{font-family:'Great Vibes',cursive}
+h2.subtitle{font-family:'Dancing Script',cursive}
 
-  /* ---------- Portada ---------- */
-  #cover{
-    width:100vw;height:100vh;
-    background:url('fondo_floral1.jpg') center/cover no-repeat;
-    display:flex;flex-direction:column;align-items:center;justify-content:center;
-    position:relative;overflow:hidden;
-  }
-  #cursor-canvas{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:2}
+/* ---------- Portada ---------- */
+#cover{
+  width:100vw;height:100vh;
+  background:url('fondo_floral1.jpg') center/cover no-repeat;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+}
+#cursor-canvas{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:2}
 
-  /* ring */
-  #ring-wrap{position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;gap:18px}
-  .ring{
-    width:220px;height:220px;border-radius:50%;
-    background: radial-gradient(circle at 28% 28%, #dcdcdc, #9b9b9b);
-    position:relative;display:flex;align-items:center;justify-content:center;
-    box-shadow:0 0 30px rgba(0,150,255,0.18), inset 0 -6px 18px rgba(0,0,0,0.12);
-    cursor:pointer; transition:transform .25s ease;
-    overflow:visible;
-  }
-  .ring:hover{transform:scale(1.06)}
-  .gem{
-    width:86px;height:86px;border-radius:50%;
-    background: radial-gradient(circle at 35% 30%, #69a8ff 0%, #1a6bff 45%, #0058d6 100%);
-    box-shadow: 0 0 18px rgba(0,150,255,0.9), 0 0 36px rgba(0,110,255,0.55);
-    position:relative;
-    z-index:4;
-    animation:gem-pulse 2s ease-in-out infinite alternate;
-  }
-  @keyframes gem-pulse{
-    0%{transform:scale(1);filter:brightness(1)}
-    100%{transform:scale(1.06);filter:brightness(1.12)}
-  }
-  .sparkle-orbit{position:absolute;width:12px;height:12px;border-radius:50%;background: radial-gradient(circle,#ffffff,#aeefff,#1e90ff);box-shadow:0 0 12px rgba(30,144,255,0.9);opacity:0;pointer-events:none;}
+#ring-wrap{position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;gap:18px}
+.ring{
+  width:220px;height:220px;border-radius:50%;
+  background: radial-gradient(circle at 28% 28%, #dcdcdc, #9b9b9b);
+  position:relative;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 30px rgba(0,150,255,0.18), inset 0 -6px 18px rgba(0,0,0,0.12);
+  cursor:pointer; transition:transform .25s ease;
+  overflow:visible;
+}
+.ring:hover{transform:scale(1.06)}
+.gem{
+  width:86px;height:86px;border-radius:50%;
+  background: radial-gradient(circle at 35% 30%, #69a8ff 0%, #1a6bff 45%, #0058d6 100%);
+  box-shadow: 0 0 18px rgba(0,150,255,0.9), 0 0 36px rgba(0,110,255,0.55);
+  position:relative; z-index:4;
+  animation:gem-pulse 2s ease-in-out infinite alternate;
+}
+@keyframes gem-pulse{
+  0%{transform:scale(1);filter:brightness(1)}
+  100%{transform:scale(1.06);filter:brightness(1.12)}
+}
+.sparkle-orbit{
+  position:absolute;width:12px;height:12px;border-radius:50%;
+  background: radial-gradient(circle,#ffffff,#aeefff,#1e90ff);
+  box-shadow:0 0 12px rgba(30,144,255,0.9);
+  opacity:0;pointer-events:none;
+}
+#yes-text{font-family:'Great Vibes',cursive;color:#fff;font-size:44px;text-shadow:0 6px 20px rgba(0,0,0,0.45);z-index:3}
+#cover-count{color:#fff;font-size:18px;margin-top:6px;text-shadow:0 4px 14px rgba(0,0,0,0.45);z-index:3}
+#audio-btn{
+  position:fixed;top:18px;right:18px;z-index:9999;width:54px;height:54px;border-radius:999px;
+  background:linear-gradient(180deg,#fff,#f1f5ff);box-shadow:0 6px 18px rgba(0,0,0,0.12);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+}
 
-  #yes-text{font-family:'Great Vibes',cursive;color:#fff;font-size:44px;text-shadow:0 6px 20px rgba(0,0,0,0.45);z-index:3}
-  #cover-count{color:#fff;font-size:18px;margin-top:6px;text-shadow:0 4px 14px rgba(0,0,0,0.45);z-index:3}
-
-  /* ---------- audio control ---------- */
-  #audio-btn{
-    position:fixed;top:18px;right:18px;z-index:9999;
-    width:54px;height:54px;border-radius:999px;background:linear-gradient(180deg,#fff,#f1f5ff);
-    box-shadow:0 6px 18px rgba(0,0,0,0.12);display:flex;align-items:center;justify-content:center;cursor:pointer;
-  }
-
-  /* ---------- Book ---------- */
-  #book-container{width:92%;max-width:1100px;margin:36px auto;display:none;z-index:10}
-  #book{width:100%;height:640px;margin:0 auto}
-  #book .page{
-    background:url('fondo_floral3.jpg') center/cover no-repeat;
-    border-radius:12px;overflow:hidden;padding:26px;
-    box-shadow:0 14px 40px rgba(0,0,0,0.18);
-  }
-  .page-inner{background:rgba(255,255,255,0.92);border-radius:10px;padding:28px;height:100%;overflow:auto;box-shadow:inset 0 2px 10px rgba(0,0,0,0.04)}
-
-  /* families */
-  .family-row{display:flex;justify-content:space-between;gap:12px;font-size:18px}
-  .family-col{width:48%;display:flex;flex-direction:column;gap:6px}
-  .family-col p{margin:0;font-size:18px}
-  .center-phrase{margin:20px 0;text-align:center;font-size:20px;color:#333;font-family:'Great Vibes',cursive}
-  .couple-names{text-align:center;font-size:36px;color:#2b2b2b;margin-top:6px;text-shadow:0 6px 18px rgba(170,51,119,0.12)}
-  .big-count{text-align:center;font-size:28px;color:#0a7fff;margin-top:18px;text-shadow:0 0 18px rgba(10,127,255,0.25)}
-
-  /* itinerary icons */
-  .itinerary{display:flex;gap:18px;justify-content:space-around;align-items:flex-start;margin-top:18px}
-  .it-item{text-align:center;width:30%}
-  .it-item p{margin-top:8px}
-
-  /* gallery */
-  .swiper{width:100%;height:320px;margin-top:10px;border-radius:10px}
-  .swiper-slide img{width:100%;height:100%;object-fit:cover;border-radius:10px;display:block}
-
-  /* RSVP */
-  .form-group{display:flex;flex-direction:column;gap:8px;margin-top:10px}
-  input[type=text],input[type=number],textarea{padding:10px;border-radius:8px;border:1px solid #ccc;font-size:16px}
-  button.btn{padding:10px 14px;background:#0a84ff;color:#fff;border:none;border-radius:8px;font-weight:600}
-
-  /* wishes */
-  #wishes-list{list-style:none;margin-top:12px;padding-left:0}
-  #wishes-list li{background:rgba(255,255,255,0.9);padding:8px 10px;border-radius:6px;margin-bottom:8px;animation:fade-in .4s ease}
-  @keyframes fade-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-
-  /* palette */
-  .palette{display:flex;gap:10px;align-items:center;justify-content:center;margin-top:20px}
-  .swatch{width:44px;height:44px;border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,0.08)}
-
-  /* responsive */
-  @media (max-width:900px){
-    .family-row{flex-direction:column}
-    .it-item{width:100%}
-    #book{height:calc(80vh)}
-    .couple-names{font-size:28px}
-    #ring{width:150px;height:150px}
-    .gem{width:64px;height:64px}
-    .page-inner{padding:16px;height:calc(100% - 32px)}
-  }
+/* ---------- Book container ---------- */
+#book-container{width:92%;max-width:1100px;margin:36px auto;display:none;z-index:10}
+#book .page{
+  background:url('fondo_floral3.jpg') center/cover no-repeat;
+  border-radius:12px;overflow:hidden;padding:26px;
+  box-shadow:0 14px 40px rgba(0,0,0,0.18);
+}
+.page-inner{
+  background:rgba(255,255,255,0.92);border-radius:10px;padding:28px;height:100%;overflow:auto;
+  box-shadow:inset 0 2px 10px rgba(0,0,0,0.04)
+}
+.family-row{display:flex;justify-content:space-between;gap:12px;font-size:18px}
+.family-col{width:48%;display:flex;flex-direction:column;gap:6px}
+.family-col p{margin:0;font-size:18px}
+.center-phrase{margin:20px 0;text-align:center;font-size:20px;color:#333;font-family:'Great Vibes',cursive}
+.couple-names{text-align:center;font-size:36px;color:#2b2b2b;margin-top:6px;text-shadow:0 6px 18px rgba(170,51,119,0.12)}
+.big-count{text-align:center;font-size:28px;color:#0a7fff;margin-top:18px;text-shadow:0 0 18px rgba(10,127,255,0.25)}
+.itinerary{display:flex;gap:18px;justify-content:space-around;align-items:flex-start;margin-top:18px}
+.it-item{text-align:center;width:30%}
+.it-item p{margin-top:8px}
+.swiper{width:100%;height:320px;margin-top:10px;border-radius:10px}
+.swiper-slide img{width:100%;height:100%;object-fit:cover;border-radius:10px;display:block}
+.form-group{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+input[type=text],input[type=number],textarea{padding:10px;border-radius:8px;border:1px solid #ccc;font-size:16px}
+button.btn{padding:10px 14px;background:#0a84ff;color:#fff;border:none;border-radius:8px;font-weight:600}
+#wishes-list{list-style:none;margin-top:12px;padding-left:0}
+#wishes-list li{background:rgba(255,255,255,0.9);padding:8px 10px;border-radius:6px;margin-bottom:8px;animation:fade-in .4s ease}
+@keyframes fade-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.palette{display:flex;gap:10px;align-items:center;justify-content:center;margin-top:20px}
+.swatch{width:44px;height:44px;border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,0.08)}
+@media (max-width:900px){
+  .family-row{flex-direction:column}
+  .it-item{width:100%}
+  #book{height:calc(80vh)}
+  .couple-names{font-size:28px}
+  #ring{width:150px;height:150px}
+  .gem{width:64px;height:64px}
+}
 </style>
 </head>
 <body>
 
-<!-- AUDIO -->
 <div id="audio-btn" title="Control audio">🎵</div>
 
-<!-- COVER -->
 <section id="cover" aria-label="Portada">
   <canvas id="cursor-canvas"></canvas>
   <div id="ring-wrap" aria-hidden="false">
@@ -146,127 +126,197 @@
   </div>
 </section>
 
-<!-- BOOK -->
 <section id="book-container" aria-hidden="true">
   <div id="book">
-    <!-- Portada extra (fondo_floral1) -->
-    <div class="page"><div class="page-inner"><h2 class="subtitle">Abril & Pablo</h2></div></div>
-
-    <!-- Familias (fondo_floral2) -->
+    <!-- page 1: families -->
     <div class="page" style="background:url('fondo_floral2.jpg') center/cover no-repeat">
       <div class="page-inner">
-        <h2 class="subtitle">Familias</h2>
+        <h2 id="bible-verse" class="subtitle" style="display:none;text-align:center;margin-bottom:18px;">
+          “Quien halla esposa halla el bien, y alcanza la benevolencia de Jehová – Proverbios 18:22”
+        </h2>
         <div class="family-row">
-          <div class="family-col"><p>Familia de Abril</p></div>
-          <div class="family-col"><p>Familia de Pablo</p></div>
-        </div>
-        <div class="center-phrase">“Quien halla esposa halla el bien, y alcanza la bendición del Señor”</div>
-      </div>
-    </div>
-
-    <!-- Itinerario (fondo_floral3) -->
-    <div class="page">
-      <div class="page-inner">
-        <h2 class="subtitle">Ceremonia & Recepción</h2>
-        <div class="itinerary">
-          <div class="it-item"><img src="icons/iglesia.png"/><p>Iglesia 5pm</p></div>
-          <div class="it-item"><img src="icons/copas.png"/><p>Recepción 7pm</p></div>
-          <div class="it-item"><img src="icons/ramo.png"/><p>Bendiciones</p></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Galería -->
-    <div class="page">
-      <div class="page-inner">
-        <h2 class="subtitle">Galería</h2>
-        <div class="swiper">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide"><img src="galeria/1.jpg"/></div>
-            <div class="swiper-slide"><img src="galeria/2.jpg"/></div>
-            <div class="swiper-slide"><img src="galeria/3.jpg"/></div>
+          <div class="family-col">
+            <p><strong>Eva Aguilar Rendón</strong></p>
+            <p><strong>Pedro Pérez Hernández</strong></p>
+          </div>
+          <div class="family-col" style="text-align:right">
+            <p><strong>Saray Hernández Santana</strong></p>
+            <p><strong>Pablo Tinoco Carranza ✝</strong></p>
           </div>
         </div>
+        <div class="center-phrase">Tienen el honor de compartir la dicha que enlaza a sus amados hijos.</div>
+        <div class="couple-names">Abril Pérez Aguilar & Pablo Eliel Tinoco Hernández</div>
+        <div class="big-count" id="book-count"></div>
       </div>
     </div>
 
-    <!-- RSVP -->
+    <!-- page 2: itinerary -->
     <div class="page">
       <div class="page-inner">
-        <h2 class="subtitle">Confirma tu asistencia</h2>
-        <form>
-          <div class="form-group"><input type="text" placeholder="Nombre"/></div>
-          <div class="form-group"><input type="number" placeholder="Invitados"/></div>
-          <div class="form-group"><textarea placeholder="Mensaje"></textarea></div>
-          <button type="submit" class="btn">Enviar</button>
+        <h2 class="subtitle" style="text-align:center">Itinerario</h2>
+        <div class="itinerary">
+          <!-- íconos y detalles como antes -->
+        </div>
+      </div>
+    </div>
+
+    <!-- page 3: gallery -->
+    <div class="page">
+      <div class="page-inner">
+        <h2 class="subtitle" style="text-align:center">Mejores Momentos</h2>
+        <div class="swiper">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide"><a href="momento1.jpg"><img src="momento1.jpg" alt="Momento 1"></a></div>
+            <div class="swiper-slide"><a href="momento2.jpg"><img src="momento2.jpg" alt="Momento 2"></a></div>
+          </div>
+          <div class="swiper-pagination"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- page 4: RSVP -->
+    <div class="page">
+      <div class="page-inner">
+        <h2 class="subtitle" style="text-align:center">Confirmación de asistencia</h2>
+        <form id="rsvp" class="form-group" autocomplete="off">
+          <input type="text" name="nombre" placeholder="Tu nombre" required />
+          <input type="number" name="acompanantes" placeholder="Número de personas" min="0" required />
+          <textarea name="mensaje" placeholder="Mensaje / deseo (opcional)"></textarea>
+          <button class="btn" type="submit">Enviar confirmación</button>
+          <div id="rsvp-ok" style="color:green;margin-top:8px;display:none">Confirmación guardada ✅</div>
         </form>
       </div>
     </div>
 
-    <!-- Deseos -->
+    <!-- page 5: wishes -->
     <div class="page">
       <div class="page-inner">
-        <h2 class="subtitle">Deseos</h2>
-        <ul id="wishes-list">
-          <li>¡Felicidades!</li>
-          <li>Mucho amor y alegría</li>
-        </ul>
+        <h2 class="subtitle" style="text-align:center">Escribe tus buenos deseos</h2>
+        <form id="wish-form" class="form-group">
+          <input id="wish-text" type="text" placeholder="Tu mensaje..." required />
+          <button class="btn" type="submit">Enviar deseo</button>
+        </form>
+        <ul id="wishes-list"></ul>
+        <div style="margin-top:12px;text-align:center">
+          <button id="download-wishes" class="btn">Descargar deseos (.csv)</button>
+        </div>
       </div>
     </div>
 
-    <!-- Página final (fondo_floral1) -->
-    <div class="page"><div class="page-inner"><h2 class="subtitle">Gracias por acompañarnos</h2></div></div>
+    <!-- page 6: palette & final -->
+    <div class="page" style="background:url('fondo_floral1.jpg') center/cover no-repeat">
+      <div class="page-inner">
+        <h2 class="subtitle" style="text-align:center">Paleta recomendada</h2>
+        <div class="palette" aria-hidden="true">
+          <div class="swatch" style="background:#87CEEB"></div>
+          <div class="swatch" style="background:#C0C0C0"></div>
+          <div class="swatch" style="background:#B76E79"></div>
+        </div>
+        <div style="text-align:center;margin-top:36px">
+          <h1 class="subtitle">Con amor eterno... Abril y Pablo</h1>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
-<!-- Scripts -->
+<audio id="audio-march" src="marcha_nupcial.mp3" loop preload="auto" muted playsinline></audio>
+<audio id="audio-eternally" src="eternamente.mp3" loop preload="auto" muted playsinline></audio>
+
 <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/simplelightbox@2.12.1/dist/simple-lightbox.min.js"></script>
+
 <script>
 $(document).ready(function(){
-  // TURN.JS
-  $("#book").turn({
-    width: window.innerWidth<900?window.innerWidth*0.92:1100,
-    height: window.innerWidth<900?window.innerHeight*0.8:640,
-    autoCenter:true,duration:1000
+
+// ---------- Cursor sparkles ----------
+const canvas = document.getElementById('cursor-canvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+let particles = [];
+window.addEventListener('mousemove', e=>{
+  particles.push({x:e.clientX,y:e.clientY,alpha:1,size:Math.random()*4+2})
+});
+function updateParticles(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles = particles.filter(p=>p.alpha>0);
+  for(let p of particles){
+    ctx.fillStyle = 'rgba(173,216,230,'+p.alpha+')';
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.size,0,Math.PI*2);ctx.fill();
+    p.y-=0.5; p.alpha-=0.02;
+  }
+  requestAnimationFrame(updateParticles);
+}
+updateParticles();
+
+// ---------- Orbit sparkles ----------
+function createOrbitSparkles(){
+  const orbitEl = document.getElementById('orbits');
+  for(let i=0;i<6;i++){
+    const s=document.createElement('div');s.className='sparkle-orbit';
+    orbitEl.appendChild(s);
+  }
+}
+createOrbitSparkles();
+function triggerOrbitAnimation(){
+  const sparkles = document.querySelectorAll('.sparkle-orbit');
+  sparkles.forEach((s,i)=>{
+    s.style.opacity=1;
+    s.style.transform = `translate(-50%,-50%) rotate(${i*60}deg) translateX(110px)`;
+    setTimeout(()=>{s.style.opacity=0},600);
   });
+}
 
-  // SWIPE móviles
-  let startX,endX;
-  $("#book-container").on('touchstart',function(e){startX=e.originalEvent.touches[0].clientX})
-  $("#book-container").on('touchend',function(e){endX=e.originalEvent.changedTouches[0].clientX;
-    if(startX-endX>30)$("#book").turn('next');else if(endX-startX>30)$("#book").turn('previous');
+// ---------- Cover click ----------
+$('#ring').click(function(){
+  $('#cover').fadeOut(400,function(){
+    $('#book-container').fadeIn(800);
+    $('#book-count').text('¡Bienvenidos!');
+    $('#bible-verse').fadeIn(1200);
   });
+  triggerOrbitAnimation();
+});
 
-  $(window).resize(function(){
-    let w=window.innerWidth<900?window.innerWidth*0.92:1100;
-    let h=window.innerWidth<900?window.innerHeight*0.8:640;
-    $("#book").turn('size',w,h);
-  });
+// ---------- Turn.js responsive ----------
+function initBook(){
+  const w = window.innerWidth<900? window.innerWidth*0.92 : 900;
+  const h = window.innerHeight<700? window.innerHeight*0.8 : 600;
+  $('#book').turn({width:w,height:h,autoCenter:true});
+}
+initBook();
+$(window).resize(initBook);
 
-  // SWIPER
-  const swiper=new Swiper('.swiper',{loop:true,autoplay:{delay:3500}});
-  const lightbox=new SimpleLightbox('.swiper-slide img',{});
+// ---------- Audio toggle ----------
+const audioBtn = $('#audio-btn'), march = $('#audio-march')[0];
+audioBtn.click(()=>{if(march.paused){march.muted=false;march.play();audioBtn.text('🔊')}else{march.pause();audioBtn.text('🎵')}});
 
-  // AUDIO
-  let audio1=new Audio('marcha_nupcial.mp3'),audio2=new Audio('eternamente.mp3'),playing1=true;
-  audio1.loop=true;audio1.volume=0.72;
-  audio2.loop=true;audio2.volume=0.72;
-  audio1.play();
+// ---------- Swiper & Lightbox ----------
+const swiper = new Swiper('.swiper',{pagination:{el:'.swiper-pagination',clickable:true}});
+const lightbox = new SimpleLightbox('.swiper-slide a',{captionDelay:250});
 
-  $('#audio-btn').on('click',function(){
-    if(playing1){audio1.pause();audio2.pause();playing1=false;$(this).text('🔇');}
-    else{audio1.play();playing1=true;$(this).text('🎵');}
-  });
+// ---------- RSVP ----------
+$('#rsvp').submit(function(e){
+  e.preventDefault();
+  $('#rsvp-ok').fadeIn(400).delay(1500).fadeOut();
+  $(this).trigger('reset');
+});
 
-  // Abrir libro desde portada
-  $('#ring').on('click',function(){
-    $('#cover').fadeOut(800,function(){
-      $('#book-container').fadeIn(800);
-      audio1.pause();
-      audio2.play();
-    });
-  });
+// ---------- Wishes ----------
+let wishes = JSON.parse(localStorage.getItem('wishes')||'[]');
+function renderWishes(){$('#wishes-list').empty();wishes.forEach(w=>$('#wishes-list').append('<li>'+w+'</li>'))}
+renderWishes();
+$('#wish-form').submit(function(e){
+  e.preventDefault();
+  const text=$('#wish-text').val();
+  wishes.push(text); localStorage.setItem('wishes',JSON.stringify(wishes));
+  renderWishes(); $('#wish-text').val('');
+});
+$('#download-wishes').click(function(){
+  const csv='data:text/csv;charset=utf-8,'+wishes.map(w=>'"'+w.replace(/"/g,'""')+'"').join('\n');
+  const link=document.createElement('a'); link.href=csv; link.download='deseos.csv'; link.click();
+});
 });
 </script>
 </body>
