@@ -1,561 +1,597 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Invitación: Abril & Pablo — Cuento de Princesas</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Abril & Pablo — Invitación</title>
 
-<!-- Fuentes -->
-<link href="https://fonts.googleapis.com/css2?family=Dancing+Script&family=Great+Vibes&family=Playfair+Display&display=swap" rel="stylesheet">
+  <!-- Fonts: Poppins (base), Great Vibes (romántica), Dancing Script (subtítulos) -->
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
-<!-- Swiper (galería) -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"/>
+  <style>
+    /* =========================
+       Variables / Reset
+       ========================= */
+    :root{
+      --bg-cream:#F8F5F0;
+      --accent:#B8DDE6;
+      --deep:#2B2A2F;
+      --card-bg: rgba(255,255,255,0.90);
+      --rose-gold:#d6a79b;
+      --glass-shadow: 0 10px 35px rgba(0,0,0,0.12);
+      --count-glow: rgba(102,201,255,0.18);
+      --white:#ffffff;
+      --muted:#6b6b6b;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;width:100%;font-family:'Poppins',system-ui,Arial,Helvetica,sans-serif;background:var(--bg-cream);color:var(--deep);-webkit-font-smoothing:antialiased;overflow:hidden;cursor:none}
+    a{color:inherit}
+    img{display:block;max-width:100%}
+    button{font-family:inherit;border:0;background:none;cursor:pointer}
+    /* hide focus outlines visually custom for accessibility */
+    :focus{outline:2px dashed rgba(0,0,0,0.08);outline-offset:3px}
 
-<!-- SimpleLightbox -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplelightbox@2.12.1/dist/simple-lightbox.min.css" />
+    /* =========================
+       Layout / Sections
+       ========================= */
+    .sections{position:relative;height:100vh;perspective:1400px;overflow:hidden}
+    .section{
+      position:absolute;inset:0;
+      display:flex;align-items:center;justify-content:center;
+      padding:36px 18px;
+      transition:transform .9s cubic-bezier(.2,.9,.2,1),opacity .6s ease;
+      transform-origin:center;backface-visibility:hidden;
+      opacity:0;
+      background-size:cover;background-position:center;background-attachment:fixed;
+    }
+    .section.active{opacity:1;transform:rotateY(0) translateZ(0)}
+    .section.prev{opacity:0;transform:rotateY(-90deg) translateZ(-240px)}
+    .section.next{opacity:0;transform:rotateY(90deg) translateZ(-240px)}
 
-<!-- jQuery & Turn.js (flipbook) -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/turn.js/4.1.0/turn.min.js"></script>
+    /* Backgrounds (user images; cover) */
+    .portada{background-image:url('fondo_floral.jpg')}
+    .page2{background-image:url('fondo_floral1.png')}
+    .page3{background-image:url('fondo_floral2.jpg')}
+    .page4{background-image:url('fondo_floral3.jpg')}
+    .page5{background-image:url('fondo_floral3.jpg')}
+    .final{background-image:url('fondo_floral4.png')}
 
-<style>
-  /* ---------- Reset & base ---------- */
-  *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%}
-  body{
-    font-family:'Playfair Display', serif;
-    background:#f7f6f4;
-    color:#222;
-    -webkit-font-smoothing:antialiased;
-    -moz-osx-font-smoothing:grayscale;
-  }
-  h1,h2,h3,h4{font-family:'Great Vibes',cursive}
-  h2.subtitle{font-family:'Dancing Script',cursive}
+    /* overlay to soften backgrounds */
+    .overlay{position:absolute;inset:0;background:linear-gradient(180deg, rgba(255,255,255,0.36), rgba(255,255,255,0.7));pointer-events:none}
 
-  /* ---------- Portada ---------- */
-  #cover{
-    width:100vw;height:100vh;
-    background:url('fondo_floral1.jpg') center/cover no-repeat;
-    display:flex;flex-direction:column;align-items:center;justify-content:center;
-    position:relative;overflow:hidden;
-  }
-  /* canvas for particles */
-  #cursor-canvas{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:2}
+    /* central card */
+    .card{
+      position:relative;z-index:2;
+      width:100%;max-width:980px;
+      background:var(--card-bg);
+      padding:28px;border-radius:18px;
+      box-shadow:var(--glass-shadow);
+      backdrop-filter:blur(6px);
+      display:flex;flex-direction:column;align-items:center;gap:18px;
+    }
 
-  /* ring (princess style) */
-  #ring-wrap{position:relative;z-index:3;display:flex;flex-direction:column;align-items:center;gap:18px}
-  .ring{
-    width:220px;height:220px;border-radius:50%;
-    background: radial-gradient(circle at 28% 28%, #dcdcdc, #9b9b9b);
-    position:relative;display:flex;align-items:center;justify-content:center;
-    box-shadow:0 0 30px rgba(0,150,255,0.18), inset 0 -6px 18px rgba(0,0,0,0.12);
-    cursor:pointer; transition:transform .25s ease;
-    overflow:visible;
-  }
-  .ring:hover{transform:scale(1.06)}
-  /* gemstone (blue) */
-  .gem{
-    width:86px;height:86px;border-radius:50%;
-    background: radial-gradient(circle at 35% 30%, #69a8ff 0%, #1a6bff 45%, #0058d6 100%);
-    box-shadow: 0 0 18px rgba(0,150,255,0.9), 0 0 36px rgba(0,110,255,0.55);
-    position:relative;
-    z-index:4;
-    animation:gem-pulse 2s ease-in-out infinite alternate;
-  }
-  @keyframes gem-pulse{
-    0%{transform:scale(1);filter:brightness(1)}
-    100%{transform:scale(1.06);filter:brightness(1.12)}
-  }
+    /* typography */
+    .headline{font-family:'Great Vibes',cursive;font-size:64px;margin:4px 0 0;color:#2f2f2f;text-align:center}
+    .sub{font-family:'Dancing Script',cursive;font-size:36px;margin:0;color:#3d3d3d;text-align:center}
+    .body-serif{font-family:'Poppins',sans-serif;font-size:16px;color:var(--deep);text-align:center}
+    .verse{font-family:'Dancing Script',cursive;font-size:18px;color:#3d3d3d;text-align:center}
+    .muted{color:var(--muted);font-size:13px}
 
-  /* orbiting sparkles around ring */
-  .sparkle-orbit{
-    position:absolute;
-    width:12px;height:12px;border-radius:50%;
-    background: radial-gradient(circle,#ffffff,#aeefff,#1e90ff);
-    box-shadow:0 0 12px rgba(30,144,255,0.9);
-    opacity:0;pointer-events:none;
-  }
+    /* ring button (portada) */
+    .ring-button{background:transparent;border:0;padding:0;margin:6px auto;position:relative;cursor:pointer}
+    .ring-svg{width:240px;height:240px;display:block}
+    .ring-rotate{animation:ringSpin 14s linear infinite;transform-origin:100px 100px}
+    @keyframes ringSpin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+    .ring-spark{position:absolute;left:50%;top:36%;width:140px;height:140px;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;opacity:0}
+    .ring-button.clicked .ring-spark{animation:spark 900ms ease-out forwards}
+    @keyframes spark{0%{opacity:0;transform:translate(-50%,-50%) scale(0.6)}30%{opacity:1;transform:translate(-50%,-50%) scale(1.05)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.6)}}
 
-  /* "Sí acepto!" text */
-  #yes-text{font-family:'Great Vibes',cursive;color:#fff;font-size:44px;text-shadow:0 6px 20px rgba(0,0,0,0.45);z-index:3}
+    /* controls */
+    .controls-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+    .magicBtn{
+      padding:8px 14px;border-radius:12px;background:linear-gradient(45deg,var(--white),#B8DDE6);
+      color:#2B2A2F;font-weight:600;cursor:pointer;box-shadow:0 8px 22px rgba(0,0,0,0.10);
+      border:1px solid rgba(0,0,0,0.04)
+    }
+    .magicBtn.small{padding:6px 10px;font-size:13px}
 
-  /* cover countdown (small) */
-  #cover-count{color:#fff;font-size:18px;margin-top:6px;text-shadow:0 4px 14px rgba(0,0,0,0.45);z-index:3}
+    /* parents layout */
+    .parents-grid{display:flex;gap:28px;align-items:center;width:100%;justify-content:space-between;margin-bottom:6px}
+    .parents-grid .col{flex:1;min-width:200px}
+    .parent-names{font-family:'Great Vibes',cursive;font-size:26px;line-height:1.2;color:#2B2A2F}
+    .parent-left{text-align:left}
+    .parent-right{text-align:right}
+    .honor{font-family:'Dancing Script',cursive;font-size:22px;text-align:center;margin-top:8px;color:#2b2b2b}
 
-  /* ---------- audio control ---------- */
-  #audio-btn{
-    position:fixed;top:18px;right:18px;z-index:9999;
-    width:54px;height:54px;border-radius:999px;background:linear-gradient(180deg,#fff,#f1f5ff);
-    box-shadow:0 6px 18px rgba(0,0,0,0.12);display:flex;align-items:center;justify-content:center;cursor:pointer;
-  }
+    /* couple */
+    .couple{display:flex;flex-direction:column;align-items:center;gap:14px}
+    .photo{max-width:520px;width:100%;height:auto;border-radius:14px;box-shadow:0 12px 36px rgba(0,0,0,0.12);object-fit:cover}
 
-  /* ---------- Book container ---------- */
-  #book-container{width:92%;max-width:1100px;margin:36px auto;display:none;z-index:10}
-  #book{width:100%;height:640px;margin:0 auto}
-  #book .page{background:url('fondo_floral3.jpg') center/cover no-repeat;border-radius:12px;overflow:hidden;padding:26px;box-shadow:0 14px 40px rgba(0,0,0,0.18)}
+    /* itinerary */
+    .itinerary{display:flex;flex-direction:column;gap:12px;width:100%;max-width:820px}
+    .it-item{display:flex;gap:12px;align-items:flex-start}
+    .it-icon{width:48px;height:48px;border-radius:10px;background:rgba(255,255,255,0.9);display:flex;align-items:center;justify-content:center;font-size:22px}
 
-  /* page inner content container */
-  .page-inner{background:rgba(255,255,255,0.92);border-radius:10px;padding:28px;height:100%;overflow:auto;box-shadow:inset 0 2px 10px rgba(0,0,0,0.04)}
+    /* gallery */
+    .gallery-grid{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+    .gallery-grid img{width:160px;height:110px;object-fit:cover;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.12);transition:transform .25s}
+    .gallery-grid img:hover{transform:scale(1.05)}
 
-  /* families section */
-  .family-row{display:flex;justify-content:space-between;gap:12px;font-size:18px}
-  .family-col{width:48%;display:flex;flex-direction:column;gap:6px}
-  .family-col p{margin:0;font-size:18px}
-  .center-phrase{margin:20px 0;text-align:center;font-size:20px;color:#333;font-family:'Great Vibes',cursive}
+    /* carousel */
+    .carousel-container{display:flex;flex-direction:column;align-items:center;gap:14px;width:100%}
+    .carousel-container img{max-width:640px;width:100%;border-radius:14px;box-shadow:0 14px 40px rgba(0,0,0,0.14);object-fit:cover}
+    .carousel-controls{display:flex;gap:12px;align-items:center;justify-content:center}
 
-  .couple-names{text-align:center;font-size:36px;color:#2b2b2b;margin-top:6px;text-shadow:0 6px 18px rgba(170,51,119,0.12)}
+    /* modal RSVP */
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,0.56);display:none;align-items:center;justify-content:center;z-index:9999;padding:18px}
+    .modal.open{display:flex}
+    .modal .box{background:var(--white);padding:18px;border-radius:12px;max-width:560px;width:100%;box-shadow:0 10px 30px rgba(0,0,0,0.18)}
 
-  /* countdown highlighted on book */
-  .big-count{text-align:center;font-size:28px;color:#0a7fff;margin-top:18px;text-shadow:0 0 18px rgba(10,127,255,0.25)}
+    /* flip countdown */
+    .countdown{display:flex;gap:14px;align-items:end;justify-content:center;margin-top:10px}
+    .flip-box{display:flex;flex-direction:column;align-items:center;gap:8px}
+    .flip-card{width:90px;height:76px;position:relative;perspective:900px}
+    .flip-card .card-inner{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.2,.9,.2,1)}
+    .flip-card .face{
+      position:absolute;left:0;right:0;display:flex;align-items:center;justify-content:center;
+      font-family:'Dancing Script',cursive;font-size:20px;font-weight:700;color:#012a55;background:rgba(255,255,255,0.95);border-radius:12px;box-shadow:0 0 16px var(--count-glow);
+    }
+    .flip-card .face.top{top:0;height:50%;border-bottom:1px solid rgba(0,0,0,0.06);transform-origin:bottom}
+    .flip-card .face.bottom{bottom:0;height:50%;border-top:1px solid rgba(0,0,0,0.06);transform-origin:top;transform:translateY(50%)}
+    .flip-card.flipping .card-inner{transform:rotateX(-180deg)}
+    .count-label{font-size:12px;color:#666}
 
-  /* itinerary 2d icons */
-  .itinerary{display:flex;gap:18px;justify-content:space-around;align-items:flex-start;margin-top:18px}
-  .it-item{text-align:center;width:30%}
-  .it-item p{margin-top:8px}
+    /* hearts */
+    .magicHeart{position:fixed;pointer-events:none;z-index:99999;width:26px;height:26px;opacity:0;transform:translate(-50%,-50%) scale(1);animation:heartFade 1000ms forwards}
+    @keyframes heartFade{0%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-120%) scale(0.6)}}
 
-  /* gallery */
-  .swiper{width:100%;height:320px;margin-top:10px;border-radius:10px}
-  .swiper-slide img{width:100%;height:100%;object-fit:cover;border-radius:10px;display:block}
-
-  /* RSVP */
-  .form-group{display:flex;flex-direction:column;gap:8px;margin-top:10px}
-  input[type=text],input[type=number],textarea{padding:10px;border-radius:8px;border:1px solid #ccc;font-size:16px}
-  button.btn{padding:10px 14px;background:#0a84ff;color:#fff;border:none;border-radius:8px;font-weight:600}
-
-  /* wishes list */
-  #wishes-list{list-style:none;margin-top:12px;padding-left:0}
-  #wishes-list li{background:rgba(255,255,255,0.9);padding:8px 10px;border-radius:6px;margin-bottom:8px;animation:fade-in .4s ease}
-  @keyframes fade-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-
-  /* palette & footer */
-  .palette{display:flex;gap:10px;align-items:center;justify-content:center;margin-top:20px}
-  .swatch{width:44px;height:44px;border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,0.08)}
-
-  /* responsive */
-  @media (max-width:900px){
-    .family-row{flex-direction:column}
-    .it-item{width:100%}
-    #book{height:calc(80vh)}
-    .couple-names{font-size:28px}
-    #ring{width:150px;height:150px}
-    .gem{width:64px;height:64px}
-  }
-</style>
+    /* small screens */
+    @media (max-width:900px){
+      .headline{font-size:46px}
+      .sub{font-size:28px}
+      .parent-names{font-size:20px}
+      .flip-card{width:66px;height:56px}
+      .carousel-container img{max-width:420px}
+      .card{padding:18px}
+    }
+  </style>
 </head>
 <body>
 
-<!-- AUDIO CONTROL -->
-<div id="audio-btn" title="Control audio">🎵</div>
+  <!-- Audios (must exist in same folder) -->
+  <audio id="marcha" src="marcha_nupcial.mp3" preload="auto" loop autoplay></audio>
+  <audio id="eternamente" src="eternamente.mp3" preload="auto"></audio>
 
-<!-- COVER / PORTADA -->
-<section id="cover" aria-label="Portada">
-  <canvas id="cursor-canvas"></canvas>
+  <!-- Sections -->
+  <div class="sections" id="sections">
 
-  <div id="ring-wrap" aria-hidden="false">
-    <div class="ring" id="ring" role="button" aria-label="Abrir invitación">
-      <!-- orbiting sparkles (we will position with JS) -->
-      <div class="gem" id="gem"></div>
-    </div>
+    <!-- -----------------------
+         Page 1 - Portada
+         ----------------------- -->
+    <section class="section portada active" data-name="portada" aria-label="Portada">
+      <div class="overlay" aria-hidden="true"></div>
+      <div class="card">
+        <h1 class="headline">Abril & Pablo</h1>
+        <h2 class="sub">¡Sí, acepto!</h2>
 
-    <!-- orbit sparkles placeholders -->
-    <div id="orbits" aria-hidden="true"></div>
+        <button class="ring-button" id="ringBtn" aria-label="Abrir invitación">
+          <div class="ring-spark" aria-hidden="true"></div>
+          <svg class="ring-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <radialGradient id="ringMetal" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#e9eef2"/><stop offset="60%" stop-color="#c9ccd0"/><stop offset="100%" stop-color="var(--rose-gold)"/></radialGradient>
+              <radialGradient id="blueGem" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#dff6ff"/><stop offset="60%" stop-color="#66c9ff"/><stop offset="100%" stop-color="#004c99"/></radialGradient>
+            </defs>
+            <g class="ring-rotate">
+              <ellipse cx="100" cy="100" rx="40" ry="12" stroke="url(#ringMetal)" stroke-width="12" fill="none" />
+              <path d="M100 58 L110 70 L100 86 L90 70 Z" fill="url(#blueGem)" stroke="#fff" stroke-opacity="0.4" stroke-width="0.6"/>
+              <circle cx="100" cy="60" r="2" fill="#fff" opacity="0.9"></circle>
+            </g>
+          </svg>
+        </button>
 
-    <div id="yes-text">¡Sí acepto!</div>
-    <div id="cover-count"></div>
+        <div class="controls-row" role="group" aria-label="Controles portada">
+          <button class="magicBtn" id="clickRingBtn">Clic en el anillo</button>
+          <button class="magicBtn" id="pauseMarchBtn">Pausar marcha</button>
+          <button class="magicBtn" id="toggleEtern">Reproducir eternamente</button>
+        </div>
+
+        <p class="verse">"Quien halla esposa halla el bien" — <strong>Proverbios 18:22</strong></p>
+      </div>
+    </section>
+
+    <!-- -----------------------
+         Page 2 - Padres + Novios
+         ----------------------- -->
+    <section class="section page2" data-name="page2" aria-label="Padres y novios">
+      <div class="overlay" aria-hidden="true"></div>
+      <div class="card" role="region">
+        <div style="width:100%;">
+          <div class="parents-grid" id="parentsGrid">
+            <div class="col parent-left">
+              <p class="parent-names">Padres de la novia<br><strong>Eva Aguilar Rendón</strong><br><strong>Pedro Pérez Hernández</strong></p>
+            </div>
+            <div class="col parent-right">
+              <p class="parent-names">Padres del novio<br><strong>Saray Hernández Santana</strong><br><strong>Pablo Tinoco Carranza</strong> <span title="Finado" style="font-size:18px;color:#444">✝</span></p>
+            </div>
+          </div>
+
+          <div class="honor" style="margin-top:12px">Tienen el honor de compartir la dicha que enlaza a sus amados hijos.</div>
+        </div>
+
+        <div class="couple" style="margin-top:10px">
+          <h2 class="sub">Abril & Pablo</h2>
+          <img src="foto1.jpg" alt="Abril y Pablo" class="photo" id="photo1">
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------
+         Page 3 - Itinerario + RSVP + Contador
+         ----------------------- -->
+    <section class="section page3" data-name="page3" aria-label="Itinerario">
+      <div class="overlay" aria-hidden="true"></div>
+      <div class="card" role="region">
+        <h2 class="sub">Itinerario</h2>
+
+        <div class="itinerary" style="margin-top:6px">
+          <div class="it-item"><div class="it-icon" aria-hidden="true">⛪</div><div><strong>Ceremonia Religiosa:</strong> <strong>2:00 pm</strong> — Iglesia Cristiana Palabra de Vida AD<br><a class="muted" href="https://maps.app.goo.gl/AWYkNZ44jyshjRUG6" target="_blank" rel="noopener">Ver mapa</a></div></div>
+
+          <div class="it-item"><div class="it-icon" aria-hidden="true">🎉</div><div><strong>Recepción:</strong> <strong>4:00 pm</strong> — Jardín Los Abuelos, Tlaquiltenango, Morelos<br><a class="muted" href="https://maps.app.goo.gl/B2W65gnaMnyodGh56" target="_blank" rel="noopener">Ver mapa</a></div></div>
+
+          <div class="it-item"><div class="it-icon" aria-hidden="true">⏳</div><div><strong>Duración estimada:</strong> Inicio 4:00 pm — Se estima evento hasta las 11:00 pm aprox.</div></div>
+
+          <div class="it-item"><div class="it-icon" aria-hidden="true">👗</div><div><strong>Código de vestimenta:</strong> Formal — tonos recomendados: celestes, beige, gris, verde, rosa.<br><em>Dejemos el blanco para la novia.</em></div></div>
+        </div>
+
+        <div style="margin-top:12px">
+          <button class="magicBtn" id="openRsvp">Confirmar asistencia</button>
+        </div>
+
+        <h3 class="sub" style="margin-top:12px">28 de diciembre del 2025</h3>
+
+        <!-- Flip countdown -->
+        <div class="countdown" id="flipCountdown" aria-live="polite" aria-atomic="true">
+          <div class="flip-box" aria-hidden="false">
+            <div class="flip-card" id="daysCard" aria-hidden="false">
+              <div class="card-inner">
+                <div class="face top" id="daysTop">00</div>
+                <div class="face bottom" id="daysBottom">00</div>
+              </div>
+            </div>
+            <div class="count-label">Días</div>
+          </div>
+
+          <div class="flip-box">
+            <div class="flip-card" id="hoursCard" aria-hidden="false">
+              <div class="card-inner">
+                <div class="face top" id="hoursTop">00</div>
+                <div class="face bottom" id="hoursBottom">00</div>
+              </div>
+            </div>
+            <div class="count-label">Horas</div>
+          </div>
+
+          <div class="flip-box">
+            <div class="flip-card" id="minutesCard" aria-hidden="false">
+              <div class="card-inner">
+                <div class="face top" id="minutesTop">00</div>
+                <div class="face bottom" id="minutesBottom">00</div>
+              </div>
+            </div>
+            <div class="count-label">Minutos</div>
+          </div>
+
+          <div class="flip-box">
+            <div class="flip-card" id="secondsCard" aria-hidden="false">
+              <div class="card-inner">
+                <div class="face top" id="secondsTop">00</div>
+                <div class="face bottom" id="secondsBottom">00</div>
+              </div>
+            </div>
+            <div class="count-label">Segundos</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------
+         Page 4 - Galería novios (carrusel)
+         ----------------------- -->
+    <section class="section page4" data-name="page4" aria-label="Galería novios">
+      <div class="overlay" aria-hidden="true"></div>
+      <div class="card carousel-container" role="region">
+        <h2 class="sub">Galería — Los novios</h2>
+        <img src="foto1.jpg" alt="Abril y Pablo" id="carouselImage" class="carousel-image" />
+        <div class="carousel-controls" style="margin-top:8px">
+          <button class="magicBtn small" id="carouselPrev" aria-label="Anterior foto">Anterior</button>
+          <button class="magicBtn small" id="carouselNext" aria-label="Siguiente foto">Siguiente</button>
+          <button class="magicBtn small" id="galleryAutoplayToggle" aria-pressed="false">Pausar autoplay</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- -----------------------
+         Page 5 - Galería colaborativa
+         ----------------------- -->
+    <section class="section page5" data-name="page5" aria-label="Galería invitados">
+      <div class="overlay" aria-hidden="true"></div>
+      <div class="card" role="region">
+        <h2 class="sub">Momentos de los invitados</h2>
+        <div class="gallery-grid" id="guestGallery" style="margin-top:10px">
+          <img src="momento8.jpg" alt="Momento invitado 1">
+          <img src="foto1.jpg" alt="Momento invitado 2">
+        </div>
+        <p class="muted" style="text-align:center;margin-top:12px">Comparte tus fotos: <a href="https://docs.google.com/forms/d/e/1FAIpQLSfDX9Ky8YrQ962Uxh5ibEYGDk2WsyyVUxUPC09IcwrBKlHx7A/viewform?usp=header" target="_blank" rel="noopener">Subir momento</a></p>
+      </div>
+    </section>
+
+    <!-- -----------------------
+         Page 6 - Momento final
+         ----------------------- -->
+    <section class="section final" data-name="final" aria-label="Final">
+      <div class="overlay" aria-hidden="true"></div>
+      <div class="card couple" role="region">
+        <img src="momento8.jpg" alt="Momento especial" class="photo" />
+        <h2 class="sub">“Y así comienza nuestra historia para siempre”</h2>
+        <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;justify-content:center">
+          <a class="magicBtn small" href="#" id="addCalendar">Agregar al calendario</a>
+          <button class="magicBtn small" id="downloadPdf">Descargar invitación (PDF)</button>
+        </div>
+
+        <div style="display:flex;gap:8px;margin-top:12px;justify-content:center">
+          <a class="magicBtn small" href="https://wa.me/5217774914500" target="_blank" rel="noopener">WhatsApp Abril</a>
+          <a class="magicBtn small" href="https://wa.me/5217341123645" target="_blank" rel="noopener">WhatsApp Pablo</a>
+        </div>
+      </div>
+    </section>
+
   </div>
-</section>
 
-<!-- BOOK (hidden until ring click) -->
-<section id="book-container" aria-hidden="true">
-  <div id="book">
-    <!-- page 1: families + bible verse will be revealed after click -->
-    <div class="page">
-      <div class="page-inner">
-        <h2 id="bible-verse" class="subtitle" style="display:none;text-align:center;margin-bottom:18px;">
-          “Quien halla esposa halla el bien, y alcanza la benevolencia de Jehová – Proverbios 18:22”
-        </h2>
-
-        <div class="family-row">
-          <div class="family-col">
-            <p><strong>Eva Aguilar Rendón</strong></p>
-            <p><strong>Pedro Pérez Hernández</strong></p>
-          </div>
-          <div class="family-col" style="text-align:right">
-            <p><strong>Saray Hernández Santana</strong></p>
-            <p><strong>Pablo Tinoco Carranza ✝</strong></p>
-          </div>
+  <!-- RSVP Modal -->
+  <div class="modal" id="rsvpModal" role="dialog" aria-modal="true" aria-labelledby="rsvpTitle">
+    <div class="box">
+      <h3 id="rsvpTitle">Confirmación de asistencia</h3>
+      <form id="rsvpForm" style="display:flex;flex-direction:column;gap:8px;margin-top:10px">
+        <label>Nombre completo<br><input name="name" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #e6e6e6"></label>
+        <label>Correo (opcional)<br><input name="email" style="width:100%;padding:10px;border-radius:8px;border:1px solid #e6e6e6"></label>
+        <label>Número de acompañantes<br><input name="guests" type="number" min="0" value="0" style="width:100%;padding:10px;border-radius:8px;border:1px solid #e6e6e6"></label>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:6px">
+          <button type="button" class="magicBtn" id="closeRsvp">Cancelar</button>
+          <button type="submit" class="magicBtn">Enviar</button>
         </div>
-
-        <div class="center-phrase">Tienen el honor de compartir la dicha que enlaza a sus amados hijos.</div>
-        <div class="couple-names">Abril Pérez Aguilar & Pablo Eliel Tinoco Hernández</div>
-        <div class="big-count" id="book-count"></div>
-      </div>
-    </div>
-
-    <!-- page 2: itinerary -->
-    <div class="page">
-      <div class="page-inner">
-        <h2 class="subtitle" style="text-align:center">Itinerario</h2>
-        <div class="itinerary">
-          <div class="it-item" title="Preparativos">
-            <!-- ramo SVG 2D -->
-            <svg width="120" height="120" viewBox="0 0 64 64" aria-hidden="true">
-              <circle cx="32" cy="32" r="18" fill="#FFB6C1"/>
-              <g fill="#8B5E68"><path d="M32 18c-6 8-6 18 0 26 6-8 6-18 0-26z"/></g>
-            </svg>
-            <p>Preparativos / Ceremonia inicial</p>
-          </div>
-          <div class="it-item" title="Ceremonia Religiosa">
-            <!-- iglesia SVG -->
-            <svg width="120" height="120" viewBox="0 0 64 64" aria-hidden="true">
-              <polygon points="32,6 8,22 18,22 18,56 46,56 46,22 56,22" fill="#9FC5E8"/>
-              <rect x="26" y="28" width="12" height="22" fill="#fff"/>
-              <path d="M32 6 L32 18" stroke="#fff" stroke-width="1.4"/>
-            </svg>
-            <p><strong>Ceremonia Religiosa</strong><br>2pm — Iglesia Cristiana "Palabra de Vida"</p>
-            <p><a href="https://maps.app.goo.gl/JYTirH62EEM2VvD96" target="_blank" rel="noopener">Ver en Google Maps</a></p>
-          </div>
-          <div class="it-item" title="Recepción">
-            <!-- copas SVG -->
-            <svg width="120" height="120" viewBox="0 0 64 64" aria-hidden="true">
-              <g fill="#c0c0c0"><path d="M18 16c6 0 10 4 10 10 0 2-1 4-2 6H20c-1-2-2-4-2-6 0-6 4-10 0-10z"/></g>
-              <g fill="#F6D365"><circle cx="44" cy="26" r="8"/></g>
-              <line x1="24" y1="44" x2="40" y2="44" stroke="#8A6B3F" stroke-width="2"/>
-            </svg>
-            <p><strong>Recepción</strong><br>4pm — Jardín El Abuelo</p>
-            <p><a href="https://maps.app.goo.gl/kuYmUMoTuaj3XAjz9" target="_blank" rel="noopener">Ver en Google Maps</a></p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- page 3: gallery -->
-    <div class="page">
-      <div class="page-inner">
-        <h2 class="subtitle" style="text-align:center">Mejores Momentos</h2>
-        <div class="swiper">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide"><a href="momento1.jpg"><img src="momento1.jpg" alt="Momento 1"></a></div>
-            <div class="swiper-slide"><a href="momento2.jpg"><img src="momento2.jpg" alt="Momento 2"></a></div>
-            <div class="swiper-slide"><a href="momento3.jpg"><img src="momento3.jpg" alt="Momento 3"></a></div>
-            <div class="swiper-slide"><a href="momento4.jpg"><img src="momento4.jpg" alt="Momento 4"></a></div>
-            <div class="swiper-slide"><a href="momento5.jpg"><img src="momento5.jpg" alt="Momento 5"></a></div>
-          </div>
-          <div class="swiper-pagination"></div>
-        </div>
-        <div class="center-phrase">“Tu amor es lo que he anhelado y el regalo que Dios me ha dado”</div>
-      </div>
-    </div>
-
-    <!-- page 4: RSVP -->
-    <div class="page">
-      <div class="page-inner">
-        <h2 class="subtitle" style="text-align:center">Confirmación de asistencia</h2>
-        <form id="rsvp" class="form-group" autocomplete="off">
-          <input type="text" name="nombre" placeholder="Tu nombre" required />
-          <input type="number" name="acompanantes" placeholder="Número de personas" min="0" required />
-          <textarea name="mensaje" placeholder="Mensaje / deseo (opcional)"></textarea>
-          <button class="btn" type="submit">Enviar confirmación</button>
-          <div id="rsvp-ok" style="color:green;margin-top:8px;display:none">Confirmación guardada en la base de datos ✅</div>
-        </form>
-      </div>
-    </div>
-
-    <!-- page 5: wishes -->
-    <div class="page">
-      <div class="page-inner">
-        <h2 class="subtitle" style="text-align:center">Escribe tus buenos deseos</h2>
-        <form id="wish-form" class="form-group">
-          <input id="wish-text" type="text" placeholder="Tu mensaje..." required />
-          <button class="btn" type="submit">Enviar deseo</button>
-        </form>
-        <ul id="wishes-list"></ul>
-        <div style="margin-top:12px;text-align:center">
-          <button id="download-wishes" class="btn">Descargar deseos (.csv)</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- page 6: palette & final -->
-    <div class="page">
-      <div class="page-inner">
-        <h2 class="subtitle" style="text-align:center">Paleta recomendada</h2>
-        <div class="palette" aria-hidden="true">
-          <div class="swatch" style="background:#87CEEB"></div>
-          <div class="swatch" style="background:#C0C0C0"></div>
-          <div class="swatch" style="background:#B76E79"></div>
-          <div class="swatch" style="background:#F5DEB3"></div>
-          <div class="swatch" style="background:#FFC0CB"></div>
-          <div class="swatch" style="background:#98FB98"></div>
-        </div>
-
-        <p style="text-align:center;margin-top:18px">Te recomendamos la siguiente paleta de colores; dejemos el blanco para la novia.</p>
-
-        <div style="text-align:center;margin-top:36px">
-          <h1 class="subtitle">Con amor eterno... Abril y Pablo</h1>
-          <div style="margin-top:18px;display:flex;gap:12px;justify-content:center">
-            <a href="https://wa.me/5217774914500" target="_blank"><button class="btn">WhatsApp Abril</button></a>
-            <a href="https://wa.me/5217341123645" target="_blank"><button class="btn">WhatsApp Pablo</button></a>
-          </div>
-        </div>
-      </div>
+      </form>
     </div>
   </div>
-</section>
 
-<!-- Audio elements (files must exist in repo) -->
-<audio id="audio-march" src="marcha_nupcial.mp3" loop preload="auto"></audio>
-<audio id="audio-eternally" src="eternamente.mp3" loop preload="auto"></audio>
+  <script>
+    /* ============================
+       Basic section navigation (flipbook)
+       - showSectionByIndex manages classes active/prev/next
+       - keyboard arrows and ring / next click navigate
+       ============================ */
+    const sections = Array.from(document.querySelectorAll('.section'));
+    let currentIndex = 0;
 
-<!-- External scripts -->
-<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/simplelightbox@2.12.1/dist/simple-lightbox.min.js"></script>
+    function showSectionByIndex(idx){
+      if(idx < 0) idx = 0;
+      if(idx > sections.length - 1) idx = sections.length -1;
+      sections.forEach((s,i)=>{
+        s.classList.remove('active','prev','next');
+        if(i === idx) s.classList.add('active');
+        else if(i < idx) s.classList.add('prev');
+        else s.classList.add('next');
+      });
+      currentIndex = idx;
+    }
+    // initial
+    showSectionByIndex(0);
 
-<script>
-/* ------------------------------ Utilities ------------------------------ */
-const gsScriptUrl = 'https://script.google.com/macros/s/AKfycbyeIsfOd4ugH3DerKdBooOjEoZDOrYlTgD2oHQmMxRqfSCIx9UPDPQeGs1sI8KpKoWLTQ/exec'; // RSVP endpoint
+    // ring + click behaviors
+    const ringBtn = document.getElementById('ringBtn');
+    const clickRingBtn = document.getElementById('clickRingBtn');
+    const pauseMarchBtn = document.getElementById('pauseMarchBtn');
+    const toggleEternBtn = document.getElementById('toggleEtern');
+    const marcha = document.getElementById('marcha');
+    const eternamente = document.getElementById('eternamente');
 
-/* ------------------------------ Particles (canvas) ------------------------------ */
-const canvas = document.getElementById('cursor-canvas');
-const ctx = canvas.getContext('2d');
-function resizeCanvas(){canvas.width = window.innerWidth; canvas.height = window.innerHeight;}
-resizeCanvas(); window.addEventListener('resize', resizeCanvas);
+    function openParents(){
+      try{ marcha.pause(); }catch(e){}
+      try{ eternamente.currentTime = 0; eternamente.play(); }catch(e){}
+      ringBtn.classList.add('clicked'); setTimeout(()=> ringBtn.classList.remove('clicked'),900);
+      showSectionByIndex(1); // go to page 2 (parents)
+    }
+    ringBtn && ringBtn.addEventListener('click', openParents);
+    clickRingBtn?.addEventListener('click', openParents);
+    pauseMarchBtn?.addEventListener('click', ()=> { try{ marcha.pause(); }catch(e){} });
+    function updateToggleEtern(){ toggleEternBtn.textContent = eternamente.paused ? 'Reproducir eternamente' : 'Pausar eternamente'; }
+    toggleEternBtn.addEventListener('click', ()=> {
+      if(eternamente.paused) eternamente.play(); else eternamente.pause();
+      updateToggleEtern();
+    });
+    eternamente.addEventListener('play', updateToggleEtern);
+    eternamente.addEventListener('pause', updateToggleEtern);
+    updateToggleEtern();
 
-let particles = [];
-function addParticle(x,y){
-  const p = {
-    x, y,
-    vx: (Math.random()-0.5)*1.6,
-    vy: (Math.random()-0.8)*1.6,
-    r: 2 + Math.random()*4,
-    life: 40 + Math.random()*60,
-    color: ['#87CEEB','#C0C0C0','#B76E79','#ffffff'][Math.floor(Math.random()*4)]
-  };
-  particles.push(p);
-}
-function updateParticles(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  for(let i=particles.length-1;i>=0;i--){
-    const p=particles[i];
-    p.x+=p.vx; p.y+=p.vy; p.life--;
-    ctx.globalAlpha = Math.max(0, p.life/100);
-    ctx.fillStyle = p.color;
-    ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
-    if(p.life<=0) particles.splice(i,1);
-  }
-  ctx.globalAlpha=1;
-  requestAnimationFrame(updateParticles);
-}
-updateParticles();
-document.addEventListener('mousemove', e => {
-  // reduce particles on small screens
-  if(window.innerWidth < 600){ if(Math.random()>0.35) return; }
-  addParticle(e.clientX + (Math.random()-0.5)*16, e.clientY + (Math.random()-0.5)*16);
-});
+    // keyboard nav (left/right)
+    window.addEventListener('keydown', (e)=>{
+      if(e.key === 'ArrowRight'){ showSectionByIndex((currentIndex + 1) % sections.length); }
+      else if(e.key === 'ArrowLeft'){ showSectionByIndex((currentIndex - 1 + sections.length) % sections.length); }
+    });
 
-/* ---------- Ring interactivity and sparkle orbits ---------- */
-const ring = document.getElementById('ring');
-const gem = document.getElementById('gem');
-const orbits = document.getElementById('orbits');
-const coverCount = document.getElementById('cover-count');
-const audioMarch = document.getElementById('audio-march');
-const audioEternally = document.getElementById('audio-eternally');
-const cover = document.getElementById('cover');
-const bookContainer = document.getElementById('book-container');
-const bibleVerse = document.getElementById('bible-verse');
+    /* ============================
+       Subtle parallax: background-position move on mouse
+       Keeps light (no heavy transforms)
+       ============================ */
+    document.addEventListener('mousemove', (ev)=>{
+      const x = ev.clientX / window.innerWidth;
+      const y = ev.clientY / window.innerHeight;
+      sections.forEach((s, i)=>{
+        const intensity = 6 + (i % 3) * 2; // varied intensity
+        s.style.backgroundPosition = `${50 + (x - 0.5) * intensity}% ${50 + (y - 0.5) * intensity}%`;
+      });
+    });
 
-/* create 6 orbiting sparkles */
-function createOrbitSparkles(){
-  orbits.innerHTML = '';
-  for(let i=0;i<6;i++){
-    const s = document.createElement('div');
-    s.className = 'sparkle-orbit';
-    s.style.left = '50%';
-    s.style.top = '50%';
-    s.style.transform = `translate(-50%,-50%) rotate(${i*(360/6)}deg) translateX(110px)`;
-    s.style.opacity = 0;
-    orbits.appendChild(s);
-  }
-}
-createOrbitSparkles();
+    /* ============================
+       RSVP modal + simple local submit
+       ============================ */
+    const openRsvpBtn = document.getElementById('openRsvp');
+    const rsvpModal = document.getElementById('rsvpModal');
+    const closeRsvp = document.getElementById('closeRsvp');
+    const rsvpForm = document.getElementById('rsvpForm');
 
-function triggerOrbitAnimation(){
-  const nodes = orbits.querySelectorAll('.sparkle-orbit');
-  nodes.forEach((n,idx)=> {
-    n.style.transition = `transform 900ms cubic-bezier(.2,.9,.2,1), opacity 900ms`;
-    n.style.opacity = 1;
-    n.style.transform = `translate(-50%,-50%) rotate(${idx*(360/6)}deg) translateX(130px) scale(1)`;
-    setTimeout(()=>{ n.style.opacity = 0; }, 900);
-  });
-}
+    openRsvpBtn?.addEventListener('click', ()=> { rsvpModal.classList.add('open'); });
+    closeRsvp?.addEventListener('click', ()=> { rsvpModal.classList.remove('open'); });
+    rsvpForm?.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const data = new FormData(rsvpForm);
+      const payload = {};
+      data.forEach((v,k)=>payload[k]=v);
+      // Here you can replace with fetch(...) to Google Apps Script endpoint if you want to persist.
+      alert('Confirmación enviada. Gracias, ' + (payload.name || 'invitado') + '!');
+      rsvpForm.reset();
+      rsvpModal.classList.remove('open');
+    });
 
-/* show cover countdown */
-function computeCoverCountdown(){
-  const target = new Date('2025-12-28T00:00:00');
-  const now = new Date();
-  const diff = Math.max(0, Math.floor((target - now)/(1000*60*60*24)));
-  coverCount.textContent = `Faltan ${diff} días para nuestro gran día`;
-}
-computeCoverCountdown();
-setInterval(computeCoverCountdown, 60*60*1000);
+    /* ============================
+       Flip countdown (animated)
+       - Uses rotateX of inner card to flip
+       - animateFlip triggers when value changes
+       ============================ */
+    const target = new Date('2025-12-28T00:00:00');
 
-/* try autoplay march (may be blocked) */
-audioMarch.play().catch(()=>{ /* autoplay blocked until user interacts */ });
+    const flipCards = {
+      days: { card: document.getElementById('daysCard'), top: document.getElementById('daysTop'), bottom: document.getElementById('daysBottom') },
+      hours: { card: document.getElementById('hoursCard'), top: document.getElementById('hoursTop'), bottom: document.getElementById('hoursBottom') },
+      minutes: { card: document.getElementById('minutesCard'), top: document.getElementById('minutesTop'), bottom: document.getElementById('minutesBottom') },
+      seconds: { card: document.getElementById('secondsCard'), top: document.getElementById('secondsTop'), bottom: document.getElementById('secondsBottom') }
+    };
 
-/* ring click: open book, pause march, play eternally, show bible phrase */
-ring.addEventListener('click', async () => {
-  // make magic sparkle
-  triggerOrbitAnimation();
+    function animateFlipUnit(unit, value){
+      const obj = flipCards[unit];
+      if(!obj) return;
+      const current = obj.top.textContent;
+      if(current === value) return;
+      // prepare bottom with current, top becomes new, then flip
+      obj.bottom.textContent = current;
+      obj.top.textContent = value;
+      obj.card.classList.add('flipping');
+      setTimeout(()=> obj.card.classList.remove('flipping'), 650);
+    }
 
-  // hide cover, show book
-  cover.style.display = 'none';
-  bookContainer.style.display = 'block';
-  bookContainer.setAttribute('aria-hidden', 'false');
+    function updateCountdown(){
+      const now = new Date();
+      let diff = target - now;
+      if(diff < 0) diff = 0;
+      const days = Math.floor(diff / (1000*60*60*24));
+      const hours = Math.floor((diff / (1000*60*60)) % 24);
+      const minutes = Math.floor((diff / (1000*60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+      animateFlipUnit('days', String(days).padStart(2,'0'));
+      animateFlipUnit('hours', String(hours).padStart(2,'0'));
+      animateFlipUnit('minutes', String(minutes).padStart(2,'0'));
+      animateFlipUnit('seconds', String(seconds).padStart(2,'0'));
+    }
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
 
-  // show Bible verse smoothly
-  bibleVerse.style.display = 'block';
-  bibleVerse.style.opacity = 0;
-  bibleVerse.animate([{opacity:0, transform:'translateY(10px)'},{opacity:1, transform:'translateY(0)'}], {duration:700, easing:'ease-out', fill:'forwards'});
+    /* ============================
+       Carousel (page 4) — autoplay + arrows + pause
+       ============================ */
+    const carouselImages = ['foto1.jpg','momento8.jpg','momento2.jpg','momento3.jpg','momento4.jpg']; // add those that exist
+    let carouselIndex = 0;
+    const carouselImage = document.getElementById('carouselImage');
+    const carouselPrev = document.getElementById('carouselPrev');
+    const carouselNext = document.getElementById('carouselNext');
+    const autoplayToggle = document.getElementById('galleryAutoplayToggle');
+    let carouselTimer = null;
+    let autoplay = true;
 
-  // audio behavior
-  try{ audioMarch.pause(); }catch(e){}
-  try{ await audioEternally.play(); }catch(e){ /* some browsers require interaction, but click is interaction */ }
+    function setCarouselImage(i){
+      carouselIndex = (i + carouselImages.length) % carouselImages.length;
+      carouselImage.style.opacity = 0;
+      setTimeout(()=> {
+        carouselImage.src = carouselImages[carouselIndex];
+        carouselImage.style.opacity = 1;
+      }, 180);
+    }
+    carouselPrev?.addEventListener('click', ()=> setCarouselImage(carouselIndex - 1));
+    carouselNext?.addEventListener('click', ()=> setCarouselImage(carouselIndex + 1));
 
-  // initial sparkle effect around pages (so ring glows when opening)
-  triggerPageSparkles();
-  // initialize turn.js flipbook once visible
-  $('#book').turn({width:900,height:600,autoCenter:true});
-});
+    function startCarousel(){
+      stopCarousel();
+      carouselTimer = setInterval(()=> setCarouselImage(carouselIndex + 1), 4200);
+      autoplay = true;
+      if(autoplayToggle) { autoplayToggle.textContent = 'Pausar autoplay'; autoplayToggle.setAttribute('aria-pressed','true'); }
+    }
+    function stopCarousel(){
+      if(carouselTimer) clearInterval(carouselTimer);
+      carouselTimer = null;
+      autoplay = false;
+      if(autoplayToggle) { autoplayToggle.textContent = 'Reproducir autoplay'; autoplayToggle.setAttribute('aria-pressed','false'); }
+    }
+    autoplayToggle?.addEventListener('click', ()=> { if(autoplay) stopCarousel(); else startCarousel(); });
 
-/* audio toggle button */
-document.getElementById('audio-btn').addEventListener('click', ()=>{
-  if(!audioMarch.paused){ audioMarch.pause(); audioEternally.pause(); document.getElementById('audio-btn').textContent='🔈'; }
-  else { audioMarch.play().catch(()=>{}); document.getElementById('audio-btn').textContent='🎵'; }
-});
+    // initialize carousel
+    setCarouselImage(0);
+    startCarousel();
 
-/* ---------- Swiper gallery & Lightbox ---------- */
-const swiper = new Swiper('.swiper', {
-  loop:true,
-  pagination:{el:'.swiper-pagination', clickable:true},
-  autoplay:{delay:3000},
-  slidesPerView:1,
-  spaceBetween:10
-});
-const lightbox = new SimpleLightbox('.swiper-slide a', { /* options */ });
+    /* ============================
+       Guest gallery placeholder (static)
+       - if you host uploads via form, fetch and update here
+       ============================ */
 
-/* ---------- Countdown in book ---------- */
-function updateBookCountdown(){
-  const el = document.getElementById('book-count');
-  if(!el) return;
-  const target = new Date('2025-12-28T00:00:00');
-  const now = new Date();
-  const diffDays = Math.max(0, Math.floor((target - now)/(1000*60*60*24)));
-  el.textContent = `Faltan ${diffDays} días para nuestro gran día`;
-}
-updateBookCountdown();
-setInterval(updateBookCountdown, 60*60*1000);
+    /* ============================
+       Add calendar / download PDF
+       ============================ */
+    document.getElementById('addCalendar')?.addEventListener('click', (e)=>{
+      e.preventDefault();
+      const start = '20251228T140000';
+      const end = '20251228T230000';
+      const title = encodeURIComponent('Boda — Abril & Pablo');
+      const details = encodeURIComponent('Ceremonia y recepción — Abril & Pablo');
+      const location = encodeURIComponent('Iglesia Cristiana Palabra de Vida AD / Jardín Los Abuelos, Tlaquiltenango, Morelos');
+      const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&location=${location}`;
+      window.open(url, '_blank');
+    });
 
-/* ---------- Page sparkle on page change ---------- */
-function triggerPageSparkles(){
-  // create ephemeral sparkles in center of book container / current page
-  const rect = document.getElementById('book').getBoundingClientRect();
-  const cx = rect.left + rect.width/2;
-  const cy = rect.top + rect.height/2;
-  for(let i=0;i<16;i++){
-    const p = document.createElement('div');
-    p.className='particle';
-    p.style.left = (cx + (Math.random()-0.5)*220) + 'px';
-    p.style.top = (cy + (Math.random()-0.5)*100) + 'px';
-    p.style.width = p.style.height = (4 + Math.random()*8) + 'px';
-    p.style.borderRadius = '50%';
-    p.style.background = ['#87CEEB','#C0C0C0','#B76E79','#ffffff'][Math.floor(Math.random()*4)];
-    p.style.opacity = 1;
-    p.style.transition = 'transform 900ms ease-out, opacity 900ms ease-out';
-    document.body.appendChild(p);
-    requestAnimationFrame(()=> p.style.transform = `translateY(-40px) scale(${1+Math.random()*0.6})`, p.style.opacity = 0);
-    setTimeout(()=>p.remove(),1000);
-  }
-}
+    document.getElementById('downloadPdf')?.addEventListener('click', ()=> window.print());
 
-/* when turning pages with turn.js, listen and sparkle (turn.js triggers 'turned') */
-$('#book').on('turned', function(event, page, view){
-  triggerPageSparkles();
-});
+    /* ============================
+       Cursor hearts visual
+       - spawn occasionally for performance
+       ============================ */
+    document.addEventListener('mousemove', (ev)=>{
+      if(Math.random() > 0.6) return;
+      const heart = document.createElement('div');
+      heart.className = 'magicHeart';
+      const size = 14 + Math.random() * 20;
+      heart.style.width = heart.style.height = size + 'px';
+      heart.style.left = (ev.clientX + (Math.random()*26 - 13)) + 'px';
+      heart.style.top = (ev.clientY + (Math.random()*26 - 13)) + 'px';
+      const r = Math.random();
+      if(r < 0.25) heart.style.background = 'radial-gradient(circle,#4dc3ff,#bfeeff)';
+      else if(r < 0.5) heart.style.background = 'radial-gradient(circle,#a7ffcf,#eafff0)';
+      else if(r < 0.75) heart.style.background = 'radial-gradient(circle,#ffffff,#f0f0f0)';
+      else heart.style.background = 'radial-gradient(circle,#c8c8c8,#ffffff)';
+      heart.style.clipPath = 'polygon(50% 0%,61% 15%,75% 15%,84% 27%,84% 45%,75% 60%,50% 80%,25% 60%,16% 45%,16% 27%,25% 15%,39% 15%)';
+      document.body.appendChild(heart);
+      setTimeout(()=> heart.remove(), 900 + Math.random() * 800);
+    });
 
-/* For our fallback page navigation (keyboard arrows) show sparkle too */
-document.addEventListener('keydown', e=>{
-  if(e.key === 'ArrowRight' || e.key === 'ArrowLeft') triggerPageSparkles();
-});
+    /* ============================
+       Small accessibility: allow clicking on card to advance
+       (keeps navigation accessible to keyboard too)
+       ============================ */
+    document.querySelectorAll('.card').forEach((c, i) => {
+      c.addEventListener('dblclick', ()=> showSectionByIndex((currentIndex + 1) % sections.length));
+    });
 
-/* ---------- RSVP: POST to Google Apps Script ---------- */
-const rsvpForm = document.getElementById('rsvp');
-rsvpForm.addEventListener('submit', async (ev)=>{
-  ev.preventDefault();
-  const formData = new FormData(rsvpForm);
-  // show loading/disable
-  const btn = rsvpForm.querySelector('button');
-  btn.disabled = true; btn.textContent = 'Enviando...';
-  try{
-    // Google Apps Script often expects form-encoded; we send FormData
-    const res = await fetch(gsScriptUrl, { method:'POST', body: formData });
-    // show confirmation
-    document.getElementById('rsvp-ok').style.display = 'block';
-    // temporary indicator visual near ring (tiny)
-    const note = document.createElement('div'); note.textContent='Confirmación guardada ✅';
-    note.style.position='fixed'; note.style.bottom='24px'; note.style.left='24px'; note.style.padding='8px 10px';
-    note.style.background='rgba(10,160,80,0.95)'; note.style.color='#fff'; note.style.borderRadius='8px';
-    document.body.appendChild(note);
-    setTimeout(()=>note.remove(),4000);
-    rsvpForm.reset();
-  }catch(err){
-    alert('Error al enviar la confirmación. Intenta nuevamente.');
-  } finally{ btn.disabled=false; btn.textContent='Enviar confirmación'; }
-});
+    /* ============================
+       Ensure toggleEtern label correct on load
+       ============================ */
+    try { (function(){ if(typeof updateToggleEtern === 'function') updateToggleEtern(); })(); } catch(e){}
 
-/* ---------- Wishes: localStorage + download ---------- */
-const wishForm = document.getElementById('wish-form');
-const wishesListEl = document.getElementById('wishes-list');
-function loadWishes(){
-  const arr = JSON.parse(localStorage.getItem('wishes')||'[]');
-  wishesListEl.innerHTML = '';
-  arr.forEach(w=>{
-    const li = document.createElement('li'); li.textContent = w;
-    wishesListEl.appendChild(li);
-  });
-}
-loadWishes();
-
-wishForm.addEventListener('submit', e=>{
-  e.preventDefault();
-  const val = document.getElementById('wish-text').value.trim();
-  if(!val) return;
-  const arr = JSON.parse(localStorage.getItem('wishes')||'[]');
-  arr.push(val);
-  localStorage.setItem('wishes', JSON.stringify(arr));
-  loadWishes();
-  wishForm.reset();
-  // small sparkle feedback
-  triggerPageSparkles();
-});
-
-document.getElementById('download-wishes').addEventListener('click', ()=>{
-  const arr = JSON.parse(localStorage.getItem('wishes')||'[]');
-  const csv = 'Mensaje\n' + arr.map(s => '"' + s.replace(/"/g,'""') + '"').join('\n');
-  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'buenos_deseos.csv'; a.click();
-});
-
-/* ---------- Swiper lightbox init after DOM content ---------- */
-document.addEventListener('DOMContentLoaded', ()=>{
-  // lightbox for gallery
-  try { new SimpleLightbox('.swiper-slide a'); } catch(e){}
-});
-
-/* ---------- UX: helpful notes ---------- */
-/* If autoplay blocked, audio will play when user interacts (click ring or audio button). */
-
-/* ---------- END ---------- */
-</script>
+  </script>
 </body>
 </html>
  
