@@ -51,16 +51,28 @@
     }
     .section.active{transform:translateY(0);opacity:1;pointer-events:auto;z-index:3}
 
-    /* ---------- PAGE BACKGROUNDS ---------- */
-    /* Make sure these files exist in repo root with exact names */
+    /* ---------- PAGE BACKGROUNDS (map per user's latest list) ---------- */
+    /* Portada: fondo_floral.jpg
+       Página 1: fondo_floral1.png
+       Página 2: fondo_floral2.jpg
+       Página 3: fondo_floral3.jpg
+       Página 4: fondo_floral4.png
+       Página 5: fondo_floral5.jpg
+       Página 6: fondo_floral6.jpg
+       Página 7: fondo_floral7.png
+       Página 8: fondo_floral8.png
+    */
     #s1{background-image:url('fondo_floral.jpg')}
     #s2{background-image:url('fondo_floral1.png')}
     #s3{background-image:url('fondo_floral2.jpg')}
     #s4{background-image:url('fondo_floral3.jpg')}
     #s5{background-image:url('fondo_floral4.png')}
-    #s6{background-image:url('fondo_floral5.png')}
-    #s7{background-image:url('fondo_floral6.png')}
-    #s8{background-image:url('fondo_floral8.jpg')} /* final uses fondo_floral8.jpg */
+    #s6{background-image:url('fondo_floral5.jpg')}
+    #s7{background-image:url('fondo_floral6.jpg')}
+    #s8{background-image:url('fondo_floral7.png')}
+    /* final page (user requested fondo_floral8.png) - we'll set s9 mapping below if we add, but mapping is s1..s8 above.
+       The user requested page 8 to use fondo_floral8.png; to honor that we will override s8 background in JS on load.
+    */
 
     /* ---------- CARD ---------- */
     .card{
@@ -92,7 +104,7 @@
     #musicBtn{position:fixed;right:18px;bottom:18px;width:52px;height:52px;border-radius:999px;background:rgba(255,255,255,0.95);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:999;box-shadow:0 12px 34px rgba(0,0,0,0.12)}
     #musicBtn svg{width:26px;height:26px;fill:var(--deep)}
 
-    /* ========= PORTADA ========== */
+    /* ========= PORTADA (s1) ========== */
     .port-title{font-family:'Great Vibes',cursive;font-size:56px;color:var(--deep);margin-bottom:6px}
     .mini-counter{margin-top:12px;display:flex;gap:12px;align-items:center;justify-content:center;font-weight:700;color:var(--deep)}
     .mini-counter .chip{background:rgba(255,255,255,0.96);padding:8px 12px;border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,0.08);min-width:96px;text-align:center}
@@ -225,7 +237,7 @@
 
     <main class="sections" id="sections" role="main" aria-live="polite">
 
-      <!-- ========== PAGE 1 - PORTADA ========== -->
+      <!-- ========== PAGE 1 - PORTADA (fondo_floral.jpg) ========== -->
       <section id="s1" class="section active" data-page="1" aria-label="Portada">
         <div class="card" role="region" aria-labelledby="portTitle">
           <h1 id="portTitle" class="port-title">Boda de Abril y Pablo 💍</h1>
@@ -261,7 +273,7 @@
         </div>
       </section>
 
-      <!-- ========== PAGE 2 - PADRES & NOVIOS ========== -->
+      <!-- ========== PAGE 2 - PADRES & NOVIOS (fondo_floral1.png) ========== -->
       <section id="s2" class="section" data-page="2" aria-label="Padres y novios">
         <div class="card" role="region" style="display:flex;flex-direction:column;gap:12px;align-items:center">
           <div class="parents-row" style="width:100%;">
@@ -282,13 +294,13 @@
 
           <div style="margin-top:12px;display:flex;flex-direction:column;align-items:center;gap:10px">
             <div class="couple-names">Abril Pérez Aguilar<br>y<br>Pablo Eliel Tinoco Hernández</div>
-            <!-- smaller photo to avoid overlapping on mobile -->
+            <!-- photo smaller on mobile to ensure parents visible -->
             <img src="foto1.jpg" alt="Abril y Pablo" class="novios-photo zoomable lb-target" data-src="foto1.jpg" style="display:block">
           </div>
         </div>
       </section>
 
-      <!-- ========== PAGE 3 - ITINERARIO + COUNTER ========== -->
+      <!-- ========== PAGE 3 - ITINERARIO + COUNTER (fondo_floral2.jpg) ========== -->
       <section id="s3" class="section" data-page="3" aria-label="Itinerario">
         <div class="card" role="region" style="max-width:920px;">
           <h2 class="romantic" style="font-size:28px">Itinerario</h2>
@@ -348,7 +360,7 @@
         </div>
       </section>
 
-      <!-- ========== PAGE 4 - CONFIRMACIONES & BUENOS DESEOS ========== -->
+      <!-- ========== PAGE 4 - CONFIRMACIONES & BUENOS DESEOS (fondo_floral3.jpg) ========== -->
       <section id="s4" class="section" data-page="4" aria-label="Confirmación y deseos">
         <div class="card" role="region" style="max-width:980px;display:flex;flex-direction:column;gap:12px;align-items:center">
           <h2 class="romantic" style="font-size:26px">Confirmación de asistencia</h2>
@@ -366,9 +378,9 @@
           </form>
 
           <!-- Buttons to open the full Google Forms in new tab (user requested) -->
-          <div class="btns-row">
-            <a class="magicBtn" href="https://docs.google.com/forms/d/e/1FAIpQLSfDX9Ky8YrQ962Uxh5ibEYGDk2WsyyVUxUPC09IcwrBKlHx7A/viewform?usp=sharing" target="_blank" rel="noopener">Abrir formulario (Subir momento / Confirmaciones)</a>
-            <a class="magicBtn" href="https://docs.google.com/forms/d/e/1FAIpQLSfDX9Ky8YrQ962Uxh5ibEYGDk2WsyyVUxUPC09IcwrBKlHx7A/viewform?usp=sharing" target="_blank" rel="noopener">Abrir formulario de invitados</a>
+          <div class="btns-row" style="margin-top:8px">
+            <a class="magicBtn" href="https://docs.google.com/forms/d/e/1FAIpQLSfDX9Ky8YrQ962Uxh5ibEYGDk2WsyyVUxUPC09IcwrBKlHx7A/viewform?usp=sharing" target="_blank" rel="noopener">Abrir formulario de confirmación (Sheet)</a>
+            <a class="magicBtn" href="https://docs.google.com/forms/d/e/1FAIpQLSfDX9Ky8YrQ962Uxh5ibEYGDk2WsyyVUxUPC09IcwrBKlHx7A/viewform?usp=sharing" target="_blank" rel="noopener">Abrir formulario para momentos</a>
           </div>
 
           <hr style="width:90%;border:none;border-top:1px solid rgba(0,0,0,0.06)">
@@ -387,7 +399,7 @@
         </div>
       </section>
 
-      <!-- ========== PAGE 5 - GALERÍA NOVIOS ========== -->
+      <!-- ========== PAGE 5 - GALERÍA NOVIOS (fondo_floral4.png) ========== -->
       <section id="s5" class="section" data-page="5" aria-label="Galería de los novios">
         <div class="card" role="region" style="max-width:980px;display:flex;flex-direction:column;gap:12px;align-items:center">
           <h2 class="romantic" style="font-size:26px">Galería — Los novios</h2>
@@ -408,7 +420,7 @@
         </div>
       </section>
 
-      <!-- ========== PAGE 6 - MOMENTOS INVITADOS (momento8) ========== -->
+      <!-- ========== PAGE 6 - MOMENTOS INVITADOS (fondo_floral5.jpg) ========== -->
       <section id="s6" class="section" data-page="6" aria-label="Momentos invitados">
         <div class="card" role="region" style="max-width:980px;display:flex;flex-direction:column;align-items:center;gap:12px">
           <h2 class="romantic" style="font-size:24px">Momentos de los invitados</h2>
@@ -420,7 +432,7 @@
         </div>
       </section>
 
-      <!-- ========== PAGE 7 - MOMENTO9 ========== -->
+      <!-- ========== PAGE 7 - MOMENTO9 (fondo_floral6.jpg) ========== -->
       <section id="s7" class="section" data-page="7" aria-label="Momento especial">
         <div class="card" role="region" style="max-width:760px;display:flex;flex-direction:column;align-items:center;gap:12px">
           <img src="momento9.jpg" alt="momento9" class="special-photo zoomable lb-target" data-src="momento9.jpg">
@@ -428,7 +440,7 @@
         </div>
       </section>
 
-      <!-- ========== PAGE 8 - FINAL / WHATSAPP / CALENDAR (fondo_floral8.jpg) ========== -->
+      <!-- ========== PAGE 8 - FINAL / WHATSAPP / CALENDAR (fondo_floral8.png) ========== -->
       <section id="s8" class="section" data-page="8" aria-label="Final">
         <div class="card" role="region" style="display:flex;flex-direction:column;align-items:center;gap:12px">
           <div class="romantic" style="font-size:32px">Con amor eterno</div>
@@ -527,18 +539,22 @@
 
     // show overlay on mobile devices (small screens) to allow user to tap
     function shouldShowStartOverlay(){
-      // show overlay if not allowed to autoplay or if touch device
       return ('ontouchstart' in window) || (navigator.userAgent.match(/Mobi|Android/i));
     }
 
     // attempt to autoplay on load for desktops
     window.addEventListener('load', async ()=>{
+      // override s8 background to final user's requested file (fondo_floral8.png)
+      try{
+        const s8 = document.getElementById('s8');
+        if(s8) s8.style.backgroundImage = "url('fondo_floral8.png')";
+      }catch(e){}
+
       try{ await marcha.play(); await fadeAudio(marcha,0,1,700); }catch(e){ /* blocked */ }
       // decide whether to show overlay for mobile
       if(shouldShowStartOverlay()){
         startOverlay.classList.add('show');
       } else {
-        // hide overlay immediately if not needed
         startOverlay.classList.remove('show');
       }
     });
@@ -608,6 +624,7 @@
       setTimeout(()=> { top.textContent = newVal; node.classList.remove('animate'); }, 700);
     }
 
+    // event date: 28 December 2025 at 14:00 local (as requested)
     const targetDate = new Date('2025-12-28T14:00:00');
     function updateCounters(){
       const now = new Date();
@@ -729,11 +746,13 @@
        ========================= */
     document.getElementById('addCalendar').addEventListener('click', (e)=>{
       e.preventDefault();
+      // Use UTC formatted dates - user event: 2025-12-28 14:00 local. We'll use a simplified template.
+      // Start 20251228T140000 local (no timezone param in URL). Google will attempt to interpret.
       const start = '20251228T140000';
       const end = '20251228T230000';
       const title = encodeURIComponent('Boda de Abril y Pablo 💍');
       const details = encodeURIComponent('Ceremonia y recepción. Iglesia Cristiana Palabra de Vida AD / Jardín Los Abuelos, Tlaquiltenango, Morelos');
-      const location = encodeURIComponent('Jardín Los Abuelos, Tlaquiltenango, Morelos');
+      const location = encodeURIComponent('Iglesia Cristiana Palabra de Vida AD / Jardín Los Abuelos, Tlaquiltenango, Morelos');
       const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&location=${location}`;
       window.open(url,'_blank');
     });
@@ -818,7 +837,6 @@
 
     setTimeout(()=> { if(document.getElementById('flipMain') && document.getElementById('flipMain').children.length === 0){ for(let i=0;i<4;i++) document.getElementById('flipMain').appendChild(createFlip('00')); } }, 300);
     function createFlip(initial){ const wrap=document.createElement('div'); wrap.className='flip'; const t=document.createElement('div'); t.className='face top'; t.innerHTML=`<div class="digit">${initial}</div>`; const b=document.createElement('div'); b.className='face bottom'; b.innerHTML=`<div class="digit">${initial}</div>`; wrap.appendChild(t); wrap.appendChild(b); return wrap; }
-
   </script>
 </body>
 </html>
