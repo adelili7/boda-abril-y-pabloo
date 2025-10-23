@@ -1,186 +1,218 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Boda — Abril & Pablo 💍</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Boda de Abril y Pablo 💍</title>
 
-<!-- Tipografías -->
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Alex+Brush&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Quicksand:wght@300;400;600&display=swap" rel="stylesheet">
+  <!-- Tipografías -->
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Alex+Brush&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Quicksand:wght@300;400;600&display=swap" rel="stylesheet">
 
-<style>
-  /* ---------- ROOT / RESET ---------- */
-  :root{
-    --bg-cream:#F8F5F0;
-    --deep:#2B2A2F;
-    --card-bg: rgba(255,255,255,0.92);
-    --accent:#B8DDE6;
-    --led:#00e5ff;
-    --muted:#6f6f6f;
-    --chip-celeste:#a8dadc;
-    --chip-beige:#f1faee;
-    --chip-verde:#a8e6cf;
-    --chip-gris:#adb5bd;
-    --chip-rosa:#f4978e;
-    --wa:#25D366;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%;width:100%;font-family:Quicksand,system-ui,Arial;background:var(--bg-cream);color:var(--deep);-webkit-font-smoothing:antialiased;overflow:hidden}
-  a{color:inherit}
-  img{display:block;max-width:100%}
-  button{font-family:inherit;cursor:pointer}
-  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+  <style>
+    /* ============================
+       RESET & ROOT
+       ============================ */
+    :root{
+      --bg-cream:#F8F5F0;
+      --deep:#2B2A2F;
+      --card-bg: rgba(255,255,255,0.94);
+      --accent:#B8DDE6;
+      --led:#00e5ff;
+      --muted:#6f6f6f;
+      --chip-celeste:#a8dadc;
+      --chip-beige:#f1faee;
+      --chip-verde:#a8e6cf;
+      --chip-gris:#adb5bd;
+      --chip-rosa:#f4978e;
+      --wa:#25D366;
+      --transition: .6s cubic-bezier(.2,.9,.2,1);
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%;width:100%;font-family:Quicksand,system-ui,Arial;background:var(--bg-cream);color:var(--deep);-webkit-font-smoothing:antialiased;overflow:hidden}
+    a{color:inherit}
+    img{display:block;max-width:100%}
+    button{font-family:inherit;cursor:pointer}
+    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
-  /* ---------- APP / SECTIONS ---------- */
-  .app{position:relative;height:100vh;width:100vw;overflow:hidden}
-  .sections{height:100%;width:100%;position:relative}
-  .section{
-    position:absolute;inset:0;
-    display:flex;flex-direction:column;align-items:center;justify-content:center;
-    padding:28px;
-    background-size:cover;background-position:center;
-    transition:transform .8s cubic-bezier(.2,.9,.2,1),opacity .6s ease;
-    transform: translateY(30px);
-    opacity:0; pointer-events:none;
-    background-attachment:fixed;
-  }
-  .section.active{transform:translateY(0);opacity:1;pointer-events:auto;z-index:3}
+    /* ============================
+       LAYOUT / SECTIONS
+       ============================ */
+    .app{position:relative;height:100vh;width:100vw;overflow:hidden}
+    main.sections{height:100%;width:100%;position:relative}
+    .section{
+      position:absolute;inset:0;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      padding:28px;
+      background-size:cover;background-position:center;
+      transition:transform var(--transition),opacity .5s ease;
+      transform: translateY(30px);
+      opacity:0; pointer-events:none;
+      background-attachment:fixed; /* simple parallax effect */
+    }
+    .section.active{transform:translateY(0);opacity:1;pointer-events:auto;z-index:3}
 
-  /* ---------- Backgrounds (pages 1..8) ---------- */
-  #s1{background-image:url('fondo_floral.jpg')}
-  #s2{background-image:url('fondo_floral1.png')}
-  #s3{background-image:url('fondo_floral2.jpg')}
-  #s4{background-image:url('fondo_floral3.jpg')}
-  #s5{background-image:url('fondo_floral4.png')}
-  #s6{background-image:url('fondo_floral5.png')}
-  #s7{background-image:url('fondo_floral6.png')}
-  #s8{background-image:url('fondo_floral7.png')}
-  /* Note: if you want fondo_floral8, change s8 mapping accordingly */
+    /* ---------- PAGE BACKGROUNDS ---------- */
+    /* Make sure these files exist in repo root with exact names */
+    #s1{background-image:url('fondo_floral.jpg')}
+    #s2{background-image:url('fondo_floral1.png')}
+    #s3{background-image:url('fondo_floral2.jpg')}
+    #s4{background-image:url('fondo_floral3.jpg')}
+    #s5{background-image:url('fondo_floral4.png')}
+    #s6{background-image:url('fondo_floral5.png')}
+    #s7{background-image:url('fondo_floral6.png')}
+    #s8{background-image:url('fondo_floral8.jpg')} /* final uses fondo_floral8.jpg */
 
-  /* ---------- Card ---------- */
-  .card{background:var(--card-bg);backdrop-filter:blur(6px);border-radius:16px;padding:22px;max-width:980px;width:92%;box-shadow:0 14px 40px rgba(0,0,0,0.12);text-align:center}
+    /* ---------- CARD ---------- */
+    .card{
+      background:var(--card-bg);
+      backdrop-filter:blur(6px);
+      border-radius:16px;
+      padding:20px;
+      max-width:980px;
+      width:92%;
+      box-shadow:0 14px 40px rgba(0,0,0,0.12);
+      text-align:center;
+    }
 
-  /* ---------- Typography ---------- */
-  .title{font-family:'Great Vibes',cursive;font-size:56px;color:var(--deep)}
-  .romantic{font-family:'Great Vibes',cursive;color:var(--deep)}
-  .serif{font-family:'Playfair Display',serif}
-  .muted{color:var(--muted);font-size:13px}
-  .lead{font-family:'Playfair Display',serif;font-size:18px;color:#333;margin-top:8px}
+    /* ---------- TYPO ---------- */
+    .title{font-family:'Great Vibes',cursive;font-size:56px;color:var(--deep)}
+    .romantic{font-family:'Great Vibes',cursive;color:var(--deep)}
+    .serif{font-family:'Playfair Display',serif}
+    .muted{color:var(--muted);font-size:13px}
+    .lead{font-family:'Playfair Display',serif;font-size:18px;color:#333;margin-top:8px}
 
-  /* ---------- NAV arrows & progress ---------- */
-  .nav{position:fixed;top:50%;left:0;right:0;display:flex;justify-content:space-between;pointer-events:none;z-index:999;transform:translateY(-50%)}
-  .nav button{pointer-events:all;background:rgba(255,255,255,0.95);border:0;padding:10px 12px;border-radius:999px;font-size:28px;cursor:pointer;margin:8px;box-shadow:0 10px 30px rgba(0,0,0,0.12)}
-  .nav button.hidden{display:none}
-  .progress{position:fixed;left:16px;top:12%;height:76%;width:12px;background:rgba(255,255,255,0.18);border-radius:8px;padding:6px;z-index:900}
-  .progress .bar{width:100%;background:linear-gradient(180deg,var(--accent),var(--led));border-radius:6px;height:0%;transition:height .45s ease}
+    /* ---------- NAV / PROGRESS ---------- */
+    .nav{position:fixed;top:50%;left:0;right:0;display:flex;justify-content:space-between;pointer-events:none;z-index:999;transform:translateY(-50%)}
+    .nav button{pointer-events:all;background:rgba(255,255,255,0.95);border:0;padding:10px 12px;border-radius:999px;font-size:28px;cursor:pointer;margin:8px;box-shadow:0 10px 30px rgba(0,0,0,0.12)}
+    .nav button.hidden{display:none}
+    .progress{position:fixed;left:16px;top:12%;height:76%;width:12px;background:rgba(255,255,255,0.18);border-radius:8px;padding:6px;z-index:900}
+    .progress .bar{width:100%;background:linear-gradient(180deg,var(--accent),var(--led));border-radius:6px;height:0%;transition:height .45s ease}
 
-  /* ---------- Music control ---------- */
-  #musicBtn{position:fixed;right:18px;bottom:18px;width:52px;height:52px;border-radius:999px;background:rgba(255,255,255,0.95);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:999;box-shadow:0 12px 34px rgba(0,0,0,0.12)}
-  #musicBtn svg{width:26px;height:26px;fill:var(--deep)}
+    /* ---------- MUSIC CONTROL ---------- */
+    #musicBtn{position:fixed;right:18px;bottom:18px;width:52px;height:52px;border-radius:999px;background:rgba(255,255,255,0.95);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:999;box-shadow:0 12px 34px rgba(0,0,0,0.12)}
+    #musicBtn svg{width:26px;height:26px;fill:var(--deep)}
 
-  /* ---------- PORTADA minimal counter ---------- */
-  .port-title{font-family:'Great Vibes',cursive;font-size:56px;color:var(--deep);margin-bottom:6px}
-  .mini-counter{margin-top:12px;display:flex;gap:12px;align-items:center;justify-content:center;font-weight:700;color:var(--deep)}
-  .mini-counter .chip{background:rgba(255,255,255,0.96);padding:8px 12px;border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,0.08);min-width:96px;text-align:center}
+    /* ========= PORTADA ========== */
+    .port-title{font-family:'Great Vibes',cursive;font-size:56px;color:var(--deep);margin-bottom:6px}
+    .mini-counter{margin-top:12px;display:flex;gap:12px;align-items:center;justify-content:center;font-weight:700;color:var(--deep)}
+    .mini-counter .chip{background:rgba(255,255,255,0.96);padding:8px 12px;border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,0.08);min-width:96px;text-align:center}
 
-  .ring-btn{background:transparent;border:0;padding:0;cursor:pointer;outline:none}
+    .ring-btn{background:transparent;border:0;padding:0;cursor:pointer;outline:none}
 
-  /* ---------- PAGE 2 parents & couple ---------- */
-  .parents-row{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;flex-wrap:wrap;width:100%}
-  .parents-col{flex:1;min-width:220px}
-  .parents-title{font-family:'Alex Brush',cursive;font-size:24px;color:var(--deep);margin-bottom:6px}
-  .parents-list{font-size:16px}
-  .romantic-center{font-family:'Great Vibes',cursive;font-size:24px;color:var(--deep);margin-top:12px}
-  .couple-names{font-family:'Great Vibes',cursive;font-size:36px;color:var(--deep);margin-top:12px}
-  .novios-photo{width:72%;max-width:460px;border-radius:14px;box-shadow:0 12px 36px rgba(0,0,0,0.12);transition:transform .45s ease}
+    /* ========= PAGE 2: PARENTS & NOVIOS ========= */
+    .parents-row{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;flex-wrap:wrap;width:100%}
+    .parents-col{flex:1;min-width:220px}
+    .parents-title{font-family:'Alex Brush',cursive;font-size:22px;color:var(--deep);margin-bottom:6px}
+    .parents-list{font-size:16px}
+    .romantic-center{font-family:'Great Vibes',cursive;font-size:20px;color:var(--deep);margin-top:12px}
+    .couple-names{font-family:'Great Vibes',cursive;font-size:34px;color:var(--deep);margin-top:12px}
+    .novios-photo{width:48%;max-width:340px;border-radius:14px;box-shadow:0 12px 36px rgba(0,0,0,0.12);transition:transform .45s ease}
+    /* smaller photo on smaller screens to show parents */
+    @media (max-width:720px){
+      .novios-photo{width:62%;max-width:320px}
+      .couple-names{font-size:28px}
+    }
+    @media (max-width:420px){
+      .novios-photo{width:78%;max-width:280px}
+      .couple-names{font-size:24px}
+      .parents-row{flex-direction:column;align-items:center;text-align:center}
+    }
 
-  /* center parents on small screens */
-  @media (max-width:520px){
-    .parents-row{flex-direction:column;align-items:center;text-align:center}
-    .couple-names{font-size:30px}
-    .novios-photo{width:84%}
-  }
+    /* ========= PAGE 3: ITINERARY + FLIP ========= */
+    .itinerary{display:flex;flex-direction:column;gap:14px;text-align:left;padding:8px}
+    .it-item{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:10px;background:rgba(255,255,255,0.92);box-shadow:0 8px 20px rgba(0,0,0,0.06)}
+    .it-icon{width:46px;height:46px;border-radius:10px;background:rgba(255,255,255,0.95);display:flex;align-items:center;justify-content:center;font-size:22px}
+    .counter-caption{font-family:'Playfair Display',serif;font-size:18px;margin-bottom:6px}
 
-  /* ---------- PAGE 3 itinerary + flip counter ---------- */
-  .itinerary{display:flex;flex-direction:column;gap:12px;text-align:left}
-  .it-item{display:flex;gap:12px;align-items:flex-start}
-  .it-icon{width:46px;height:46px;border-radius:10px;background:rgba(255,255,255,0.95);display:flex;align-items:center;justify-content:center;font-size:22px}
-  .counter-caption{font-family:'Playfair Display',serif;font-size:18px;margin-bottom:6px}
+    .flip-wrap{display:flex;gap:12px;align-items:center;justify-content:center;margin-top:12px;flex-wrap:wrap}
+    .flip{width:84px;height:88px;perspective:900px;position:relative}
+    .face{position:absolute;left:0;top:0;width:100%;height:50%;overflow:hidden;border-radius:10px;background:rgba(255,255,255,0.96);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:28px;color:var(--deep);box-shadow:0 8px 24px rgba(0,0,0,0.10)}
+    .face.top{border-bottom-left-radius:0;border-bottom-right-radius:0;transform-origin:bottom}
+    .face.bottom{top:50%;border-top-left-radius:0;border-top-right-radius:0;transform-origin:top}
+    .flip.animate .face.top{animation:flipTop .7s forwards}
+    .flip.animate .face.bottom{animation:flipBottom .7s forwards}
+    @keyframes flipTop{0%{transform:rotateX(0)}100%{transform:rotateX(-180deg)}}
+    @keyframes flipBottom{0%{transform:rotateX(180deg)}100%{transform:rotateX(0deg)}}
+    .digit{color:var(--led);text-shadow:0 0 8px rgba(0,230,255,0.45),0 0 20px rgba(0,200,255,0.25);font-family:'Playfair Display',serif;font-size:26px}
 
-  .flip-wrap{display:flex;gap:12px;align-items:center;justify-content:center;margin-top:12px;flex-wrap:wrap}
-  .flip{width:84px;height:88px;perspective:900px;position:relative}
-  .face{position:absolute;left:0;top:0;width:100%;height:50%;overflow:hidden;border-radius:10px;background:rgba(255,255,255,0.96);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:28px;color:var(--deep);box-shadow:0 8px 24px rgba(0,0,0,0.10)}
-  .face.top{border-bottom-left-radius:0;border-bottom-right-radius:0;transform-origin:bottom}
-  .face.bottom{top:50%;border-top-left-radius:0;border-top-right-radius:0;transform-origin:top}
-  .flip.animate .face.top{animation:flipTop .7s forwards}
-  .flip.animate .face.bottom{animation:flipBottom .7s forwards}
-  @keyframes flipTop{0%{transform:rotateX(0)}100%{transform:rotateX(-180deg)}}
-  @keyframes flipBottom{0%{transform:rotateX(180deg)}100%{transform:rotateX(0deg)}}
-  .digit{color:var(--led);text-shadow:0 0 8px rgba(0,230,255,0.45),0 0 20px rgba(0,200,255,0.25);font-family:'Playfair Display',serif;font-size:26px}
+    /* ========= PAGE 4: RSVP + WISHES ========= */
+    .form{display:flex;flex-direction:column;gap:10px;align-items:center;margin-top:10px}
+    .form input,.form textarea{padding:10px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);width:100%;max-width:460px}
+    .messages{max-height:320px;overflow:auto;padding:8px;border-radius:8px;background:rgba(255,255,255,0.96);width:100%;max-width:760px;text-align:left}
+    .btns-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:8px}
 
-  /* ---------- PAGE 4 RSVP & WISHES ---------- */
-  .form{display:flex;flex-direction:column;gap:10px;align-items:center;margin-top:10px}
-  .form input,.form textarea{padding:10px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);width:100%;max-width:460px}
-  .messages{max-height:260px;overflow:auto;padding:8px;border-radius:8px;background:rgba(255,255,255,0.96);width:100%;max-width:760px;text-align:left}
-  .gform-frame{width:100%;max-width:720px;border:0;height:640px;border-radius:10px;box-shadow:0 12px 36px rgba(0,0,0,0.12)}
+    /* ========= PAGE 5: GALLERY NOVIOS ========= */
+    .carousel{position:relative;width:94%;max-width:980px;height:620px;border-radius:14px;overflow:hidden;box-shadow:0 18px 44px rgba(0,0,0,0.16)}
+    .carousel img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .9s ease,transform .9s ease;transform:scale(1.02)}
+    .carousel img.active{opacity:1;transform:scale(1)}
+    .carousel .cbtn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.92);border-radius:999px;padding:12px;font-size:22px;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,0.15)}
+    .carousel .cbtn.left{left:12px}
+    .carousel .cbtn.right{right:12px}
 
-  /* ---------- PAGE 5 gallery larger ---------- */
-  .carousel{position:relative;width:94%;max-width:980px;height:620px;border-radius:14px;overflow:hidden;box-shadow:0 18px 44px rgba(0,0,0,0.16)}
-  .carousel img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .9s ease,transform .9s ease;transform:scale(1.02)}
-  .carousel img.active{opacity:1;transform:scale(1)}
-  .carousel .cbtn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.92);border-radius:999px;padding:12px;font-size:22px;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,0.15)}
-  .carousel .cbtn.left{left:12px}
-  .carousel .cbtn.right{right:12px}
+    /* ========= PAGE 6: MOMENTO8 big ========= */
+    .full-photo{width:100%;max-width:980px;height:70vh;border-radius:14px;object-fit:cover;box-shadow:0 18px 44px rgba(0,0,0,0.16)}
+    .phrase-big{font-family:'Playfair Display',serif;font-size:20px;margin-top:14px;text-align:center;color:var(--deep)}
 
-  /* ---------- PAGE 6 full moment ---------- */
-  .full-photo{width:100%;max-width:980px;height:70vh;border-radius:14px;object-fit:cover;box-shadow:0 18px 44px rgba(0,0,0,0.16)}
-  .phrase-big{font-family:'Playfair Display',serif;font-size:20px;margin-top:14px;text-align:center;color:var(--deep)}
+    /* ========= LIGHTBOX ========= */
+    .lb{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:2000;background:rgba(0,0,0,0.78);backdrop-filter:blur(6px)}
+    .lb.open{display:flex}
+    .lb-img{max-width:92%;max-height:88%;border-radius:12px;box-shadow:0 18px 60px rgba(0,0,0,0.6);transform-origin:center;transition:transform .6s ease,opacity .5s ease}
+    .lb-close{position:fixed;right:20px;top:20px;background:rgba(255,255,255,0.95);border-radius:999px;padding:10px;cursor:pointer}
+    .lb-nav{position:fixed;left:10px;right:10px;top:50%;display:flex;justify-content:space-between;pointer-events:none}
+    .lb-nav button{pointer-events:all;background:rgba(255,255,255,0.9);border-radius:999px;padding:10px 12px;border:0;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,0.2)}
 
-  /* ---------- FINAL / WHATSAPP / CALENDAR ---------- */
-  .wa{display:inline-flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;background:var(--wa);color:#fff;font-weight:700}
-  .small-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:8px}
-  .magicBtn{padding:8px 12px;border-radius:12px;background:linear-gradient(45deg,#a7e4ff,#f8f5f0);color:#2B2A2F;font-weight:700;border:0;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,0.12)}
+    /* ========= CURSOR HEARTS ========= */
+    .magicHeart{position:fixed;pointer-events:none;z-index:99999;width:22px;height:22px;opacity:0;transform:translate(-50%,-50%) scale(1);animation:heartFade 1000ms forwards}
+    @keyframes heartFade{0%{opacity:1;transform:translate(-50%,-50%) scale(1);}100%{opacity:0;transform:translate(-50%,-120%) scale(0.6)}}
 
-  /* ---------- Lightbox ---------- */
-  .lb{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:2000;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px)}
-  .lb.open{display:flex}
-  .lb-img{max-width:92%;max-height:88%;border-radius:12px;box-shadow:0 18px 60px rgba(0,0,0,0.6);transform-origin:center;transition:transform .6s ease,opacity .5s ease}
-  .lb-close{position:fixed;right:20px;top:20px;background:rgba(255,255,255,0.95);border-radius:999px;padding:10px;cursor:pointer}
-  .lb-nav{position:fixed;left:10px;right:10px;top:50%;display:flex;justify-content:space-between;pointer-events:none}
-  .lb-nav button{pointer-events:all;background:rgba(255,255,255,0.9);border-radius:999px;padding:10px 12px;border:0;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,0.2)}
+    /* ========= Responsive tweaks ========= */
+    @media (max-width:900px){
+      .title{font-size:44px}
+      .carousel{height:460px}
+      .flip{width:64px;height:68px}
+      .full-photo{height:60vh}
+    }
+    @media (max-width:520px){
+      .title{font-size:34px}
+      .couple-names{font-size:28px}
+      .card{padding:14px}
+      .carousel{height:320px}
+      .flip{width:52px;height:60px}
+      .mini-counter{font-size:14px}
+    }
 
-  /* ---------- cursor hearts ---------- */
-  .magicHeart{position:fixed;pointer-events:none;z-index:99999;width:22px;height:22px;opacity:0;transform:translate(-50%,-50%) scale(1);animation:heartFade 1000ms forwards}
-  @keyframes heartFade{0%{opacity:1;transform:translate(-50%,-50%) scale(1);}100%{opacity:0;transform:translate(-50%,-120%) scale(0.6)}}
-
-  /* ---------- responsive ---------- */
-  @media (max-width:900px){
-    .title{font-size:44px}
-    .novios-photo{width:340px}
-    .carousel{height:460px}
-    .flip{width:64px;height:68px}
-    .full-photo{height:60vh}
-  }
-  @media (max-width:520px){
-    .title{font-size:34px}
-    .couple-names{font-size:30px}
-    .card{padding:14px}
-    .carousel{height:320px}
-    .flip{width:52px;height:60px}
-    .mini-counter{font-size:14px}
-  }
-</style>
+    /* "Toca para comenzar" overlay for mobile autoplay */
+    #startOverlay{
+      position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:3000;background:linear-gradient(180deg,rgba(0,0,0,0.25),rgba(0,0,0,0.35));
+      backdrop-filter: blur(3px);opacity:0;pointer-events:none;transition:opacity .45s ease;
+    }
+    #startOverlay.show{opacity:1;pointer-events:auto}
+    .start-card{background:rgba(255,255,255,0.96);padding:20px;border-radius:12px;text-align:center;box-shadow:0 12px 36px rgba(0,0,0,0.18)}
+    .start-card h3{font-family:'Great Vibes',cursive;font-size:30px;margin-bottom:6px}
+    .start-card p{color:var(--muted);margin-bottom:12px}
+    .start-cta{display:inline-flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;background:var(--wa);color:#fff;font-weight:700}
+  </style>
 </head>
+
 <body>
   <div class="app" id="app">
-    <!-- Audio files in same folder -->
+    <!-- Audios (local files) -->
     <audio id="marcha" src="marcha_nupcial.mp3" preload="auto" loop></audio>
     <audio id="eternamente" src="eternamente.mp3" preload="auto" loop></audio>
 
-    <!-- Progress -->
+    <!-- Start overlay (for mobile autoplay permission) -->
+    <div id="startOverlay" role="dialog" aria-modal="true">
+      <div class="start-card">
+        <h3>¡Toca para comenzar 💍</h3>
+        <p>Pulsa para iniciar la música y abrir la invitación.</p>
+        <button id="startBtn" class="start-cta">Toca para comenzar</button>
+      </div>
+    </div>
+
+    <!-- Progress bar -->
     <div class="progress" aria-hidden="true"><div class="bar" id="progressBar"></div></div>
 
-    <!-- Nav arrows -->
+    <!-- Navigation arrows -->
     <div class="nav" aria-hidden="false">
       <div><button id="prevBtn" aria-label="Anterior">‹</button></div>
       <div><button id="nextBtn" aria-label="Siguiente">›</button></div>
@@ -191,15 +223,17 @@
       <svg viewBox="0 0 24 24" id="musicIcon"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg>
     </div>
 
-    <main class="sections" id="sections" role="main">
-      <!-- PAGE 1 - PORTADA -->
+    <main class="sections" id="sections" role="main" aria-live="polite">
+
+      <!-- ========== PAGE 1 - PORTADA ========== -->
       <section id="s1" class="section active" data-page="1" aria-label="Portada">
-        <div class="card" role="region" aria-labelledby="titlePort">
-          <h1 id="titlePort" class="port-title">Abril & Pablo</h1>
+        <div class="card" role="region" aria-labelledby="portTitle">
+          <h1 id="portTitle" class="port-title">Boda de Abril y Pablo 💍</h1>
           <div class="lead">¡Sí, acepto!</div>
 
           <div style="margin-top:14px;display:flex;flex-direction:column;align-items:center;gap:12px">
             <button id="ringBtn" class="ring-btn" aria-label="Abrir invitación (anillo)" title="Abrir invitación">
+              <!-- ring svg -->
               <svg width="140" height="140" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <defs>
                   <radialGradient id="g1" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fff"/><stop offset="60%" stop-color="#c9ccd0"/><stop offset="100%" stop-color="#d6a79b"/></radialGradient>
@@ -227,14 +261,17 @@
         </div>
       </section>
 
-      <!-- PAGE 2 - PADRES + NOVIOS -->
+      <!-- ========== PAGE 2 - PADRES & NOVIOS ========== -->
       <section id="s2" class="section" data-page="2" aria-label="Padres y novios">
         <div class="card" role="region" style="display:flex;flex-direction:column;gap:12px;align-items:center">
-          <div class="parents-row">
+          <div class="parents-row" style="width:100%;">
+            <!-- parents left -->
             <div class="parents-col" style="text-align:center">
               <div class="parents-title">Padres de la novia</div>
               <div class="parents-list">Eva Aguilar Rendón<br>Pedro Pérez Hernández</div>
             </div>
+
+            <!-- parents right -->
             <div class="parents-col" style="text-align:center">
               <div class="parents-title">Padres del novio</div>
               <div class="parents-list">Saray Hernández Santana<br>Pablo Tinoco Carranza <span title="finado">✝</span></div>
@@ -245,33 +282,62 @@
 
           <div style="margin-top:12px;display:flex;flex-direction:column;align-items:center;gap:10px">
             <div class="couple-names">Abril Pérez Aguilar<br>y<br>Pablo Eliel Tinoco Hernández</div>
-            <img src="foto1.jpg" alt="Abril y Pablo" class="novios-photo zoomable lb-target" data-src="foto1.jpg" data-index="auto">
+            <!-- smaller photo to avoid overlapping on mobile -->
+            <img src="foto1.jpg" alt="Abril y Pablo" class="novios-photo zoomable lb-target" data-src="foto1.jpg" style="display:block">
           </div>
         </div>
       </section>
 
-      <!-- PAGE 3 - ITINERARIO + COUNTER -->
+      <!-- ========== PAGE 3 - ITINERARIO + COUNTER ========== -->
       <section id="s3" class="section" data-page="3" aria-label="Itinerario">
-        <div class="card" role="region" style="max-width:920px">
+        <div class="card" role="region" style="max-width:920px;">
           <h2 class="romantic" style="font-size:28px">Itinerario</h2>
 
-          <div class="itinerary" style="margin-top:12px">
-            <div class="it-item"><div class="it-icon">⛪</div><div><strong>Ceremonia Religiosa:</strong> 2:00 pm — Iglesia Cristiana Palabra de Vida AD<br><a class="muted" href="https://maps.app.goo.gl/AWYkNZ44jyshjRUG6" target="_blank" rel="noopener">Ver mapa</a></div></div>
-
-            <div class="it-item"><div class="it-icon">🎉</div><div><strong>Recepción:</strong> 4:00 pm — Jardín Los Abuelos, Tlaquiltenango, Morelos<br><a class="muted" href="https://maps.app.goo.gl/B2W65gnaMnyodGh56" target="_blank" rel="noopener">Ver mapa</a></div></div>
-
-            <div class="it-item"><div class="it-icon">⏳</div><div><strong>Duración estimada:</strong> Inicio 4:00 pm — Se estima hasta las 11:00 pm aprox.</div></div>
-
-            <div class="it-item"><div class="it-icon">👗</div><div><strong>Código de vestimenta:</strong> Formal — tonos recomendados:
-              <div style="display:flex;gap:8px;margin-top:8px">
-                <div style="width:22px;height:22px;border-radius:6px;background:var(--chip-celeste)"></div>
-                <div style="width:22px;height:22px;border-radius:6px;background:var(--chip-beige);border:1px solid #ddd"></div>
-                <div style="width:22px;height:22px;border-radius:6px;background:var(--chip-verde)"></div>
-                <div style="width:22px;height:22px;border-radius:6px;background:var(--chip-gris)"></div>
-                <div style="width:22px;height:22px;border-radius:6px;background:var(--chip-rosa)"></div>
+          <div style="margin-top:12px">
+            <!-- improved spacing and readable cards -->
+            <div class="itinerary">
+              <div class="it-item">
+                <div class="it-icon">⛪</div>
+                <div>
+                  <strong>Ceremonia Religiosa</strong><br>
+                  <span class="muted">28 de diciembre de 2025 — 2:00 pm</span><br>
+                  <a class="muted" href="https://maps.app.goo.gl/AWYkNZ44jyshjRUG6" target="_blank" rel="noopener">Ver mapa</a>
+                </div>
               </div>
-              <div class="muted" style="margin-top:6px"><em>Dejemos el blanco para la novia.</em></div>
-            </div></div>
+
+              <div class="it-item">
+                <div class="it-icon">🎉</div>
+                <div>
+                  <strong>Recepción</strong><br>
+                  <span class="muted">4:00 pm — Jardín Los Abuelos, Tlaquiltenango, Morelos</span><br>
+                  <a class="muted" href="https://maps.app.goo.gl/B2W65gnaMnyodGh56" target="_blank" rel="noopener">Ver mapa</a>
+                </div>
+              </div>
+
+              <div class="it-item">
+                <div class="it-icon">⏳</div>
+                <div>
+                  <strong>Duración estimada</strong><br>
+                  <span class="muted">Inicio 4:00 pm — Evento hasta las 11:00 pm aprox.</span>
+                </div>
+              </div>
+
+              <div class="it-item">
+                <div class="it-icon">👗</div>
+                <div>
+                  <strong>Código de vestimenta</strong><br>
+                  <span class="muted">Formal — tonos recomendados: celestes, beige, verde, gris, rosa</span>
+                  <div style="display:flex;gap:8px;margin-top:8px">
+                    <div style="width:22px;height:22px;border-radius:6px;background:var(--chip-celeste)"></div>
+                    <div style="width:22px;height:22px;border-radius:6px;background:var(--chip-beige);border:1px solid #ddd"></div>
+                    <div style="width:22px;height:22px;border-radius:6px;background:var(--chip-verde)"></div>
+                    <div style="width:22px;height:22px;border-radius:6px;background:var(--chip-gris)"></div>
+                    <div style="width:22px;height:22px;border-radius:6px;background:var(--chip-rosa)"></div>
+                  </div>
+                  <div class="muted" style="margin-top:6px"><em>Dejemos el blanco para la novia.</em></div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div style="margin-top:18px;text-align:center">
@@ -282,33 +348,36 @@
         </div>
       </section>
 
-      <!-- PAGE 4 - RSVP + BUENOS DESEOS -->
+      <!-- ========== PAGE 4 - CONFIRMACIONES & BUENOS DESEOS ========== -->
       <section id="s4" class="section" data-page="4" aria-label="Confirmación y deseos">
         <div class="card" role="region" style="max-width:980px;display:flex;flex-direction:column;gap:12px;align-items:center">
           <h2 class="romantic" style="font-size:26px">Confirmación de asistencia</h2>
 
-          <form id="rsvpForm" class="form" aria-label="Formulario de confirmación (rápido)">
+          <!-- Quick RSVP form (local) that POSTs to your Apps Script -->
+          <form id="rsvpForm" class="form" aria-label="Formulario rápido de confirmación">
             <input name="name" placeholder="Nombre completo" required>
             <input name="email" placeholder="Correo (opcional)">
             <input name="guests" type="number" min="0" value="0" style="max-width:160px">
-            <div style="display:flex;gap:8px">
+            <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
               <button type="submit" class="magicBtn">Enviar confirmación</button>
               <button type="reset" class="magicBtn" style="background:#eee;color:#222">Limpiar</button>
             </div>
             <div class="muted" style="font-size:13px;margin-top:6px">Tus confirmaciones se guardan en Google Sheets.</div>
           </form>
 
-          <div style="width:100%;display:flex;gap:12px;flex-direction:column;align-items:center">
-            <div class="muted" style="font-size:14px">Formulario oficial (opcional):</div>
-            <iframe class="gform-frame" src="https://docs.google.com/forms/d/e/1FAIpQLSfDX9Ky8YrQ962Uxh5ibEYGDk2WsyyVUxUPC09IcwrBKlHx7A/viewform?embedded=true"></iframe>
+          <!-- Buttons to open the full Google Forms in new tab (user requested) -->
+          <div class="btns-row">
+            <a class="magicBtn" href="https://docs.google.com/forms/d/e/1FAIpQLSfDX9Ky8YrQ962Uxh5ibEYGDk2WsyyVUxUPC09IcwrBKlHx7A/viewform?usp=sharing" target="_blank" rel="noopener">Abrir formulario (Subir momento / Confirmaciones)</a>
+            <a class="magicBtn" href="https://docs.google.com/forms/d/e/1FAIpQLSfDX9Ky8YrQ962Uxh5ibEYGDk2WsyyVUxUPC09IcwrBKlHx7A/viewform?usp=sharing" target="_blank" rel="noopener">Abrir formulario de invitados</a>
           </div>
 
           <hr style="width:90%;border:none;border-top:1px solid rgba(0,0,0,0.06)">
 
           <h3 class="romantic" style="font-size:22px">Buenos deseos</h3>
-          <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+
+          <div style="display:flex;flex-direction:column;align-items:center;gap:8px;width:100%;">
             <textarea id="wishInput" placeholder="Escribe tu deseo..." rows="4" style="width:100%;max-width:700px;padding:10px;border-radius:10px;border:1px solid rgba(0,0,0,0.06)"></textarea>
-            <div style="display:flex;gap:8px">
+            <div style="display:flex;gap:8px;justify-content:center">
               <button id="sendWish" class="magicBtn">Enviar deseo</button>
               <button id="refreshWishes" class="magicBtn" style="background:#eee;color:#222">Actualizar</button>
             </div>
@@ -318,11 +387,12 @@
         </div>
       </section>
 
-      <!-- PAGE 5 - GALERÍA NOVIOS -->
+      <!-- ========== PAGE 5 - GALERÍA NOVIOS ========== -->
       <section id="s5" class="section" data-page="5" aria-label="Galería de los novios">
         <div class="card" role="region" style="max-width:980px;display:flex;flex-direction:column;gap:12px;align-items:center">
           <h2 class="romantic" style="font-size:26px">Galería — Los novios</h2>
-          <div class="carousel" id="galleryNovios">
+
+          <div class="carousel" id="galleryNovios" aria-live="polite">
             <img src="momento1.jpg" alt="momento1" class="active lb-target" data-src="momento1.jpg">
             <img src="momento2.jpg" alt="momento2" class="lb-target" data-src="momento2.jpg">
             <img src="momento3.jpg" alt="momento3" class="lb-target" data-src="momento3.jpg">
@@ -333,23 +403,24 @@
             <button class="cbtn left" id="prevGallery" aria-label="Anterior foto">‹</button>
             <button class="cbtn right" id="nextGallery" aria-label="Siguiente foto">›</button>
           </div>
+
           <div class="muted">Transición automática + flechas</div>
         </div>
       </section>
 
-      <!-- PAGE 6 - MOMENTOS INVITADOS (momento8 grande) -->
+      <!-- ========== PAGE 6 - MOMENTOS INVITADOS (momento8) ========== -->
       <section id="s6" class="section" data-page="6" aria-label="Momentos invitados">
         <div class="card" role="region" style="max-width:980px;display:flex;flex-direction:column;align-items:center;gap:12px">
           <h2 class="romantic" style="font-size:24px">Momentos de los invitados</h2>
           <img src="momento8.jpg" alt="momento8" class="full-photo zoomable lb-target" data-src="momento8.jpg">
           <div class="phrase-big">"Tu amor es lo que he anhelado y el regalo que Dios me ha dado"</div>
           <div style="margin-top:10px">
-            <a class="magicBtn" href="https://docs.google.com/forms/d/e/1FAIpQLSfDX9Ky8YrQ962Uxh5ibEYGDk2WsyyVUxUPC09IcwrBKlHx7A/viewform?usp=header" target="_blank" rel="noopener">Contribuir momento</a>
+            <a class="magicBtn" href="https://docs.google.com/forms/d/e/1FAIpQLSfDX9Ky8YrQ962Uxh5ibEYGDk2WsyyVUxUPC09IcwrBKlHx7A/viewform?usp=sharing" target="_blank" rel="noopener">Contribuir momento</a>
           </div>
         </div>
       </section>
 
-      <!-- PAGE 7 - momento9 -->
+      <!-- ========== PAGE 7 - MOMENTO9 ========== -->
       <section id="s7" class="section" data-page="7" aria-label="Momento especial">
         <div class="card" role="region" style="max-width:760px;display:flex;flex-direction:column;align-items:center;gap:12px">
           <img src="momento9.jpg" alt="momento9" class="special-photo zoomable lb-target" data-src="momento9.jpg">
@@ -357,7 +428,7 @@
         </div>
       </section>
 
-      <!-- PAGE 8 - FINAL / WHATSAPP / CALENDAR -->
+      <!-- ========== PAGE 8 - FINAL / WHATSAPP / CALENDAR (fondo_floral8.jpg) ========== -->
       <section id="s8" class="section" data-page="8" aria-label="Final">
         <div class="card" role="region" style="display:flex;flex-direction:column;align-items:center;gap:12px">
           <div class="romantic" style="font-size:32px">Con amor eterno</div>
@@ -382,7 +453,7 @@
 
     </main>
 
-    <!-- LIGHTBOX (single for all images) -->
+    <!-- LIGHTBOX (single instance for all images) -->
     <div class="lb" id="lightbox" aria-hidden="true" role="dialog" aria-modal="true">
       <button class="lb-close" id="lbClose" aria-label="Cerrar">✕</button>
       <div class="lb-nav">
@@ -393,380 +464,362 @@
     </div>
   </div>
 
-<script>
-/* =========================
-   NAVIGATION between sections
-   ========================= */
-const sections = Array.from(document.querySelectorAll('.section'));
-let current = 0;
-function showSection(i){
-  if(i<0) i=0;
-  if(i>sections.length-1) i=sections.length-1;
-  sections.forEach((s, idx)=> s.classList.toggle('active', idx===i));
-  current = i;
-  document.getElementById('progressBar').style.height = ((i+1)/sections.length*100) + '%';
-  document.getElementById('prevBtn').classList.toggle('hidden', i===0);
-  document.getElementById('nextBtn').classList.toggle('hidden', i===sections.length-1);
-  // subtle card reveal
-  const card = sections[i].querySelector('.card');
-  if(card){
-    card.style.opacity = 0;
-    card.style.transform = 'translateY(8px)';
-    requestAnimationFrame(()=> {
-      card.style.transition = 'opacity .55s ease, transform .55s ease';
-      card.style.opacity = 1;
-      card.style.transform = 'translateY(0)';
+  <script>
+    /* =========================
+       NAVIGATION between sections (arrows, keys, swipe)
+       ========================= */
+    const sections = Array.from(document.querySelectorAll('.section'));
+    let current = 0;
+    function showSection(i){
+      if(i<0) i=0;
+      if(i>sections.length-1) i=sections.length-1;
+      sections.forEach((s, idx)=> s.classList.toggle('active', idx===i));
+      current = i;
+      document.getElementById('progressBar').style.height = ((i+1)/sections.length*100) + '%';
+      document.getElementById('prevBtn').classList.toggle('hidden', i===0);
+      document.getElementById('nextBtn').classList.toggle('hidden', i===sections.length-1);
+      // simple reveal
+      const card = sections[i].querySelector('.card');
+      if(card){
+        card.style.opacity = 0;
+        card.style.transform = 'translateY(6px)';
+        requestAnimationFrame(()=> {
+          card.style.transition = 'opacity .55s ease, transform .55s ease';
+          card.style.opacity = 1;
+          card.style.transform = 'translateY(0)';
+        });
+      }
+    }
+    showSection(0);
+    document.getElementById('nextBtn').addEventListener('click', ()=> showSection(current+1));
+    document.getElementById('prevBtn').addEventListener('click', ()=> showSection(current-1));
+    window.addEventListener('keydown',(e)=>{
+      if(e.key==='ArrowRight' || e.key==='ArrowDown') showSection(current+1);
+      if(e.key==='ArrowLeft' || e.key==='ArrowUp') showSection(current-1);
     });
-  }
-}
-showSection(0);
-document.getElementById('nextBtn').addEventListener('click', ()=> showSection(current+1));
-document.getElementById('prevBtn').addEventListener('click', ()=> showSection(current-1));
-// keyboard
-window.addEventListener('keydown', (e)=> {
-  if(e.key==='ArrowRight' || e.key==='ArrowDown') showSection(current+1);
-  if(e.key==='ArrowLeft' || e.key==='ArrowUp') showSection(current-1);
-});
-// wheel / touch
-let wheelLock=false;
-window.addEventListener('wheel', (e)=> {
-  if(wheelLock) return;
-  wheelLock=true; setTimeout(()=> wheelLock=false, 700);
-  if(e.deltaY>0) showSection(current+1); else showSection(current-1);
-});
-let tsY = null;
-window.addEventListener('touchstart', e => tsY = e.touches[0].clientY);
-window.addEventListener('touchend', e=>{
-  if(tsY === null) return;
-  const dy = e.changedTouches[0].clientY - tsY;
-  if(Math.abs(dy)>60){ if(dy<0) showSection(current+1); else showSection(current-1); }
-  tsY=null;
-});
+    // wheel
+    let wheelLocked=false;
+    window.addEventListener('wheel',(e)=>{ if(wheelLocked) return; wheelLocked=true; setTimeout(()=> wheelLocked=false,700); if(e.deltaY>0) showSection(current+1); else showSection(current-1); });
+    // touch swipe
+    let tsY=null;
+    window.addEventListener('touchstart', e => tsY = e.touches[0].clientY);
+    window.addEventListener('touchend', e=>{ if(tsY===null) return; const dy = e.changedTouches[0].clientY - tsY; if(Math.abs(dy)>60){ if(dy<0) showSection(current+1); else showSection(current-1);} tsY=null;});
 
-/* =========================
-   AUDIO crossfade logic
-   ========================= */
-const marcha = document.getElementById('marcha');
-const eternamente = document.getElementById('eternamente');
-const ringBtn = document.getElementById('ringBtn');
-const musicBtn = document.getElementById('musicBtn');
+    /* =========================
+       AUDIO: autoplay handling and crossfade
+       - startOverlay displayed for mobile to allow audio after user tap
+       ========================= */
+    const marcha = document.getElementById('marcha');
+    const eternamente = document.getElementById('eternamente');
+    const ringBtn = document.getElementById('ringBtn');
+    const startOverlay = document.getElementById('startOverlay');
+    const startBtn = document.getElementById('startBtn');
+    const musicBtn = document.getElementById('musicBtn');
 
-function fadeAudio(audio, from, to, duration=600){
-  const steps = 30; const stepTime = duration/steps;
-  let step = 0;
-  audio.volume = Math.max(0, Math.min(1, from));
-  return new Promise(resolve=>{
-    const id = setInterval(()=>{
-      step++;
-      audio.volume = Math.max(0, Math.min(1, from + (to-from)*(step/steps)));
-      if(step>=steps){ clearInterval(id); audio.volume = Math.max(0, Math.min(1,to)); resolve(); }
-    }, stepTime);
-  });
-}
-// try autoplay
-window.addEventListener('load', async ()=>{
-  try{ await marcha.play(); await fadeAudio(marcha,0,1,700); } catch(e) { /* may be blocked until user gesture */ }
-});
-// ring click: crossfade marcha->eternamente & go to page2
-ringBtn.addEventListener('click', async ()=>{
-  try{ if(!marcha.paused){ await fadeAudio(marcha, marcha.volume||1,0,600); marcha.pause(); } }catch(e){}
-  try{ eternamente.currentTime = 0; eternamente.volume = 0; await eternamente.play(); await fadeAudio(eternamente,0,1,800); }catch(e){}
-  showSection(1);
-});
-// music toggle (controls marcha)
-musicBtn.addEventListener('click', async ()=>{
-  if(marcha.paused){
-    try{ await marcha.play(); await fadeAudio(marcha,0,1,600); }catch(e){}
-    musicBtn.setAttribute('aria-pressed','false');
-  } else {
-    try{ await fadeAudio(marcha, marcha.volume||1,0,600); }catch(e){}
-    marcha.pause();
-    musicBtn.setAttribute('aria-pressed','true');
-  }
-});
-document.getElementById('pauseMarch').addEventListener('click', async ()=> { try{ await fadeAudio(marcha, marcha.volume||1,0,500); }catch(e){} marcha.pause(); });
-document.getElementById('playEtern').addEventListener('click', async ()=> { try{ eternamente.currentTime=0; eternamente.volume=0; await eternamente.play(); await fadeAudio(eternamente,0,1,700);}catch(e){} });
-
-/* =========================
-   COUNTERS: mini portada + flip-style main
-   ========================= */
-const miniDays = document.getElementById('miniDays');
-const miniHms = document.getElementById('miniHms');
-const flipMain = document.getElementById('flipMain');
-
-function createFlip(initial){
-  const wrapper = document.createElement('div'); wrapper.className='flip';
-  const top = document.createElement('div'); top.className='face top'; top.innerHTML = `<div class="digit">${initial}</div>`;
-  const bottom = document.createElement('div'); bottom.className='face bottom'; bottom.innerHTML = `<div class="digit">${initial}</div>`;
-  wrapper.appendChild(top); wrapper.appendChild(bottom);
-  return wrapper;
-}
-function ensureFlips(){
-  if(!flipMain) return;
-  if(flipMain.children.length === 0){
-    for(let i=0;i<4;i++) flipMain.appendChild(createFlip('00'));
-  }
-}
-ensureFlips();
-
-function animateFlip(node,newVal){
-  const top = node.querySelector('.face.top .digit');
-  const bottom = node.querySelector('.face.bottom .digit');
-  if(top.textContent === newVal) return;
-  bottom.textContent = newVal;
-  node.classList.remove('animate'); void node.offsetWidth; node.classList.add('animate');
-  setTimeout(()=> { top.textContent = newVal; node.classList.remove('animate'); }, 700);
-}
-
-const target = new Date('2025-12-28T14:00:00'); // 28 Dec 2025 14:00 local
-function tick(){
-  const now = new Date();
-  let diff = Math.max(0, target - now);
-  const d = Math.floor(diff / (1000*60*60*24));
-  diff -= d * 24*60*60*1000;
-  const h = Math.floor(diff/(1000*60*60));
-  diff -= h * 60*60*1000;
-  const m = Math.floor(diff/(1000*60));
-  diff -= m*60*1000;
-  const s = Math.floor(diff/1000);
-  if(miniDays) miniDays.textContent = `${d} días`;
-  if(miniHms) miniHms.textContent = `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-  ensureFlips();
-  if(flipMain){
-    const nodes = Array.from(flipMain.querySelectorAll('.flip'));
-    const vals = [String(d).padStart(2,'0'), String(h).padStart(2,'0'), String(m).padStart(2,'0'), String(s).padStart(2,'0')];
-    nodes.forEach((n,i)=> animateFlip(n, vals[i] || '00'));
-  }
-}
-tick(); setInterval(tick,1000);
-
-/* =========================
-   RSVP -> Google Apps Script (POST JSON)
-   ========================= */
-const rsvpForm = document.getElementById('rsvpForm');
-const rsvpEndpoint = 'https://script.google.com/macros/s/AKfycbyDEgVJzj-vGvwxFE1eqTmKb4pO4__lXB9gX8gMKGc2yGhlzR15AFPY8vQMvnjoNs01Vg/exec';
-if(rsvpForm){
-  rsvpForm.addEventListener('submit', async (e)=>{
-    e.preventDefault();
-    const fd = new FormData(rsvpForm);
-    const payload = {};
-    fd.forEach((v,k)=> payload[k]=v);
-    try{
-      await fetch(rsvpEndpoint, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)});
-      alert('Confirmación enviada. Gracias!');
-      rsvpForm.reset();
-    }catch(err){
-      console.error('rsvp error', err);
-      alert('No se pudo enviar la confirmación. Intenta más tarde.');
+    // fade helper
+    function fadeAudio(audio, from, to, duration=600){
+      const steps = 30; const stepTime = duration/steps;
+      let step=0; audio.volume = Math.max(0,Math.min(1,from));
+      return new Promise(resolve=>{
+        const id = setInterval(()=>{ step++; audio.volume = Math.max(0,Math.min(1, from + (to-from)*(step/steps))); if(step>=steps){ clearInterval(id); audio.volume = Math.max(0,Math.min(1,to)); resolve(); } }, stepTime);
+      });
     }
-  });
-}
 
-/* =========================
-   WISHES -> Google Apps Script (POST & LIST)
-   ========================= */
-const wishesEndpoint = 'https://script.google.com/macros/s/AKfycbwY2G6aHz1-W9Sk3CUspgJYNf2EhEchr_gNk4mvaZS4wXn7sKIfIV3Qy-Wje2UCKdgC/exec';
-const wishInput = document.getElementById('wishInput');
-const sendWishBtn = document.getElementById('sendWish');
-const refreshWishesBtn = document.getElementById('refreshWishes');
-const wishesContainer = document.getElementById('wishesContainer');
-
-async function loadWishes(){
-  if(!wishesContainer) return;
-  wishesContainer.innerHTML = 'Cargando deseos...';
-  try{
-    const res = await fetch(wishesEndpoint + '?action=list');
-    const data = await res.json();
-    if(!Array.isArray(data) || data.length === 0) { wishesContainer.innerHTML = '<div class="muted">Aún no hay deseos públicos.</div>'; return; }
-    wishesContainer.innerHTML = data.map(w=>{
-      const name = w.name || w.nombre || 'Anon';
-      const msg = (w.message || w.mensaje || w.deseo || '').replace(/</g,'&lt;');
-      return `<div style="padding:8px;border-bottom:1px solid #eee"><strong>${name}</strong><div style="margin-top:6px">${msg}</div></div>`;
-    }).join('');
-  }catch(e){
-    console.error('loadWishes', e);
-    wishesContainer.innerHTML = '<div class="muted">No fue posible cargar los deseos (temporal)</div>';
-  }
-}
-loadWishes();
-setInterval(loadWishes, 30000);
-if(sendWishBtn){
-  sendWishBtn.addEventListener('click', async ()=>{
-    const message = (wishInput.value || '').trim();
-    if(!message) return alert('Escribe un deseo');
-    try{
-      await fetch(wishesEndpoint, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({message})});
-      wishInput.value = '';
-      await loadWishes();
-      alert('Deseo enviado. Gracias!');
-    }catch(err){
-      console.error('sendWish', err);
-      alert('No se pudo enviar el deseo.');
+    // show overlay on mobile devices (small screens) to allow user to tap
+    function shouldShowStartOverlay(){
+      // show overlay if not allowed to autoplay or if touch device
+      return ('ontouchstart' in window) || (navigator.userAgent.match(/Mobi|Android/i));
     }
-  });
-}
-if(refreshWishesBtn) refreshWishesBtn.addEventListener('click', loadWishes);
 
-/* =========================
-   GALLERY (page5) - autoplay + arrows
-   ========================= */
-const gallery = document.getElementById('galleryNovios');
-const gImgs = gallery ? Array.from(gallery.querySelectorAll('img')) : [];
-let gIndex = 0;
-function updateGallery(i){
-  gImgs.forEach((img, idx)=>{
-    img.style.transform = `translateX(${100*(idx - i)}%)`;
-    img.classList.toggle('active', idx === i);
-  });
-}
-if(gImgs.length){
-  updateGallery(0);
-  document.getElementById('prevGallery').addEventListener('click', ()=> { gIndex = (gIndex - 1 + gImgs.length) % gImgs.length; updateGallery(gIndex); });
-  document.getElementById('nextGallery').addEventListener('click', ()=> { gIndex = (gIndex + 1) % gImgs.length; updateGallery(gIndex); });
-  let galleryAuto = setInterval(()=> { gIndex = (gIndex + 1) % gImgs.length; updateGallery(gIndex); }, 4200);
-  gallery.addEventListener('mouseenter', ()=> { if(galleryAuto){ clearInterval(galleryAuto); galleryAuto=null; } });
-  gallery.addEventListener('mouseleave', ()=> { if(!galleryAuto) galleryAuto = setInterval(()=> { gIndex = (gIndex + 1) % gImgs.length; updateGallery(gIndex); }, 4200); });
-}
+    // attempt to autoplay on load for desktops
+    window.addEventListener('load', async ()=>{
+      try{ await marcha.play(); await fadeAudio(marcha,0,1,700); }catch(e){ /* blocked */ }
+      // decide whether to show overlay for mobile
+      if(shouldShowStartOverlay()){
+        startOverlay.classList.add('show');
+      } else {
+        // hide overlay immediately if not needed
+        startOverlay.classList.remove('show');
+      }
+    });
 
-/* =========================
-   IMAGE zoom touch (mobile)
-   ========================= */
-document.querySelectorAll('.zoomable').forEach(img=>{
-  img.addEventListener('touchstart', ()=> img.classList.add('touch-active'), {passive:true});
-  img.addEventListener('touchend', ()=> img.classList.remove('touch-active'));
-});
+    // start button logic: play marcha (fade in) then hide overlay
+    startBtn.addEventListener('click', async ()=>{
+      try{
+        startBtn.disabled = true;
+        startBtn.textContent = 'Iniciando...';
+        await marcha.play();
+        await fadeAudio(marcha,0,1,600);
+      }catch(e){ console.warn('start play error', e); }
+      startOverlay.classList.remove('show');
+    });
 
-/* =========================
-   Google Calendar link for Add to Calendar
-   ========================= */
-document.getElementById('addCalendar').addEventListener('click', (e)=>{
-  e.preventDefault();
-  const start = '20251228T140000';
-  const end = '20251228T230000';
-  const title = encodeURIComponent('Boda de Abril y Pablo 💍');
-  const details = encodeURIComponent('Ceremonia y recepción. Iglesia Cristiana Palabra de Vida AD / Jardín Los Abuelos, Tlaquiltenango, Morelos');
-  const location = encodeURIComponent('Jardín Los Abuelos, Tlaquiltenango, Morelos');
-  const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&location=${location}`;
-  window.open(url, '_blank');
-});
+    // ring click: crossfade marcha -> eternamente and go to page 2
+    ringBtn.addEventListener('click', async ()=>{
+      try{ if(!marcha.paused){ await fadeAudio(marcha, marcha.volume||1, 0, 600); marcha.pause(); } }catch(e){}
+      try{ eternamente.currentTime = 0; eternamente.volume = 0; await eternamente.play(); await fadeAudio(eternamente,0,1,800); }catch(e){}
+      showSection(1);
+    });
 
-/* =========================
-   CURSOR MAGICAL HEARTS (desktop + mobile)
-   ========================= */
-function spawnHeart(x,y){
-  const heart = document.createElement('div');
-  heart.className = 'magicHeart';
-  const size = 12 + Math.random()*18;
-  heart.style.width = heart.style.height = size+'px';
-  heart.style.left = (x + (Math.random()*24 - 12))+'px';
-  heart.style.top = (y + (Math.random()*24 - 12))+'px';
-  const r = Math.random();
-  if(r<0.25) heart.style.background = 'radial-gradient(circle,#ffffff,#f0f0f0)';
-  else if(r<0.5) heart.style.background = 'radial-gradient(circle,#4dc3ff,#bfeeff)';
-  else if(r<0.75) heart.style.background = 'radial-gradient(circle,#c8c8c8,#ffffff)';
-  else heart.style.background = 'radial-gradient(circle,#a7ffcf,#eafff0)';
-  heart.style.clipPath = 'polygon(50% 0%,61% 15%,75% 15%,84% 27%,84% 45%,75% 60%,50% 80%,25% 60%,16% 45%,16% 27%,25% 15%,39% 15%)';
-  document.body.appendChild(heart);
-  setTimeout(()=> heart.remove(), 900 + Math.random()*700);
-}
-document.addEventListener('mousemove', (e)=> { if(Math.random() > 0.35) return; spawnHeart(e.clientX, e.clientY); });
-document.addEventListener('touchmove', (e)=> { const t = e.touches[0]; if(!t) return; if(Math.random()>0.35) return; spawnHeart(t.clientX, t.clientY); }, {passive:true});
+    // music toggle: control marcha
+    musicBtn.addEventListener('click', async ()=>{
+      if(marcha.paused){
+        try{ await marcha.play(); await fadeAudio(marcha,0,1,600); }catch(e){}
+        musicBtn.setAttribute('aria-pressed','false');
+      } else {
+        try{ await fadeAudio(marcha, marcha.volume||1,0,600); }catch(e){}
+        marcha.pause();
+        musicBtn.setAttribute('aria-pressed','true');
+      }
+    });
 
-/* =========================
-   LIGHTBOX for ALL images (including foto1, momento1..9)
-   Transitions intercalated: fade / slide (alternating)
-   ========================= */
-const lb = document.getElementById('lightbox');
-const lbImg = document.getElementById('lbImg');
-const lbClose = document.getElementById('lbClose');
-const lbPrev = document.getElementById('lbPrev');
-const lbNext = document.getElementById('lbNext');
+    document.getElementById('pauseMarch').addEventListener('click', async ()=> { try{ await fadeAudio(marcha, marcha.volume||1, 0, 500); }catch(e){} marcha.pause(); });
+    document.getElementById('playEtern').addEventListener('click', async ()=> { try{ eternamente.currentTime=0; eternamente.volume=0; await eternamente.play(); await fadeAudio(eternamente,0,1,700);}catch(e){} });
 
-// Build array of images from all .lb-target elements in DOM (preserve document order)
-const lbTargets = Array.from(document.querySelectorAll('.lb-target'));
-const lbSources = lbTargets.map(t => ({src: t.dataset.src || t.getAttribute('src'), el: t}));
+    /* =========================
+       COUNTERS
+       - mini counter in portada
+       - flip style on page 3
+       ========================= */
+    const miniDays = document.getElementById('miniDays');
+    const miniHms = document.getElementById('miniHms');
+    const flipMain = document.getElementById('flipMain');
 
-let currentLb = 0;
-function openLightbox(index){
-  if(index < 0) index = 0;
-  if(index >= lbSources.length) index = lbSources.length -1;
-  currentLb = index;
-  // set image
-  lbImg.style.opacity = 0;
-  lbImg.style.transform = 'scale(0.97)';
-  lbImg.setAttribute('src', lbSources[currentLb].src);
-  lb.setAttribute('aria-hidden','false');
-  lb.classList.add('open');
-  // alt text
-  const alt = lbTargets[currentLb].getAttribute('alt') || '';
-  lbImg.setAttribute('alt', alt);
-  // show with fade-in
-  setTimeout(()=> { lbImg.style.transition = 'opacity .45s ease, transform .45s ease'; lbImg.style.opacity = 1; lbImg.style.transform = 'scale(1)'; }, 30);
-}
-function closeLightbox(){
-  lbImg.style.opacity = 0; lbImg.style.transform = 'scale(.97)';
-  setTimeout(()=> { lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); lbImg.setAttribute('src',''); }, 240);
-}
+    function createFlip(initial){
+      const wrap = document.createElement('div'); wrap.className='flip';
+      const top = document.createElement('div'); top.className='face top'; top.innerHTML = `<div class="digit">${initial}</div>`;
+      const bottom = document.createElement('div'); bottom.className='face bottom'; bottom.innerHTML = `<div class="digit">${initial}</div>`;
+      wrap.appendChild(top); wrap.appendChild(bottom); return wrap;
+    }
+    function ensureFlips(){
+      if(!flipMain) return;
+      if(flipMain.children.length === 0){
+        for(let i=0;i<4;i++) flipMain.appendChild(createFlip('00'));
+      }
+    }
+    ensureFlips();
 
-// intercalated transition when moving next/prev
-function showLbDirection(dir){ // dir = 1 next, -1 prev
-  // choose style: alternate between fade and slide based on current index parity
-  const isFade = (currentLb % 2 === 0);
-  const nextIndex = (currentLb + (dir > 0 ? 1 : -1) + lbSources.length) % lbSources.length;
-  // animate out
-  if(isFade){
-    lbImg.style.transition = 'opacity .35s ease, transform .35s ease';
-    lbImg.style.opacity = 0;
-    lbImg.style.transform = 'scale(.98)';
-    setTimeout(()=> { currentLb = nextIndex; lbImg.setAttribute('src', lbSources[currentLb].src); const alt = lbTargets[currentLb].getAttribute('alt') || ''; lbImg.setAttribute('alt', alt);
-      lbImg.style.transition = 'opacity .45s ease, transform .45s ease'; lbImg.style.opacity = 1; lbImg.style.transform = 'scale(1)'; }, 380);
-  } else {
-    // slide lateral
-    const dirTranslate = dir > 0 ? '-20%' : '20%';
-    lbImg.style.transition = 'opacity .3s ease, transform .45s cubic-bezier(.2,.9,.2,1)';
-    lbImg.style.transform = `translateX(${dirTranslate}) scale(.98)`; lbImg.style.opacity = 0;
-    setTimeout(()=> { currentLb = nextIndex; lbImg.setAttribute('src', lbSources[currentLb].src); const alt = lbTargets[currentLb].getAttribute('alt') || ''; lbImg.setAttribute('alt', alt);
-      lbImg.style.transition = 'opacity .45s ease, transform .45s cubic-bezier(.2,.9,.2,1)'; lbImg.style.transform = 'translateX(0) scale(1)'; lbImg.style.opacity = 1; }, 360);
-  }
-}
+    function animateFlip(node,newVal){
+      const top = node.querySelector('.face.top .digit');
+      const bottom = node.querySelector('.face.bottom .digit');
+      if(top.textContent === newVal) return;
+      bottom.textContent = newVal;
+      node.classList.remove('animate'); void node.offsetWidth; node.classList.add('animate');
+      setTimeout(()=> { top.textContent = newVal; node.classList.remove('animate'); }, 700);
+    }
 
-// event listeners for targets
-lbTargets.forEach((t, idx)=>{
-  t.addEventListener('click', (e)=>{
-    e.preventDefault();
-    openLightbox(idx);
-  });
-});
+    const targetDate = new Date('2025-12-28T14:00:00');
+    function updateCounters(){
+      const now = new Date();
+      let diff = Math.max(0, targetDate - now);
+      const days = Math.floor(diff / (1000*60*60*24));
+      diff -= days * 24*60*60*1000;
+      const hours = Math.floor(diff/(1000*60*60));
+      diff -= hours*60*60*1000;
+      const mins = Math.floor(diff/(1000*60));
+      diff -= mins*60*1000;
+      const secs = Math.floor(diff/1000);
+      if(miniDays) miniDays.textContent = `${days} días`;
+      if(miniHms) miniHms.textContent = `${String(hours).padStart(2,'0')}:${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+      ensureFlips();
+      if(flipMain){
+        const nodes = Array.from(flipMain.querySelectorAll('.flip'));
+        const vals = [String(days).padStart(2,'0'), String(hours).padStart(2,'0'), String(mins).padStart(2,'0'), String(secs).padStart(2,'0')];
+        nodes.forEach((n,i)=> animateFlip(n, vals[i] || '00'));
+      }
+    }
+    updateCounters(); setInterval(updateCounters,1000);
 
-// lb controls
-lbClose.addEventListener('click', closeLightbox);
-lbPrev.addEventListener('click', ()=> showLbDirection(-1));
-lbNext.addEventListener('click', ()=> showLbDirection(1));
+    /* =========================
+       RSVP -> POST to Apps Script
+       ========================= */
+    const rsvpForm = document.getElementById('rsvpForm');
+    const rsvpEndpoint = 'https://script.google.com/macros/s/AKfycbyDEgVJzj-vGvwxFE1eqTmKb4pO4__lXB9gX8gMKGc2yGhlzR15AFPY8vQMvnjoNs01Vg/exec';
+    if(rsvpForm){
+      rsvpForm.addEventListener('submit', async (e)=>{
+        e.preventDefault();
+        const fd = new FormData(rsvpForm);
+        const payload = {};
+        fd.forEach((v,k)=> payload[k]=v);
+        try{
+          await fetch(rsvpEndpoint, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)});
+          alert('Confirmación enviada. ¡Gracias!');
+          rsvpForm.reset();
+        }catch(err){
+          console.error('rsvp error', err);
+          alert('No se pudo enviar la confirmación. Intenta más tarde.');
+        }
+      });
+    }
 
-// keyboard inside lightbox
-window.addEventListener('keydown', (e)=>{
-  if(!lb.classList.contains('open')) return;
-  if(e.key === 'Escape') closeLightbox();
-  if(e.key === 'ArrowRight') showLbDirection(1);
-  if(e.key === 'ArrowLeft') showLbDirection(-1);
-});
+    /* =========================
+       WISHES -> POST & LIST from Apps Script
+       ========================= */
+    const wishesEndpoint = 'https://script.google.com/macros/s/AKfycbwY2G6aHz1-W9Sk3CUspgJYNf2EhEchr_gNk4mvaZS4wXn7sKIfIV3Qy-Wje2UCKdgC/exec';
+    const wishInput = document.getElementById('wishInput');
+    const sendWishBtn = document.getElementById('sendWish');
+    const refreshWishesBtn = document.getElementById('refreshWishes');
+    const wishesContainer = document.getElementById('wishesContainer');
 
-// close when clicking outside image
-lb.addEventListener('click', (e)=>{
-  if(e.target === lb || e.target === lbImg.parentElement) closeLightbox();
-});
+    async function loadWishes(){
+      if(!wishesContainer) return;
+      wishesContainer.innerHTML = 'Cargando deseos...';
+      try{
+        const res = await fetch(wishesEndpoint + '?action=list');
+        const data = await res.json();
+        if(!Array.isArray(data) || data.length===0){ wishesContainer.innerHTML = '<div class="muted">Aún no hay deseos públicos.</div>'; return; }
+        wishesContainer.innerHTML = data.map(w=>{
+          const name = w.name || w.nombre || 'Anon';
+          const msg = (w.message || w.mensaje || w.deseo || '').replace(/</g,'&lt;');
+          return `<div style="padding:10px;border-bottom:1px solid #eee"><strong>${name}</strong><div style="margin-top:6px">${msg}</div></div>`;
+        }).join('');
+      }catch(e){
+        console.error('loadWishes', e);
+        wishesContainer.innerHTML = '<div class="muted">No fue posible cargar los deseos (temporal)</div>';
+      }
+    }
+    loadWishes();
+    setInterval(loadWishes,25000);
 
-/* =========================
-   Initial UI tweaks
-   ========================= */
-document.getElementById('prevBtn').classList.add('hidden');
-document.getElementById('progressBar').style.height = (1/sections.length*100) + '%';
+    if(sendWishBtn){
+      sendWishBtn.addEventListener('click', async ()=>{
+        const message = (wishInput.value || '').trim();
+        if(!message) return alert('Escribe un deseo');
+        try{
+          await fetch(wishesEndpoint, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({message})});
+          wishInput.value = '';
+          await loadWishes();
+          alert('Deseo enviado. ¡Gracias!');
+        }catch(err){
+          console.error('sendWish', err);
+          alert('No se pudo enviar el deseo.');
+        }
+      });
+    }
+    if(refreshWishesBtn) refreshWishesBtn.addEventListener('click', loadWishes);
 
-// ensure flip slots exist
-setTimeout(()=> { if(document.getElementById('flipMain') && document.getElementById('flipMain').children.length === 0){ for(let i=0;i<4;i++) document.getElementById('flipMain').appendChild(createFlip('00')); } }, 300);
-function createFlip(initial){ const wrap=document.createElement('div'); wrap.className='flip'; const t=document.createElement('div'); t.className='face top'; t.innerHTML=`<div class="digit">${initial}</div>`; const b=document.createElement('div'); b.className='face bottom'; b.innerHTML=`<div class="digit">${initial}</div>`; wrap.appendChild(t); wrap.appendChild(b); return wrap; }
+    /* =========================
+       GALLERY (page5) - auto + arrows
+       ========================= */
+    const gallery = document.getElementById('galleryNovios');
+    const gImgs = gallery ? Array.from(gallery.querySelectorAll('img')) : [];
+    let gIndex = 0;
+    function renderGallery(i){
+      gImgs.forEach((img, idx)=>{ img.style.transform = `translateX(${100*(idx - i)}%)`; img.classList.toggle('active', idx === i); });
+    }
+    if(gImgs.length){
+      renderGallery(0);
+      document.getElementById('prevGallery').addEventListener('click', ()=> { gIndex = (gIndex - 1 + gImgs.length) % gImgs.length; renderGallery(gIndex); });
+      document.getElementById('nextGallery').addEventListener('click', ()=> { gIndex = (gIndex + 1) % gImgs.length; renderGallery(gIndex); });
+      let galleryAuto = setInterval(()=> { gIndex = (gIndex + 1) % gImgs.length; renderGallery(gIndex); }, 4200);
+      gallery.addEventListener('mouseenter', ()=> { if(galleryAuto){ clearInterval(galleryAuto); galleryAuto=null; } });
+      gallery.addEventListener('mouseleave', ()=> { if(!galleryAuto) galleryAuto = setInterval(()=> { gIndex = (gIndex + 1) % gImgs.length; renderGallery(gIndex); }, 4200); });
+    }
 
-</script>
+    /* =========================
+       TOUCH zoom helpers (mobile)
+       ========================= */
+    document.querySelectorAll('.zoomable').forEach(img=>{
+      img.addEventListener('touchstart', ()=> img.classList.add('touch-active'), {passive:true});
+      img.addEventListener('touchend', ()=> img.classList.remove('touch-active'));
+    });
+
+    /* =========================
+       Add to Google Calendar
+       ========================= */
+    document.getElementById('addCalendar').addEventListener('click', (e)=>{
+      e.preventDefault();
+      const start = '20251228T140000';
+      const end = '20251228T230000';
+      const title = encodeURIComponent('Boda de Abril y Pablo 💍');
+      const details = encodeURIComponent('Ceremonia y recepción. Iglesia Cristiana Palabra de Vida AD / Jardín Los Abuelos, Tlaquiltenango, Morelos');
+      const location = encodeURIComponent('Jardín Los Abuelos, Tlaquiltenango, Morelos');
+      const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&location=${location}`;
+      window.open(url,'_blank');
+    });
+
+    /* =========================
+       CURSOR MAGICAL HEARTS (desktop + mobile)
+       ========================= */
+    function spawnHeart(x,y){
+      const heart = document.createElement('div');
+      heart.className = 'magicHeart';
+      const size = 12 + Math.random()*18;
+      heart.style.width = heart.style.height = size + 'px';
+      heart.style.left = (x + (Math.random()*24 - 12)) + 'px';
+      heart.style.top = (y + (Math.random()*24 - 12)) + 'px';
+      const r = Math.random();
+      if(r < 0.25) heart.style.background = 'radial-gradient(circle,#ffffff,#f0f0f0)';
+      else if(r < 0.5) heart.style.background = 'radial-gradient(circle,#4dc3ff,#bfeeff)';
+      else if(r < 0.75) heart.style.background = 'radial-gradient(circle,#c8c8c8,#ffffff)';
+      else heart.style.background = 'radial-gradient(circle,#a7ffcf,#eafff0)';
+      heart.style.clipPath = 'polygon(50% 0%,61% 15%,75% 15%,84% 27%,84% 45%,75% 60%,50% 80%,25% 60%,16% 45%,16% 27%,25% 15%,39% 15%)';
+      document.body.appendChild(heart);
+      setTimeout(()=> heart.remove(), 900 + Math.random()*700);
+    }
+    document.addEventListener('mousemove', (e)=> { if(Math.random()>0.45) return; spawnHeart(e.clientX, e.clientY); });
+    document.addEventListener('touchmove', (e)=> { const t = e.touches[0]; if(!t) return; if(Math.random()>0.45) return; spawnHeart(t.clientX, t.clientY); }, {passive:true});
+
+    /* =========================
+       LIGHTBOX (all .lb-target)
+       - transitions alternate fade/slide
+       ========================= */
+    const lb = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lbImg');
+    const lbClose = document.getElementById('lbClose');
+    const lbPrev = document.getElementById('lbPrev');
+    const lbNext = document.getElementById('lbNext');
+
+    const lbTargets = Array.from(document.querySelectorAll('.lb-target'));
+    const lbSources = lbTargets.map(t => ({src: t.dataset.src || t.getAttribute('src'), el: t}));
+
+    let currentLb = 0;
+    function openLightbox(index){
+      if(index < 0) index = 0;
+      if(index >= lbSources.length) index = lbSources.length -1;
+      currentLb = index;
+      lbImg.style.opacity = 0;
+      lbImg.style.transform = 'scale(0.97)';
+      lbImg.setAttribute('src', lbSources[currentLb].src);
+      lb.setAttribute('aria-hidden','false'); lb.classList.add('open');
+      const alt = lbTargets[currentLb].getAttribute('alt') || '';
+      lbImg.setAttribute('alt', alt);
+      setTimeout(()=> { lbImg.style.transition = 'opacity .45s ease, transform .45s ease'; lbImg.style.opacity = 1; lbImg.style.transform = 'scale(1)'; }, 30);
+    }
+    function closeLightbox(){ lbImg.style.opacity = 0; lbImg.style.transform = 'scale(.97)'; setTimeout(()=> { lb.classList.remove('open'); lb.setAttribute('aria-hidden','true'); lbImg.setAttribute('src',''); }, 240); }
+
+    function showLbDirection(dir){
+      const isFade = (currentLb % 2 === 0);
+      const nextIndex = (currentLb + (dir > 0 ? 1 : -1) + lbSources.length) % lbSources.length;
+      if(isFade){
+        lbImg.style.transition = 'opacity .35s ease, transform .35s ease';
+        lbImg.style.opacity = 0; lbImg.style.transform = 'scale(.98)';
+        setTimeout(()=> { currentLb = nextIndex; lbImg.setAttribute('src', lbSources[currentLb].src); const alt = lbTargets[currentLb].getAttribute('alt') || ''; lbImg.setAttribute('alt', alt); lbImg.style.transition = 'opacity .45s ease, transform .45s ease'; lbImg.style.opacity = 1; lbImg.style.transform = 'scale(1)'; }, 380);
+      } else {
+        const dirTranslate = dir > 0 ? '-20%' : '20%';
+        lbImg.style.transition = 'opacity .3s ease, transform .45s cubic-bezier(.2,.9,.2,1)';
+        lbImg.style.transform = `translateX(${dirTranslate}) scale(.98)`; lbImg.style.opacity = 0;
+        setTimeout(()=> { currentLb = nextIndex; lbImg.setAttribute('src', lbSources[currentLb].src); const alt = lbTargets[currentLb].getAttribute('alt') || ''; lbImg.setAttribute('alt', alt); lbImg.style.transition = 'opacity .45s ease, transform .45s cubic-bezier(.2,.9,.2,1)'; lbImg.style.transform = 'translateX(0) scale(1)'; lbImg.style.opacity = 1; }, 360);
+      }
+    }
+
+    lbTargets.forEach((t, idx)=>{ t.addEventListener('click', (e)=>{ e.preventDefault(); openLightbox(idx); }); });
+    lbClose.addEventListener('click', closeLightbox);
+    lbPrev.addEventListener('click', ()=> showLbDirection(-1));
+    lbNext.addEventListener('click', ()=> showLbDirection(1));
+    window.addEventListener('keydown', (e)=>{ if(!lb.classList.contains('open')) return; if(e.key === 'Escape') closeLightbox(); if(e.key==='ArrowRight') showLbDirection(1); if(e.key==='ArrowLeft') showLbDirection(-1); });
+    lb.addEventListener('click', (e)=>{ if(e.target === lb || e.target === lbImg.parentElement) closeLightbox(); });
+
+    /* =========================
+       INITIAL UI adjustments
+       ========================= */
+    document.getElementById('prevBtn').classList.add('hidden');
+    document.getElementById('progressBar').style.height = (1/sections.length*100) + '%';
+
+    setTimeout(()=> { if(document.getElementById('flipMain') && document.getElementById('flipMain').children.length === 0){ for(let i=0;i<4;i++) document.getElementById('flipMain').appendChild(createFlip('00')); } }, 300);
+    function createFlip(initial){ const wrap=document.createElement('div'); wrap.className='flip'; const t=document.createElement('div'); t.className='face top'; t.innerHTML=`<div class="digit">${initial}</div>`; const b=document.createElement('div'); b.className='face bottom'; b.innerHTML=`<div class="digit">${initial}</div>`; wrap.appendChild(t); wrap.appendChild(b); return wrap; }
+
+  </script>
 </body>
 </html>
  
