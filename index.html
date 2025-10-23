@@ -3,19 +3,19 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Boda de Abril y Pablo 💍</title>
+  <title>Boda de Abril & Pablo 💍</title>
 
   <!-- Tipografías -->
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Alex+Brush&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Quicksand:wght@300;400;600&display=swap" rel="stylesheet">
 
   <style>
     /* ============================
-       RESET & ROOT
+       ROOT / RESET
        ============================ */
     :root{
       --bg-cream:#F8F5F0;
       --deep:#2B2A2F;
-      --card-bg: rgba(255,255,255,0.94);
+      --card-bg: rgba(255,255,255,0.95);
       --accent:#B8DDE6;
       --led:#00e5ff;
       --muted:#6f6f6f;
@@ -25,14 +25,14 @@
       --chip-gris:#adb5bd;
       --chip-rosa:#f4978e;
       --wa:#25D366;
+      --blue-grad: linear-gradient(135deg,#66c9ff,#4a8fe7);
       --transition: .6s cubic-bezier(.2,.9,.2,1);
     }
     *{box-sizing:border-box;margin:0;padding:0}
     html,body{height:100%;width:100%;font-family:Quicksand,system-ui,Arial;background:var(--bg-cream);color:var(--deep);-webkit-font-smoothing:antialiased;overflow:hidden}
+    img{max-width:100%;display:block}
     a{color:inherit}
-    img{display:block;max-width:100%}
-    button{font-family:inherit;cursor:pointer}
-    .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    button{font-family:inherit}
 
     /* ============================
        LAYOUT / SECTIONS
@@ -47,21 +47,11 @@
       transition:transform var(--transition),opacity .5s ease;
       transform: translateY(30px);
       opacity:0; pointer-events:none;
-      background-attachment:fixed; /* simple parallax effect */
+      background-attachment:fixed; /* subtle parallax */
     }
     .section.active{transform:translateY(0);opacity:1;pointer-events:auto;z-index:3}
 
-    /* ---------- PAGE BACKGROUNDS (map per user's latest list) ---------- */
-    /* Portada: fondo_floral.jpg
-       Página 1: fondo_floral1.png
-       Página 2: fondo_floral2.jpg
-       Página 3: fondo_floral3.jpg
-       Página 4: fondo_floral4.png
-       Página 5: fondo_floral5.jpg
-       Página 6: fondo_floral6.jpg
-       Página 7: fondo_floral7.png
-       Página 8: fondo_floral8.png
-    */
+    /* ---------- BACKGROUNDS per user mapping ---------- */
     #s1{background-image:url('fondo_floral.jpg')}
     #s2{background-image:url('fondo_floral1.png')}
     #s3{background-image:url('fondo_floral2.jpg')}
@@ -69,10 +59,7 @@
     #s5{background-image:url('fondo_floral4.png')}
     #s6{background-image:url('fondo_floral5.jpg')}
     #s7{background-image:url('fondo_floral6.jpg')}
-    #s8{background-image:url('fondo_floral7.png')}
-    /* final page (user requested fondo_floral8.png) - we'll set s9 mapping below if we add, but mapping is s1..s8 above.
-       The user requested page 8 to use fondo_floral8.png; to honor that we will override s8 background in JS on load.
-    */
+    #s8{background-image:url('fondo_floral8.png')} /* final page per request */
 
     /* ---------- CARD ---------- */
     .card{
@@ -87,9 +74,9 @@
     }
 
     /* ---------- TYPO ---------- */
-    .title{font-family:'Great Vibes',cursive;font-size:56px;color:var(--deep)}
-    .romantic{font-family:'Great Vibes',cursive;color:var(--deep)}
-    .serif{font-family:'Playfair Display',serif}
+    .title-top{font-family:'Great Vibes',cursive;font-size:48px;color:var(--deep);line-height:1;margin-bottom:6px}
+    .subtitle-fairy{font-family:'Alex Brush',cursive;font-size:34px;color:#fff;text-shadow:0 6px 20px rgba(74,143,231,0.25);padding:6px 14px;border-radius:8px;background:linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));display:inline-block}
+    .verse{font-family:'Playfair Display',serif;font-size:16px;color:#3a3a3a;margin-top:10px}
     .muted{color:var(--muted);font-size:13px}
     .lead{font-family:'Playfair Display',serif;font-size:18px;color:#333;margin-top:8px}
 
@@ -97,46 +84,49 @@
     .nav{position:fixed;top:50%;left:0;right:0;display:flex;justify-content:space-between;pointer-events:none;z-index:999;transform:translateY(-50%)}
     .nav button{pointer-events:all;background:rgba(255,255,255,0.95);border:0;padding:10px 12px;border-radius:999px;font-size:28px;cursor:pointer;margin:8px;box-shadow:0 10px 30px rgba(0,0,0,0.12)}
     .nav button.hidden{display:none}
-    .progress{position:fixed;left:16px;top:12%;height:76%;width:12px;background:rgba(255,255,255,0.18);border-radius:8px;padding:6px;z-index:900}
+    .progress{position:fixed;left:12px;top:12%;height:76%;width:10px;background:rgba(255,255,255,0.18);border-radius:8px;padding:6px;z-index:900}
     .progress .bar{width:100%;background:linear-gradient(180deg,var(--accent),var(--led));border-radius:6px;height:0%;transition:height .45s ease}
 
     /* ---------- MUSIC CONTROL ---------- */
     #musicBtn{position:fixed;right:18px;bottom:18px;width:52px;height:52px;border-radius:999px;background:rgba(255,255,255,0.95);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:999;box-shadow:0 12px 34px rgba(0,0,0,0.12)}
     #musicBtn svg{width:26px;height:26px;fill:var(--deep)}
 
-    /* ========= PORTADA (s1) ========== */
-    .port-title{font-family:'Great Vibes',cursive;font-size:56px;color:var(--deep);margin-bottom:6px}
+    /* ---------- BUTTONS (blue gradient) ---------- */
+    .magicBtn{
+      padding:8px 14px;border-radius:12px;border:0;background:var(--blue-grad);color:#fff;font-weight:700;box-shadow:0 8px 24px rgba(74,143,231,0.18);cursor:pointer;transition:transform .22s ease,box-shadow .22s ease;
+    }
+    .magicBtn:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(74,143,231,0.22)}
+
+    /* ---------- PORTADA specifics ---------- */
+    .port-top{position:absolute;top:46px;left:0;right:0;text-align:center;z-index:20}
+    .port-card{background:linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.92));padding:22px;border-radius:16px;box-shadow:0 18px 44px rgba(0,0,0,0.12)}
+    .accept{font-family:'Alex Brush',cursive;font-size:36px;color:#275d9a;text-shadow:0 6px 20px rgba(102,201,255,0.12);margin-top:6px}
+
+    .ring-svg{width:160px;height:160px;display:block;transition:transform 1.2s ease}
+    .ring-animated{animation:spin 12s linear infinite}
+    @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+    .ring-glow{filter:drop-shadow(0 6px 18px rgba(102,201,255,0.24))}
+
     .mini-counter{margin-top:12px;display:flex;gap:12px;align-items:center;justify-content:center;font-weight:700;color:var(--deep)}
-    .mini-counter .chip{background:rgba(255,255,255,0.96);padding:8px 12px;border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,0.08);min-width:96px;text-align:center}
+    .mini-counter .chip{background:rgba(255,255,255,0.96);padding:8px 12px;border-radius:12px;box-shadow:0 10px 28px rgba(0,0,0,0.08);min-width:96px;text-align:center}
 
-    .ring-btn{background:transparent;border:0;padding:0;cursor:pointer;outline:none}
+    /* ---------- PAGE 2 parents & novios ---------- */
+    .parents-wrap{display:flex;gap:18px;align-items:flex-start;justify-content:space-between;width:100%;flex-wrap:wrap}
+    .parent-col{flex:1;min-width:220px;text-align:center}
+    .parent-names{font-family:'Alex Brush',cursive;font-size:20px;color:var(--deep)}
+    .parents-phrase{font-family:'Great Vibes',cursive;font-size:20px;color:var(--deep);margin-top:12px}
+    .novios-photo{width:40%;max-width:360px;border-radius:12px;box-shadow:0 12px 36px rgba(0,0,0,0.12);transition:transform .35s ease}
+    @media (max-width:720px){ .novios-photo{width:70%;max-width:320px} .parent-names{font-size:18px} }
 
-    /* ========= PAGE 2: PARENTS & NOVIOS ========= */
-    .parents-row{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;flex-wrap:wrap;width:100%}
-    .parents-col{flex:1;min-width:220px}
-    .parents-title{font-family:'Alex Brush',cursive;font-size:22px;color:var(--deep);margin-bottom:6px}
-    .parents-list{font-size:16px}
-    .romantic-center{font-family:'Great Vibes',cursive;font-size:20px;color:var(--deep);margin-top:12px}
-    .couple-names{font-family:'Great Vibes',cursive;font-size:34px;color:var(--deep);margin-top:12px}
-    .novios-photo{width:48%;max-width:340px;border-radius:14px;box-shadow:0 12px 36px rgba(0,0,0,0.12);transition:transform .45s ease}
-    /* smaller photo on smaller screens to show parents */
-    @media (max-width:720px){
-      .novios-photo{width:62%;max-width:320px}
-      .couple-names{font-size:28px}
-    }
-    @media (max-width:420px){
-      .novios-photo{width:78%;max-width:280px}
-      .couple-names{font-size:24px}
-      .parents-row{flex-direction:column;align-items:center;text-align:center}
-    }
-
-    /* ========= PAGE 3: ITINERARY + FLIP ========= */
+    /* ---------- ITINERARY (page 3) ---------- */
     .itinerary{display:flex;flex-direction:column;gap:14px;text-align:left;padding:8px}
-    .it-item{display:flex;gap:12px;align-items:flex-start;padding:12px;border-radius:10px;background:rgba(255,255,255,0.92);box-shadow:0 8px 20px rgba(0,0,0,0.06)}
-    .it-icon{width:46px;height:46px;border-radius:10px;background:rgba(255,255,255,0.95);display:flex;align-items:center;justify-content:center;font-size:22px}
-    .counter-caption{font-family:'Playfair Display',serif;font-size:18px;margin-bottom:6px}
+    .it-item{display:flex;gap:12px;align-items:flex-start;padding:14px;border-radius:12px;background:rgba(255,255,255,0.94);box-shadow:0 10px 30px rgba(0,0,0,0.06)}
+    .it-icon{width:54px;height:54px;border-radius:10px;background:rgba(255,255,255,0.96);display:flex;align-items:center;justify-content:center;font-size:22px}
+    .it-address{font-size:14px;color:#333;margin-top:6px}
+    .map-link{display:inline-block;margin-top:8px;color:#2b87e6;text-decoration:underline}
 
-    .flip-wrap{display:flex;gap:12px;align-items:center;justify-content:center;margin-top:12px;flex-wrap:wrap}
+    .counter-caption{font-family:'Playfair Display',serif;font-size:18px;margin-bottom:10px}
+    .flip-wrap{display:flex;gap:12px;align-items:center;justify-content:center;margin-top:8px;flex-wrap:wrap}
     .flip{width:84px;height:88px;perspective:900px;position:relative}
     .face{position:absolute;left:0;top:0;width:100%;height:50%;overflow:hidden;border-radius:10px;background:rgba(255,255,255,0.96);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:28px;color:var(--deep);box-shadow:0 8px 24px rgba(0,0,0,0.10)}
     .face.top{border-bottom-left-radius:0;border-bottom-right-radius:0;transform-origin:bottom}
@@ -145,27 +135,26 @@
     .flip.animate .face.bottom{animation:flipBottom .7s forwards}
     @keyframes flipTop{0%{transform:rotateX(0)}100%{transform:rotateX(-180deg)}}
     @keyframes flipBottom{0%{transform:rotateX(180deg)}100%{transform:rotateX(0deg)}}
-    .digit{color:var(--led);text-shadow:0 0 8px rgba(0,230,255,0.45),0 0 20px rgba(0,200,255,0.25);font-family:'Playfair Display',serif;font-size:26px}
+    .digit{color:var(--led);text-shadow:0 0 8px rgba(0,230,255,0.45);font-family:'Playfair Display',serif;font-size:26px}
 
-    /* ========= PAGE 4: RSVP + WISHES ========= */
+    /* ---------- RSVP + Wishes (page 4) ---------- */
     .form{display:flex;flex-direction:column;gap:10px;align-items:center;margin-top:10px}
     .form input,.form textarea{padding:10px;border-radius:10px;border:1px solid rgba(0,0,0,0.06);width:100%;max-width:460px}
     .messages{max-height:320px;overflow:auto;padding:8px;border-radius:8px;background:rgba(255,255,255,0.96);width:100%;max-width:760px;text-align:left}
-    .btns-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:8px}
 
-    /* ========= PAGE 5: GALLERY NOVIOS ========= */
-    .carousel{position:relative;width:94%;max-width:980px;height:620px;border-radius:14px;overflow:hidden;box-shadow:0 18px 44px rgba(0,0,0,0.16)}
+    /* ---------- GALLERY (page5) ---------- */
+    .carousel{position:relative;width:94%;max-width:980px;height:640px;border-radius:14px;overflow:hidden;box-shadow:0 18px 44px rgba(0,0,0,0.16)}
     .carousel img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .9s ease,transform .9s ease;transform:scale(1.02)}
     .carousel img.active{opacity:1;transform:scale(1)}
     .carousel .cbtn{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.92);border-radius:999px;padding:12px;font-size:22px;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,0.15)}
     .carousel .cbtn.left{left:12px}
     .carousel .cbtn.right{right:12px}
 
-    /* ========= PAGE 6: MOMENTO8 big ========= */
-    .full-photo{width:100%;max-width:980px;height:70vh;border-radius:14px;object-fit:cover;box-shadow:0 18px 44px rgba(0,0,0,0.16)}
+    /* ---------- MOMENTOS (page6) ---------- */
+    .full-photo{width:100%;max-width:980px;height:72vh;border-radius:14px;object-fit:cover;box-shadow:0 18px 44px rgba(0,0,0,0.16)}
     .phrase-big{font-family:'Playfair Display',serif;font-size:20px;margin-top:14px;text-align:center;color:var(--deep)}
 
-    /* ========= LIGHTBOX ========= */
+    /* ---------- LIGHTBOX ---------- */
     .lb{position:fixed;inset:0;display:none;align-items:center;justify-content:center;z-index:2000;background:rgba(0,0,0,0.78);backdrop-filter:blur(6px)}
     .lb.open{display:flex}
     .lb-img{max-width:92%;max-height:88%;border-radius:12px;box-shadow:0 18px 60px rgba(0,0,0,0.6);transform-origin:center;transition:transform .6s ease,opacity .5s ease}
@@ -173,24 +162,27 @@
     .lb-nav{position:fixed;left:10px;right:10px;top:50%;display:flex;justify-content:space-between;pointer-events:none}
     .lb-nav button{pointer-events:all;background:rgba(255,255,255,0.9);border-radius:999px;padding:10px 12px;border:0;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,0.2)}
 
-    /* ========= CURSOR HEARTS ========= */
+    /* ---------- CURSOR HEARTS ---------- */
     .magicHeart{position:fixed;pointer-events:none;z-index:99999;width:22px;height:22px;opacity:0;transform:translate(-50%,-50%) scale(1);animation:heartFade 1000ms forwards}
     @keyframes heartFade{0%{opacity:1;transform:translate(-50%,-50%) scale(1);}100%{opacity:0;transform:translate(-50%,-120%) scale(0.6)}}
 
-    /* ========= Responsive tweaks ========= */
+    /* ---------- RESPONSIVE ---------- */
     @media (max-width:900px){
-      .title{font-size:44px}
+      .title-top{font-size:40px}
       .carousel{height:460px}
       .flip{width:64px;height:68px}
       .full-photo{height:60vh}
+      .port-top{top:22px}
     }
     @media (max-width:520px){
-      .title{font-size:34px}
-      .couple-names{font-size:28px}
+      .title-top{font-size:32px}
+      .subtitle-fairy{font-size:22px}
+      .novios-photo{width:78%}
       .card{padding:14px}
-      .carousel{height:320px}
+      .carousel{height:300px}
       .flip{width:52px;height:60px}
-      .mini-counter{font-size:14px}
+      .mini-counter{font-size:13px}
+      .nav button{font-size:24px;padding:8px}
     }
 
     /* "Toca para comenzar" overlay for mobile autoplay */
@@ -221,6 +213,14 @@
       </div>
     </div>
 
+    <!-- top title over the page (makes portada more prominent) -->
+    <div class="port-top" aria-hidden="true">
+      <div class="port-card" style="display:inline-block">
+        <div class="title-top">Abril &amp; Pablo</div>
+        <div class="subtitle-fairy">Sí, ¡acepto!</div>
+      </div>
+    </div>
+
     <!-- Progress bar -->
     <div class="progress" aria-hidden="true"><div class="bar" id="progressBar"></div></div>
 
@@ -232,28 +232,31 @@
 
     <!-- Music toggle -->
     <div id="musicBtn" title="Pausar / Reanudar música" role="button" aria-pressed="false">
-      <svg viewBox="0 0 24 24" id="musicIcon"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg>
+      <svg viewBox="0 0 24 24" id="musicIcon" aria-hidden="true"><path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z"/></svg>
     </div>
 
     <main class="sections" id="sections" role="main" aria-live="polite">
 
       <!-- ========== PAGE 1 - PORTADA (fondo_floral.jpg) ========== -->
       <section id="s1" class="section active" data-page="1" aria-label="Portada">
-        <div class="card" role="region" aria-labelledby="portTitle">
-          <h1 id="portTitle" class="port-title">Boda de Abril y Pablo 💍</h1>
-          <div class="lead">¡Sí, acepto!</div>
+        <div class="card port-card" role="region" aria-labelledby="portTitle" style="max-width:760px">
+          <h1 id="portTitle" style="font-family:'Great Vibes',cursive;font-size:46px;margin-top:6px;">Abril &amp; Pablo</h1>
+          <div style="margin-top:8px;font-family:'Playfair Display',serif;color:#2f2f2f">¡Nos casamos!</div>
 
-          <div style="margin-top:14px;display:flex;flex-direction:column;align-items:center;gap:12px">
+          <div style="margin-top:14px;display:flex;flex-direction:column;align-items:center;gap:10px">
             <button id="ringBtn" class="ring-btn" aria-label="Abrir invitación (anillo)" title="Abrir invitación">
-              <!-- ring svg -->
-              <svg width="140" height="140" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <!-- ring svg with subtle animation -->
+              <svg class="ring-svg ring-animated ring-glow" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <defs>
-                  <radialGradient id="g1" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fff"/><stop offset="60%" stop-color="#c9ccd0"/><stop offset="100%" stop-color="#d6a79b"/></radialGradient>
-                  <radialGradient id="g2" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#dff6ff"/><stop offset="60%" stop-color="#66c9ff"/><stop offset="100%" stop-color="#004c99"/></radialGradient>
+                  <radialGradient id="rg1" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fff"/><stop offset="60%" stop-color="#c9ccd0"/><stop offset="100%" stop-color="#d6a79b"/></radialGradient>
+                  <radialGradient id="rg2" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#dff6ff"/><stop offset="60%" stop-color="#66c9ff"/><stop offset="100%" stop-color="#004c99"/></radialGradient>
                 </defs>
                 <g>
-                  <ellipse cx="100" cy="100" rx="40" ry="12" stroke="url(#g1)" stroke-width="12" fill="none"/>
-                  <path d="M100 58 L110 70 L100 86 L90 70 Z" fill="url(#g2)" stroke="#fff" stroke-opacity="0.45" stroke-width="0.6"/>
+                  <ellipse cx="100" cy="100" rx="40" ry="12" stroke="url(#rg1)" stroke-width="12" fill="none"/>
+                  <path d="M100 58 L110 70 L100 86 L90 70 Z" fill="url(#rg2)" stroke="#fff" stroke-opacity="0.45" stroke-width="0.6">
+                    <animateTransform attributeName="transform" type="scale" values="1;1.06;1" dur="3s" repeatCount="indefinite"/>
+                  </path>
+                  <circle cx="100" cy="60" r="2" fill="#fff" opacity="0.9"><animate attributeName="r" values="2;5;2" dur="1.6s" repeatCount="indefinite"/></circle>
                 </g>
               </svg>
             </button>
@@ -263,7 +266,9 @@
               <div class="chip" id="miniHms">--:--:--</div>
             </div>
 
-            <div class="lead" style="margin-top:8px">"Quien halla esposa halla el bien" — <strong>Proverbios 18:22</strong></div>
+            <div class="verse" style="font-family:'Playfair Display',serif;font-size:16px;color:#2f2f2f;">
+              "Quien halla esposa halla el bien" — <strong>Proverbios 18:22</strong>
+            </div>
 
             <div style="margin-top:10px;display:flex;gap:8px">
               <button id="pauseMarch" class="magicBtn">Pausar marcha</button>
@@ -275,27 +280,24 @@
 
       <!-- ========== PAGE 2 - PADRES & NOVIOS (fondo_floral1.png) ========== -->
       <section id="s2" class="section" data-page="2" aria-label="Padres y novios">
-        <div class="card" role="region" style="display:flex;flex-direction:column;gap:12px;align-items:center">
-          <div class="parents-row" style="width:100%;">
-            <!-- parents left -->
-            <div class="parents-col" style="text-align:center">
-              <div class="parents-title">Padres de la novia</div>
-              <div class="parents-list">Eva Aguilar Rendón<br>Pedro Pérez Hernández</div>
+        <div class="card" role="region" style="display:flex;flex-direction:column;gap:18px;align-items:center">
+          <div class="parents-wrap" style="width:100%;align-items:center;justify-content:center">
+            <div class="parent-col" style="text-align:center">
+              <div class="parent-names">Eva Aguilar Rendón<br>Pedro Pérez Hernández</div>
             </div>
 
-            <!-- parents right -->
-            <div class="parents-col" style="text-align:center">
-              <div class="parents-title">Padres del novio</div>
-              <div class="parents-list">Saray Hernández Santana<br>Pablo Tinoco Carranza <span title="finado">✝</span></div>
+            <div style="width:24px"></div>
+
+            <div class="parent-col" style="text-align:center">
+              <div class="parent-names">Saray Hernández Santana<br>Pablo Tinoco Carranza <span title="finado">✝</span></div>
             </div>
           </div>
 
-          <div class="romantic-center">Tienen el honor de compartir la dicha que enlaza a sus amados hijos.</div>
+          <div class="parents-phrase">Tienen el honor de compartir la dicha que enlaza a sus amados hijos.</div>
 
-          <div style="margin-top:12px;display:flex;flex-direction:column;align-items:center;gap:10px">
-            <div class="couple-names">Abril Pérez Aguilar<br>y<br>Pablo Eliel Tinoco Hernández</div>
-            <!-- photo smaller on mobile to ensure parents visible -->
-            <img src="foto1.jpg" alt="Abril y Pablo" class="novios-photo zoomable lb-target" data-src="foto1.jpg" style="display:block">
+          <div style="margin-top:8px;display:flex;flex-direction:column;align-items:center;gap:10px">
+            <div class="couple-names" style="font-family:'Great Vibes',cursive;font-size:34px">Abril Pérez Aguilar<br>y<br>Pablo Eliel Tinoco Hernández</div>
+            <img src="foto1.jpg" alt="Abril y Pablo" class="novios-photo zoomable lb-target" data-src="foto1.jpg">
           </div>
         </div>
       </section>
@@ -306,39 +308,38 @@
           <h2 class="romantic" style="font-size:28px">Itinerario</h2>
 
           <div style="margin-top:12px">
-            <!-- improved spacing and readable cards -->
             <div class="itinerary">
               <div class="it-item">
                 <div class="it-icon">⛪</div>
                 <div>
-                  <strong>Ceremonia Religiosa</strong><br>
-                  <span class="muted">28 de diciembre de 2025 — 2:00 pm</span><br>
-                  <a class="muted" href="https://maps.app.goo.gl/AWYkNZ44jyshjRUG6" target="_blank" rel="noopener">Ver mapa</a>
+                  <strong>Ceremonia Religiosa — 2:00 pm</strong>
+                  <div class="it-address">Iglesia Cristiana "Palabra de vida AD" — Rodeo #35, Gabriel Tepepa, CP. 62980, Tlaquiltenango, Morelos</div>
+                  <a class="map-link" href="https://maps.app.goo.gl/AWYkNZ44jyshjRUG6" target="_blank" rel="noopener">Ver mapa</a>
                 </div>
               </div>
 
               <div class="it-item">
                 <div class="it-icon">🎉</div>
                 <div>
-                  <strong>Recepción</strong><br>
-                  <span class="muted">4:00 pm — Jardín Los Abuelos, Tlaquiltenango, Morelos</span><br>
-                  <a class="muted" href="https://maps.app.goo.gl/B2W65gnaMnyodGh56" target="_blank" rel="noopener">Ver mapa</a>
+                  <strong>Recepción — 4:00 pm</strong>
+                  <div class="it-address">Jardín Los Abuelos — Insurgentes #819, Gabriel Tepepa, CP. 62980, Tlaquiltenango, Morelos</div>
+                  <a class="map-link" href="https://maps.app.goo.gl/B2W65gnaMnyodGh56" target="_blank" rel="noopener">Ver mapa</a>
                 </div>
               </div>
 
               <div class="it-item">
                 <div class="it-icon">⏳</div>
                 <div>
-                  <strong>Duración estimada</strong><br>
-                  <span class="muted">Inicio 4:00 pm — Evento hasta las 11:00 pm aprox.</span>
+                  <strong>Duración estimada</strong>
+                  <div class="it-address">Inicio 4:00 pm — Se estima evento hasta las 11:00 pm aprox.</div>
                 </div>
               </div>
 
               <div class="it-item">
                 <div class="it-icon">👗</div>
                 <div>
-                  <strong>Código de vestimenta</strong><br>
-                  <span class="muted">Formal — tonos recomendados: celestes, beige, verde, gris, rosa</span>
+                  <strong>Código de vestimenta</strong>
+                  <div class="it-address">Formal — tonos recomendados: celestes, beige, verde, gris, rosa</div>
                   <div style="display:flex;gap:8px;margin-top:8px">
                     <div style="width:22px;height:22px;border-radius:6px;background:var(--chip-celeste)"></div>
                     <div style="width:22px;height:22px;border-radius:6px;background:var(--chip-beige);border:1px solid #ddd"></div>
@@ -365,22 +366,20 @@
         <div class="card" role="region" style="max-width:980px;display:flex;flex-direction:column;gap:12px;align-items:center">
           <h2 class="romantic" style="font-size:26px">Confirmación de asistencia</h2>
 
-          <!-- Quick RSVP form (local) that POSTs to your Apps Script -->
+          <!-- Quick RSVP form (POST to Apps Script) -->
           <form id="rsvpForm" class="form" aria-label="Formulario rápido de confirmación">
             <input name="name" placeholder="Nombre completo" required>
             <input name="email" placeholder="Correo (opcional)">
             <input name="guests" type="number" min="0" value="0" style="max-width:160px">
             <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
               <button type="submit" class="magicBtn">Enviar confirmación</button>
-              <button type="reset" class="magicBtn" style="background:#eee;color:#222">Limpiar</button>
+              <button type="reset" class="magicBtn" style="background:linear-gradient(135deg,#eef3ff,#d6e9ff);color:#0b2b4a">Limpiar</button>
             </div>
             <div class="muted" style="font-size:13px;margin-top:6px">Tus confirmaciones se guardan en Google Sheets.</div>
           </form>
 
-          <!-- Buttons to open the full Google Forms in new tab (user requested) -->
-          <div class="btns-row" style="margin-top:8px">
-            <a class="magicBtn" href="https://docs.google.com/forms/d/e/1FAIpQLSfDX9Ky8YrQ962Uxh5ibEYGDk2WsyyVUxUPC09IcwrBKlHx7A/viewform?usp=sharing" target="_blank" rel="noopener">Abrir formulario de confirmación (Sheet)</a>
-            <a class="magicBtn" href="https://docs.google.com/forms/d/e/1FAIpQLSfDX9Ky8YrQ962Uxh5ibEYGDk2WsyyVUxUPC09IcwrBKlHx7A/viewform?usp=sharing" target="_blank" rel="noopener">Abrir formulario para momentos</a>
+          <div class="btns-row" style="margin-top:6px">
+            <a class="magicBtn" href="https://docs.google.com/forms/d/e/1FAIpQLSfDX9Ky8YrQ962Uxh5ibEYGDk2WsyyVUxUPC09IcwrBKlHx7A/viewform?usp=sharing" target="_blank" rel="noopener">Abrir formulario (Confirmación / Subir momento)</a>
           </div>
 
           <hr style="width:90%;border:none;border-top:1px solid rgba(0,0,0,0.06)">
@@ -391,7 +390,7 @@
             <textarea id="wishInput" placeholder="Escribe tu deseo..." rows="4" style="width:100%;max-width:700px;padding:10px;border-radius:10px;border:1px solid rgba(0,0,0,0.06)"></textarea>
             <div style="display:flex;gap:8px;justify-content:center">
               <button id="sendWish" class="magicBtn">Enviar deseo</button>
-              <button id="refreshWishes" class="magicBtn" style="background:#eee;color:#222">Actualizar</button>
+              <button id="refreshWishes" class="magicBtn" style="background:linear-gradient(135deg,#eef3ff,#d6e9ff);color:#0b2b4a">Actualizar</button>
             </div>
           </div>
 
@@ -424,7 +423,7 @@
       <section id="s6" class="section" data-page="6" aria-label="Momentos invitados">
         <div class="card" role="region" style="max-width:980px;display:flex;flex-direction:column;align-items:center;gap:12px">
           <h2 class="romantic" style="font-size:24px">Momentos de los invitados</h2>
-          <img src="momento8.jpg" alt="momento8" class="full-photo zoomable lb-target" data-src="momento8.jpg">
+          <img src="momento8.jpg" alt="momento8" class="full-photo zoomable lb-target" data-src="momento8.jpg" style="border-radius:12px">
           <div class="phrase-big">"Tu amor es lo que he anhelado y el regalo que Dios me ha dado"</div>
           <div style="margin-top:10px">
             <a class="magicBtn" href="https://docs.google.com/forms/d/e/1FAIpQLSfDX9Ky8YrQ962Uxh5ibEYGDk2WsyyVUxUPC09IcwrBKlHx7A/viewform?usp=sharing" target="_blank" rel="noopener">Contribuir momento</a>
@@ -435,37 +434,38 @@
       <!-- ========== PAGE 7 - MOMENTO9 (fondo_floral6.jpg) ========== -->
       <section id="s7" class="section" data-page="7" aria-label="Momento especial">
         <div class="card" role="region" style="max-width:760px;display:flex;flex-direction:column;align-items:center;gap:12px">
-          <img src="momento9.jpg" alt="momento9" class="special-photo zoomable lb-target" data-src="momento9.jpg">
+          <img src="momento9.jpg" alt="momento9" class="special-photo zoomable lb-target" data-src="momento9.jpg" style="border-radius:12px;max-width:680px">
           <div class="romantic" style="font-size:22px">"Y así comienza nuestra historia de amor para siempre"</div>
         </div>
       </section>
 
       <!-- ========== PAGE 8 - FINAL / WHATSAPP / CALENDAR (fondo_floral8.png) ========== -->
       <section id="s8" class="section" data-page="8" aria-label="Final">
-        <div class="card" role="region" style="display:flex;flex-direction:column;align-items:center;gap:12px">
+        <div class="card" role="region" style="display:flex;flex-direction:column;align-items:center;gap:14px">
           <div class="romantic" style="font-size:32px">Con amor eterno</div>
-          <div style="font-family:'Playfair Display',serif;font-size:20px">Abril & Pablo</div>
+          <div style="font-family:'Playfair Display',serif;font-size:20px">Abril &amp; Pablo</div>
           <div class="muted" style="margin-top:6px">Gracias por acompañarnos en este día especial</div>
 
-          <div class="small-actions" style="margin-top:12px">
-            <a class="wa" href="https://wa.me/5217774914500" target="_blank" rel="noopener" aria-label="WhatsApp Abril" style="display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:10px;background:var(--wa);color:#fff;font-weight:700">
-              <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="#fff" d="M20.5 3.5c-9.2 0-16.7 7.5-16.7 16.7 0 2.9.8 5.6 2.2 8l-2.3 7.5 7.7-2c2.4 1.3 5.1 2 7.9 2 9.2 0 16.7-7.5 16.7-16.7S29.7 3.5 20.5 3.5z"/></svg>
-              WhatsApp Abril
+          <div class="small-actions" style="margin-top:12px;display:flex;flex-direction:column;gap:10px;width:100%;max-width:520px;align-items:stretch">
+            <a class="magicBtn" href="https://wa.me/5217774914500" target="_blank" rel="noopener" aria-label="WhatsApp Abril" style="display:flex;align-items:center;gap:10px;justify-content:center">
+              <!-- WhatsApp svg green -->
+              <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M20.5 3.5c-9.2 0-16.7 7.5-16.7 16.7 0 2.9.8 5.6 2.2 8l-2.3 7.5 7.7-2c2.4 1.3 5.1 2 7.9 2 9.2 0 16.7-7.5 16.7-16.7S29.7 3.5 20.5 3.5z"/></svg>
+              WhatsApp Abril — +52 1 777 491 4500
             </a>
 
-            <a class="wa" href="https://wa.me/5217341123645" target="_blank" rel="noopener" aria-label="WhatsApp Pablo" style="display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:10px;background:var(--wa);color:#fff;font-weight:700">
-              <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="#fff" d="M20.5 3.5c-9.2 0-16.7 7.5-16.7 16.7 0 2.9.8 5.6 2.2 8l-2.3 7.5 7.7-2c2.4 1.3 5.1 2 7.9 2 9.2 0 16.7-7.5 16.7-16.7S29.7 3.5 20.5 3.5z"/></svg>
-              WhatsApp Pablo
+            <a class="magicBtn" href="https://wa.me/5217341123645" target="_blank" rel="noopener" aria-label="WhatsApp Pablo" style="display:flex;align-items:center;gap:10px;justify-content:center">
+              <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M20.5 3.5c-9.2 0-16.7 7.5-16.7 16.7 0 2.9.8 5.6 2.2 8l-2.3 7.5 7.7-2c2.4 1.3 5.1 2 7.9 2 9.2 0 16.7-7.5 16.7-16.7S29.7 3.5 20.5 3.5z"/></svg>
+              WhatsApp Pablo — +52 1 734 112 3645
             </a>
 
-            <a id="addCalendar" class="magicBtn" href="#" role="button">Agregar al calendario</a>
+            <a id="addCalendar" class="magicBtn" href="#" role="button" style="background:linear-gradient(135deg,#66c9ff,#4a8fe7)">Agregar al calendario</a>
           </div>
         </div>
       </section>
 
     </main>
 
-    <!-- LIGHTBOX (single instance for all images) -->
+    <!-- LIGHTBOX -->
     <div class="lb" id="lightbox" aria-hidden="true" role="dialog" aria-modal="true">
       <button class="lb-close" id="lbClose" aria-label="Cerrar">✕</button>
       <div class="lb-nav">
@@ -478,7 +478,7 @@
 
   <script>
     /* =========================
-       NAVIGATION between sections (arrows, keys, swipe)
+       Navigation between sections
        ========================= */
     const sections = Array.from(document.querySelectorAll('.section'));
     let current = 0;
@@ -490,15 +490,13 @@
       document.getElementById('progressBar').style.height = ((i+1)/sections.length*100) + '%';
       document.getElementById('prevBtn').classList.toggle('hidden', i===0);
       document.getElementById('nextBtn').classList.toggle('hidden', i===sections.length-1);
-      // simple reveal
-      const card = sections[i].querySelector('.card');
-      if(card){
-        card.style.opacity = 0;
-        card.style.transform = 'translateY(6px)';
+      // subtle entrance animation
+      const c = sections[i].querySelector('.card');
+      if(c){
+        c.style.opacity = 0; c.style.transform = 'translateY(6px)';
         requestAnimationFrame(()=> {
-          card.style.transition = 'opacity .55s ease, transform .55s ease';
-          card.style.opacity = 1;
-          card.style.transform = 'translateY(0)';
+          c.style.transition = 'opacity .45s ease, transform .45s ease';
+          c.style.opacity = 1; c.style.transform = 'translateY(0)';
         });
       }
     }
@@ -509,17 +507,16 @@
       if(e.key==='ArrowRight' || e.key==='ArrowDown') showSection(current+1);
       if(e.key==='ArrowLeft' || e.key==='ArrowUp') showSection(current-1);
     });
-    // wheel
+    // wheel (throttled)
     let wheelLocked=false;
     window.addEventListener('wheel',(e)=>{ if(wheelLocked) return; wheelLocked=true; setTimeout(()=> wheelLocked=false,700); if(e.deltaY>0) showSection(current+1); else showSection(current-1); });
-    // touch swipe
+    // swipe
     let tsY=null;
     window.addEventListener('touchstart', e => tsY = e.touches[0].clientY);
     window.addEventListener('touchend', e=>{ if(tsY===null) return; const dy = e.changedTouches[0].clientY - tsY; if(Math.abs(dy)>60){ if(dy<0) showSection(current+1); else showSection(current-1);} tsY=null;});
 
     /* =========================
-       AUDIO: autoplay handling and crossfade
-       - startOverlay displayed for mobile to allow audio after user tap
+       Audio handling & crossfade
        ========================= */
     const marcha = document.getElementById('marcha');
     const eternamente = document.getElementById('eternamente');
@@ -528,7 +525,6 @@
     const startBtn = document.getElementById('startBtn');
     const musicBtn = document.getElementById('musicBtn');
 
-    // fade helper
     function fadeAudio(audio, from, to, duration=600){
       const steps = 30; const stepTime = duration/steps;
       let step=0; audio.volume = Math.max(0,Math.min(1,from));
@@ -537,53 +533,35 @@
       });
     }
 
-    // show overlay on mobile devices (small screens) to allow user to tap
     function shouldShowStartOverlay(){
       return ('ontouchstart' in window) || (navigator.userAgent.match(/Mobi|Android/i));
     }
 
-    // attempt to autoplay on load for desktops
     window.addEventListener('load', async ()=>{
-      // override s8 background to final user's requested file (fondo_floral8.png)
-      try{
-        const s8 = document.getElementById('s8');
-        if(s8) s8.style.backgroundImage = "url('fondo_floral8.png')";
-      }catch(e){}
-
-      try{ await marcha.play(); await fadeAudio(marcha,0,1,700); }catch(e){ /* blocked */ }
-      // decide whether to show overlay for mobile
-      if(shouldShowStartOverlay()){
-        startOverlay.classList.add('show');
-      } else {
-        startOverlay.classList.remove('show');
-      }
+      // ensure s8 uses fondo_floral8.png (safeguard)
+      try{ document.getElementById('s8').style.backgroundImage = "url('fondo_floral8.png')"; }catch(e){}
+      try{ await marcha.play(); await fadeAudio(marcha,0,1,700); }catch(e){}
+      if(shouldShowStartOverlay()){ startOverlay.classList.add('show'); } else { startOverlay.classList.remove('show'); }
     });
 
-    // start button logic: play marcha (fade in) then hide overlay
     startBtn.addEventListener('click', async ()=>{
-      try{
-        startBtn.disabled = true;
-        startBtn.textContent = 'Iniciando...';
-        await marcha.play();
-        await fadeAudio(marcha,0,1,600);
-      }catch(e){ console.warn('start play error', e); }
+      try{ startBtn.disabled=true; startBtn.textContent='Iniciando...'; await marcha.play(); await fadeAudio(marcha,0,1,600); }catch(e){console.warn(e);}
       startOverlay.classList.remove('show');
     });
 
-    // ring click: crossfade marcha -> eternamente and go to page 2
     ringBtn.addEventListener('click', async ()=>{
+      // crossfade marcha -> eternamente
       try{ if(!marcha.paused){ await fadeAudio(marcha, marcha.volume||1, 0, 600); marcha.pause(); } }catch(e){}
       try{ eternamente.currentTime = 0; eternamente.volume = 0; await eternamente.play(); await fadeAudio(eternamente,0,1,800); }catch(e){}
-      showSection(1);
+      showSection(1); // go to parents
     });
 
-    // music toggle: control marcha
     musicBtn.addEventListener('click', async ()=>{
       if(marcha.paused){
-        try{ await marcha.play(); await fadeAudio(marcha,0,1,600); }catch(e){}
+        try{ await marcha.play(); await fadeAudio(marcha,0,1,600);}catch(e){}
         musicBtn.setAttribute('aria-pressed','false');
       } else {
-        try{ await fadeAudio(marcha, marcha.volume||1,0,600); }catch(e){}
+        try{ await fadeAudio(marcha, marcha.volume||1,0,600);}catch(e){}
         marcha.pause();
         musicBtn.setAttribute('aria-pressed','true');
       }
@@ -593,9 +571,7 @@
     document.getElementById('playEtern').addEventListener('click', async ()=> { try{ eternamente.currentTime=0; eternamente.volume=0; await eternamente.play(); await fadeAudio(eternamente,0,1,700);}catch(e){} });
 
     /* =========================
-       COUNTERS
-       - mini counter in portada
-       - flip style on page 3
+       Counters
        ========================= */
     const miniDays = document.getElementById('miniDays');
     const miniHms = document.getElementById('miniHms');
@@ -624,7 +600,6 @@
       setTimeout(()=> { top.textContent = newVal; node.classList.remove('animate'); }, 700);
     }
 
-    // event date: 28 December 2025 at 14:00 local (as requested)
     const targetDate = new Date('2025-12-28T14:00:00');
     function updateCounters(){
       const now = new Date();
@@ -656,6 +631,7 @@
       rsvpForm.addEventListener('submit', async (e)=>{
         e.preventDefault();
         const fd = new FormData(rsvpForm);
+        // build object
         const payload = {};
         fd.forEach((v,k)=> payload[k]=v);
         try{
@@ -670,7 +646,7 @@
     }
 
     /* =========================
-       WISHES -> POST & LIST from Apps Script
+       Wishes -> Apps Script list & post
        ========================= */
     const wishesEndpoint = 'https://script.google.com/macros/s/AKfycbwY2G6aHz1-W9Sk3CUspgJYNf2EhEchr_gNk4mvaZS4wXn7sKIfIV3Qy-Wje2UCKdgC/exec';
     const wishInput = document.getElementById('wishInput');
@@ -716,7 +692,7 @@
     if(refreshWishesBtn) refreshWishesBtn.addEventListener('click', loadWishes);
 
     /* =========================
-       GALLERY (page5) - auto + arrows
+       Gallery (auto + arrows)
        ========================= */
     const gallery = document.getElementById('galleryNovios');
     const gImgs = gallery ? Array.from(gallery.querySelectorAll('img')) : [];
@@ -734,11 +710,13 @@
     }
 
     /* =========================
-       TOUCH zoom helpers (mobile)
+       Zoom touch helpers
        ========================= */
     document.querySelectorAll('.zoomable').forEach(img=>{
       img.addEventListener('touchstart', ()=> img.classList.add('touch-active'), {passive:true});
       img.addEventListener('touchend', ()=> img.classList.remove('touch-active'));
+      img.addEventListener('mouseenter', ()=> img.style.transform='scale(1.02)');
+      img.addEventListener('mouseleave', ()=> img.style.transform='scale(1)');
     });
 
     /* =========================
@@ -746,8 +724,6 @@
        ========================= */
     document.getElementById('addCalendar').addEventListener('click', (e)=>{
       e.preventDefault();
-      // Use UTC formatted dates - user event: 2025-12-28 14:00 local. We'll use a simplified template.
-      // Start 20251228T140000 local (no timezone param in URL). Google will attempt to interpret.
       const start = '20251228T140000';
       const end = '20251228T230000';
       const title = encodeURIComponent('Boda de Abril y Pablo 💍');
@@ -758,7 +734,7 @@
     });
 
     /* =========================
-       CURSOR MAGICAL HEARTS (desktop + mobile)
+       Cursor magic hearts
        ========================= */
     function spawnHeart(x,y){
       const heart = document.createElement('div');
@@ -780,8 +756,7 @@
     document.addEventListener('touchmove', (e)=> { const t = e.touches[0]; if(!t) return; if(Math.random()>0.45) return; spawnHeart(t.clientX, t.clientY); }, {passive:true});
 
     /* =========================
-       LIGHTBOX (all .lb-target)
-       - transitions alternate fade/slide
+       LIGHTBOX
        ========================= */
     const lb = document.getElementById('lightbox');
     const lbImg = document.getElementById('lbImg');
@@ -791,8 +766,8 @@
 
     const lbTargets = Array.from(document.querySelectorAll('.lb-target'));
     const lbSources = lbTargets.map(t => ({src: t.dataset.src || t.getAttribute('src'), el: t}));
-
     let currentLb = 0;
+
     function openLightbox(index){
       if(index < 0) index = 0;
       if(index >= lbSources.length) index = lbSources.length -1;
@@ -830,13 +805,15 @@
     lb.addEventListener('click', (e)=>{ if(e.target === lb || e.target === lbImg.parentElement) closeLightbox(); });
 
     /* =========================
-       INITIAL UI adjustments
+       init small UI tweaks
        ========================= */
     document.getElementById('prevBtn').classList.add('hidden');
     document.getElementById('progressBar').style.height = (1/sections.length*100) + '%';
 
+    // ensure flip boxes exist
     setTimeout(()=> { if(document.getElementById('flipMain') && document.getElementById('flipMain').children.length === 0){ for(let i=0;i<4;i++) document.getElementById('flipMain').appendChild(createFlip('00')); } }, 300);
     function createFlip(initial){ const wrap=document.createElement('div'); wrap.className='flip'; const t=document.createElement('div'); t.className='face top'; t.innerHTML=`<div class="digit">${initial}</div>`; const b=document.createElement('div'); b.className='face bottom'; b.innerHTML=`<div class="digit">${initial}</div>`; wrap.appendChild(t); wrap.appendChild(b); return wrap; }
+
   </script>
 </body>
 </html>
