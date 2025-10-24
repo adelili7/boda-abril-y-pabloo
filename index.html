@@ -2,920 +2,413 @@
 <html lang="es">
 <head>
   <!-- =========================================================
-       META BÁSICO
+       META
        ========================================================= -->
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-
   <title>Boda de Abril & Pablo 💍</title>
 
   <!-- =========================================================
-       TIPOGRAFÍAS
-       - Waltograph (estilo Disney) — vía CDN
-       - Playfair Display (romántica/serif)
-       - Quicksand (limpia/legible)
+       FUENTES
+       - Waltograph (solo para “Sí, ¡acepto!”)
+       - Playfair Display (títulos y textos románticos)
+       - Quicksand (apoyo)
        ========================================================= -->
   <link href="https://fonts.cdnfonts.com/css/waltograph" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Quicksand:wght@300;400;600&display=swap" rel="stylesheet" />
 
   <!-- =========================================================
-       ESTILOS GLOBALES (CSS)
+       CSS EMBEBIDO
        ========================================================= -->
   <style>
-    /* ---------------------------------------------------------
-       VARIABLES DE TEMA
-       --------------------------------------------------------- */
     :root{
-      --bg-cream: #F8F5F0;
-      --deep: #2B2A2F;
-      --glass: rgba(255,255,255,0.85);
-      --glass-strong: rgba(255,255,255,0.95);
-      --rose: #d6a79b;
-      --accent: #66c9ff;
-      --accent2: #4a8fe7;
-      --wa: #25D366;
-      --chip-celeste: #a8dadc;
-      --chip-beige: #f1faee;
-      --chip-verde: #a8e6cf;
-      --chip-gris: #adb5bd;
-      --chip-rosa: #f4978e;
-      --shadow: 0 18px 50px rgba(0,0,0,.12);
-      --ease: cubic-bezier(.2,.9,.2,1);
+      --bg-cream:#F8F5F0;
+      --deep:#2B2A2F;
+      --glass:rgba(255,255,255,0.85);
+      --glass-strong:rgba(255,255,255,0.95);
+      --rose:#d6a79b;
+      --accent:#66c9ff;
+      --accent2:#4a8fe7;
+      --wa:#25D366;
+      --chip-celeste:#a8dadc;
+      --chip-beige:#f1faee;
+      --chip-verde:#a8e6cf;
+      --chip-gris:#adb5bd;
+      --chip-rosa:#f4978e;
+      --shadow:0 18px 50px rgba(0,0,0,.12);
+      --ease:cubic-bezier(.2,.9,.2,1);
+      --menu-bg: rgba(255,255,255,.9);
+      --menu-shadow: 0 12px 28px rgba(0,0,0,.12);
+      --menu-accent: #2375ff;
     }
 
-    /* ---------------------------------------------------------
-       RESET Y BASE
-       --------------------------------------------------------- */
-    *{
-      box-sizing: border-box;
+    *{box-sizing:border-box}
+    html,body{
+      height:100%;
+      margin:0;
+      background:var(--bg-cream);
+      color:var(--deep);
+      font-family:Quicksand,system-ui,Arial;
+      -webkit-font-smoothing:antialiased;
     }
+    img{max-width:100%;height:auto;display:block}
+    a{color:inherit;text-decoration:none}
+    button{font-family:inherit}
 
-    html,
-    body{
-      height: 100%;
-      margin: 0;
-      background: var(--bg-cream);
-      color: var(--deep);
-      font-family: Quicksand, system-ui, Arial;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    img{
-      max-width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    a{
-      color: inherit;
-      text-decoration: none;
-    }
-
-    button{
-      font-family: inherit;
-    }
-
-    /* ---------------------------------------------------------
-       CONTENEDOR GENERAL
-       --------------------------------------------------------- */
+    /* ========= LAYOUT PRINCIPAL ========= */
     .viewport{
-      height: 100vh;
-      overflow: hidden; /* bloquea scroll externo para usar secciones */
-      position: relative;
+      height:100vh;
+      overflow:hidden;      /* controlamos navegación por secciones */
+      position:relative;
     }
-
     .sections{
-      height: 100%;
-      width: 100%;
-      position: relative;
-      perspective: 1200px; /* sutil 3D si deseáramos */
+      height:100%;
+      width:100%;
+      position:relative;
     }
-
-    /* ---------------------------------------------------------
-       SECCIÓN BASE
-       --------------------------------------------------------- */
     .section{
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 26px;
-
-      /* Parallax simple */
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-
-      /* Transiciones */
-      opacity: 0;
-      transform: translateY(18px) scale(0.995);
-      transition:
-        transform .7s var(--ease),
-        opacity .45s ease;
-      will-change: transform, opacity;
+      position:absolute; inset:0;
+      display:flex; align-items:center; justify-content:center;
+      padding:26px;
+      background-size:cover;
+      background-position:center;
+      background-attachment:fixed; /* parallax simple */
+      opacity:0; transform:translateY(24px) scale(.995);
+      transition:transform .7s var(--ease), opacity .45s ease;
+      will-change:transform,opacity;
     }
-
-    .section.active{
-      opacity: 1;
-      transform: translateY(0) scale(1);
-    }
-
-    /* Capa difusora sobre fondos */
+    .section.active{ opacity:1; transform:translateY(0) scale(1) }
     .overlay{
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, rgba(255,255,255,0.28), rgba(255,255,255,0.6));
-      pointer-events: none;
+      position:absolute; inset:0;
+      background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,.6));
+      pointer-events:none;
     }
 
-    /* ---------------------------------------------------------
-       FONDOS POR PÁGINA (parallax simple)
-       --------------------------------------------------------- */
-    .bg-portada   { background-image: url('fondo_floral.jpg'); }
-    .bg-padres    { background-image: url('fondo_floral1.png'); }
-    .bg-itinerario{ background-image: url('fondo_floral2.jpg'); }
-    .bg-galeria   { background-image: url('fondo_floral3.jpg'); }
-    .bg-rsvp      { background-image: url('fondo_floral4.png'); }
-    .bg-collab    { background-image: url('fondo_floral5.jpg'); }
-    .bg-momento8  { background-image: url('fondo_floral6.jpg'); }
-    .bg-momento9  { background-image: url('fondo_floral7.png'); }
-    .bg-final     { background-image: url('fondo_floral8.png'); }
+    /* ========= FONDOS (según tu lista) ========= */
+    .bg-portada {background-image:url('fondo_floral.jpg')}
+    .bg-p1      {background-image:url('fondo_floral1.png')}
+    .bg-p2      {background-image:url('fondo_floral2.jpg')}
+    .bg-p3      {background-image:url('fondo_floral3.jpg')}
+    .bg-p4      {background-image:url('fondo_floral4.png')}
+    .bg-p5      {background-image:url('fondo_floral5.jpg')}
+    .bg-p6      {background-image:url('fondo_floral6.jpg')}
+    .bg-p7      {background-image:url('fondo_floral7.jpg')}
+    .bg-p8      {background-image:url('fondo_floral9.jpg')}
+    .bg-p9      {background-image:url('fondo_floral8.png')}
 
-    /* ---------------------------------------------------------
-       TARJETAS (contenedores de contenido)
-       --------------------------------------------------------- */
+    /* ========= TARJETAS ========= */
     .card{
-      position: relative;
-      z-index: 2;
-      max-width: 980px;
-      width: 100%;
-      background: var(--glass);
+      position:relative; z-index:2;
+      max-width:980px; width:100%;
+      background:var(--glass);
       backdrop-filter: blur(6px);
-      border-radius: 16px;
-      padding: 28px;
-      box-shadow: var(--shadow);
+      border-radius:16px;
+      padding:28px;
+      box-shadow:var(--shadow);
     }
+    .card.center{text-align:center}
 
-    .card.center{
-      text-align: center;
-    }
-
-    /* ---------------------------------------------------------
-       TIPOGRAFÍA Y TITULARES
-       --------------------------------------------------------- */
+    /* ========= TIPOGRAFÍA ========= */
     .title-top{
-      font-family: 'Playfair Display', serif;
-      font-size: 46px;
-      margin: 0;
-      letter-spacing: .6px;
-      text-shadow: 0 8px 26px rgba(0,0,0,.06);
+      font-family:'Playfair Display',serif;
+      font-size:46px;
+      margin:0;
+      letter-spacing:.6px;
+      text-shadow:0 8px 26px rgba(0,0,0,.06);
     }
-
-    .title-script{
-      font-family: 'Waltograph', cursive;
-      font-size: 42px;
-      margin-top: 6px;
-      background: linear-gradient(135deg, #fff, #f7e8c5 45%, #e3c792 70%, #fff);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      text-shadow: 0 0 18px rgba(255,255,255,.45);
+    .title-acepto{
+      font-family:'Waltograph',cursive;
+      font-size:42px;
+      margin-top:6px;
+      background:linear-gradient(135deg,#fff,#f7e8c5 45%,#e3c792 70%,#fff);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      text-shadow:0 0 18px rgba(255,255,255,.45);
     }
-
     .verse{
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      margin-top: 14px;
-      font-size: 16px;
-      background: linear-gradient(90deg, #b98f5a, #d6a79b);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+      font-family:'Playfair Display',serif;
+      font-style:italic;
+      margin-top:14px;
+      font-size:16px;
+      background:linear-gradient(90deg,#b98f5a,#d6a79b);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
     }
 
-    /* ---------------------------------------------------------
-       BOTONES MÁGICOS
-       --------------------------------------------------------- */
+    /* ========= BOTONES MÁGICOS ========= */
+    .btns{margin-top:14px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap}
     .magicBtn{
-      padding: 10px 14px;
-      border-radius: 12px;
-      border: 0;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color: #fff;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 10px 30px rgba(74,143,231,.18);
-      transition: filter .2s ease, transform .2s ease;
+      padding:10px 14px;
+      border-radius:12px; border:0;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      color:#fff; font-weight:700; cursor:pointer;
+      box-shadow:0 10px 30px rgba(74,143,231,.18);
+      transition:filter .2s, transform .2s;
     }
+    .magicBtn:hover{filter:brightness(1.05); transform:translateY(-1px)}
 
-    .magicBtn:hover{
-      filter: brightness(1.04);
-      transform: translateY(-1px);
-    }
+    /* ========= ANILLO ========= */
+    .ring-button{background:transparent; border:0; padding:0; cursor:pointer; display:block; margin:12px auto; position:relative}
+    .ring-svg{width:220px; height:220px; display:block}
+    .ring-rotate{animation:ringSpin 14s linear infinite; transform-origin:110px 110px}
+    @keyframes ringSpin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+    .ring-spark{position:absolute; left:50%; top:35%; width:160px; height:160px; transform:translate(-50%,-50%); pointer-events:none; border-radius:50%; opacity:0}
 
-    .btns{
-      margin-top: 14px;
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    /* ---------------------------------------------------------
-       ANILLO (SVG) + RESPLANDOR
-       --------------------------------------------------------- */
-    .ring-button{
-      background: transparent;
-      border: 0;
-      padding: 0;
-      cursor: pointer;
-      display: block;
-      margin: 12px auto;
-      position: relative;
-    }
-
-    .ring-svg{
-      width: 220px;
-      height: 220px;
-      display: block;
-    }
-
-    .ring-rotate{
-      animation: ringSpin 14s linear infinite;
-      transform-origin: 110px 110px;
-    }
-
-    @keyframes ringSpin{
-      0%{ transform: rotate(0deg); }
-      100%{ transform: rotate(360deg); }
-    }
-
-    .ring-spark{
-      position: absolute;
-      left: 50%;
-      top: 35%;
-      width: 160px;
-      height: 160px;
-      transform: translate(-50%,-50%);
-      pointer-events: none;
-      border-radius: 50%;
-      opacity: 0;
-    }
-
-    /* ---------------------------------------------------------
-       CONTADOR (PORTADA) — MINI FLIP SIN ETIQUETAS
-       --------------------------------------------------------- */
-    .mini-flip{
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      margin-top: 12px;
-      align-items: center;
-    }
-
-    .flip-mini{
-      width: 72px;
-      height: 72px;
-      perspective: 800px;
-      position: relative;
-    }
-
+    /* ========= CONTADOR (PORTADA) ========= */
+    .mini-flip{display:flex; gap:10px; justify-content:center; margin-top:12px; align-items:center}
+    .flip-mini{width:72px; height:72px; perspective:800px; position:relative}
     .flip-mini .face{
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 50%;
-      overflow: hidden;
-      border-radius: 12px;
-      background: var(--glass-strong);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      font-size: 22px;
-      font-family: 'Playfair Display', serif;
-      box-shadow: 0 10px 26px rgba(0,0,0,.08);
+      position:absolute; left:0; top:0; width:100%; height:50%;
+      overflow:hidden; border-radius:12px; background:var(--glass-strong);
+      display:flex; align-items:center; justify-content:center;
+      font-weight:800; font-size:22px; font-family:'Playfair Display',serif;
+      box-shadow:0 10px 26px rgba(0,0,0,.08);
     }
+    .flip-mini .top{border-bottom-left-radius:0;border-bottom-right-radius:0;transform-origin:bottom}
+    .flip-mini .bottom{top:50%;border-top-left-radius:0;border-top-right-radius:0;transform-origin:top}
+    .flip-mini.animate .top{animation:flipTop .7s forwards}
+    .flip-mini.animate .bottom{animation:flipBottom .7s forwards}
 
-    .flip-mini .face.top{
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
-      transform-origin: bottom;
-    }
-
-    .flip-mini .face.bottom{
-      top: 50%;
-      border-top-left-radius: 0;
-      border-top-right-radius: 0;
-      transform-origin: top;
-    }
-
-    .flip-mini.animate .face.top{
-      animation: flipTop .7s forwards;
-    }
-
-    .flip-mini.animate .face.bottom{
-      animation: flipBottom .7s forwards;
-    }
-
-    /* ---------------------------------------------------------
-       CONTADOR (ITINERARIO) — FLIP GRANDE
-       --------------------------------------------------------- */
-    .flip-grid{
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-      align-items: center;
-      margin-top: 18px;
-      flex-wrap: wrap;
-    }
-
-    .flip{
-      width: 100px;
-      height: 96px;
-      perspective: 900px;
-      position: relative;
-    }
-
+    /* ========= CONTADOR (ITINERARIO) ========= */
+    .flip-grid{display:flex; gap:12px; justify-content:center; align-items:center; margin-top:18px; flex-wrap:wrap}
+    .flip{width:100px; height:96px; perspective:900px; position:relative}
     .flip .panel{
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      border-radius: 12px;
-      background: var(--glass-strong);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Playfair Display', serif;
-      font-size: 28px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.08);
+      position:absolute; left:0; top:0; width:100%; height:100%;
+      border-radius:12px; background:var(--glass-strong);
+      display:flex; align-items:center; justify-content:center;
+      font-family:'Playfair Display',serif; font-size:28px; box-shadow:0 10px 30px rgba(0,0,0,.08);
     }
+    .flip .top{border-bottom-left-radius:0;border-bottom-right-radius:0;transform-origin:bottom;z-index:2}
+    .flip .bottom{top:50%;border-top-left-radius:0;border-top-right-radius:0;transform-origin:top;z-index:1}
+    .flip.animate .top{animation:flipTop .7s forwards}
+    .flip.animate .bottom{animation:flipBottom .7s forwards}
+    .flip .label{font-size:12px; color:#333; margin-top:8px; text-align:center}
+    @keyframes flipTop{0%{transform:rotateX(0)}100%{transform:rotateX(-180deg)}}
+    @keyframes flipBottom{0%{transform:rotateX(180deg)}100%{transform:rotateX(0)}}
 
-    .flip .panel.top{
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
-      transform-origin: bottom;
-      z-index: 2;
+    /* ========= FAMILIAS ========= */
+    .parents-grid{display:flex; gap:20px; align-items:stretch; justify-content:space-between; margin-top:12px}
+    .parent-col{flex:1; min-width:200px; display:flex; align-items:center; justify-content:center}
+    .parent-names{font-family:'Playfair Display',serif; font-size:22px; line-height:1.25; text-align:center}
+    .couple-names{font-family:'Playfair Display',serif; font-size:28px; margin-top:18px}
+
+    /* ========= PÁG. FOTO + VERSÍCULO ========= */
+    .photo-romantic{
+      width:420px; max-width:92%; border-radius:16px; box-shadow:0 16px 42px rgba(0,0,0,.16);
+      object-fit:cover; transition:transform .45s var(--ease), opacity .45s var(--ease);
     }
+    .photo-romantic:hover{transform:scale(1.03)}
+    .verse-big{font-family:'Playfair Display',serif; font-size:18px; margin-top:12px}
 
-    .flip .panel.bottom{
-      top: 50%;
-      border-top-left-radius: 0;
-      border-top-right-radius: 0;
-      transform-origin: top;
-      z-index: 1;
-    }
-
-    .flip.animate .panel.top{
-      animation: flipTop .7s forwards;
-    }
-
-    .flip.animate .panel.bottom{
-      animation: flipBottom .7s forwards;
-    }
-
-    .flip .label{
-      font-size: 12px;
-      color: #333;
-      margin-top: 8px;
-      text-align: center;
-    }
-
-    /* ---------------------------------------------------------
-       ANIMACIONES DE FLIP
-       --------------------------------------------------------- */
-    @keyframes flipTop{
-      0%{ transform: rotateX(0); }
-      100%{ transform: rotateX(-180deg); }
-    }
-
-    @keyframes flipBottom{
-      0%{ transform: rotateX(180deg); }
-      100%{ transform: rotateX(0deg); }
-    }
-
-    /* ---------------------------------------------------------
-       PADRES / NOVIOS
-       --------------------------------------------------------- */
-    .parents-grid{
-      display: flex;
-      gap: 20px;
-      align-items: stretch;
-      justify-content: space-between;
-      margin-top: 12px;
-    }
-
-    .parent-col{
-      flex: 1;
-      min-width: 200px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .parent-names{
-      font-family: 'Waltograph', cursive;
-      font-size: 24px;
-      line-height: 1.25;
-      text-align: center;
-    }
-
-    .couple{
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      margin-top: 18px;
-    }
-
-    .couple .names{
-      font-family: 'Waltograph', cursive;
-      font-size: 28px;
-    }
-
-    .photo{
-      width: 360px;
-      max-width: 88%;
-      border-radius: 14px;
-      box-shadow: 0 14px 40px rgba(0,0,0,.14);
-      object-fit: cover;
-      transition: transform .45s var(--ease), opacity .45s var(--ease);
-    }
-
-    .photo:hover{
-      transform: scale(1.03);
-    }
-
-    /* ---------------------------------------------------------
-       ITINERARIO (ITEMS)
-       --------------------------------------------------------- */
-    .itinerary{
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      margin-top: 12px;
-    }
-
+    /* ========= ITINERARIO ========= */
+    .itinerary{display:flex; flex-direction:column; gap:14px; margin-top:12px}
     .it-item{
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-      padding: 14px;
-      border-radius: 12px;
-      background: var(--glass-strong);
-      box-shadow: 0 10px 28px rgba(0,0,0,.08);
-      opacity: 0;
-      transform: translateY(12px);
-      transition: opacity .6s, transform .6s;
+      display:flex; gap:12px; align-items:flex-start; padding:14px; border-radius:12px;
+      background:var(--glass-strong); box-shadow:0 10px 28px rgba(0,0,0,.08);
+      opacity:0; transform:translateY(14px); transition:opacity .6s, transform .6s;
     }
+    .it-item.show{opacity:1; transform:translateY(0)}
+    .it-icon{width:56px; height:56px; border-radius:10px; background:rgba(255,255,255,.92); display:flex; align-items:center; justify-content:center; font-size:22px}
+    .it-info strong{display:block}
+    .map-link{display:inline-block; margin-top:6px; color:#2b87e6; text-decoration:underline}
+    .palette{display:flex; gap:8px; margin-top:8px}
+    .chip{width:22px; height:22px; border-radius:6px}
 
-    .it-item.show{
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .it-icon{
-      width: 56px;
-      height: 56px;
-      border-radius: 10px;
-      background: rgba(255,255,255,.92);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-    }
-
-    .it-info strong{
-      display: block;
-    }
-
-    .map-link{
-      display: inline-block;
-      margin-top: 6px;
-      color: #2b87e6;
-      text-decoration: underline;
-    }
-
-    /* ---------------------------------------------------------
-       GALERÍA (NOVIOS)
-       --------------------------------------------------------- */
-    .gallery-grid{
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-top: 12px;
-    }
-
+    /* ========= GALERÍA NOVIOS ========= */
+    .gallery-grid{display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:12px}
     .gallery-grid img{
-      width: 260px;
-      height: 176px;
-      object-fit: cover;
-      border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.12);
-      cursor: pointer;
-      transition: transform .35s, opacity .35s;
+      width:260px; height:176px; object-fit:cover; border-radius:12px;
+      box-shadow:0 10px 30px rgba(0,0,0,.12); cursor:pointer; transition:transform .35s, opacity .35s;
     }
+    .gallery-grid img:hover{transform:scale(1.03); opacity:.96}
+    .gallery-controls{margin-top:12px; text-align:center}
 
-    .gallery-grid img:hover{
-      transform: scale(1.03);
-      opacity: .96;
-    }
-
-    .gallery-controls{
-      margin-top: 12px;
-      text-align: center;
-    }
-
-    /* ---------------------------------------------------------
-       MOMENTOS INVITADOS (COLABORATIVA)
-       --------------------------------------------------------- */
+    /* ========= COLABORATIVA / FINALES ========= */
     .collab-photo{
-      width: 100%;
-      max-width: 860px;
-      border-radius: 14px;
-      box-shadow: 0 14px 40px rgba(0,0,0,.14);
-      object-fit: cover;
-      transition: transform .45s var(--ease);
+      width:100%; max-width:860px; border-radius:14px; box-shadow:0 14px 40px rgba(0,0,0,.14);
+      object-fit:cover; transition:transform .45s var(--ease);
     }
+    .collab-photo:hover{transform:scale(1.02)}
 
-    .collab-photo:hover{
-      transform: scale(1.02);
-    }
+    /* ========= RSVP / DESEOS ========= */
+    .note{font-size:13px; color:#666; text-align:center; margin-top:8px}
+    .form-inline{display:flex; gap:8px; justify-content:center; flex-wrap:wrap}
+    .form-inline input, .form-inline textarea{padding:10px; border-radius:8px; border:1px solid #e9e9e9}
 
-    /* ---------------------------------------------------------
-       RSVP / BUENOS DESEOS
-       --------------------------------------------------------- */
-    .form-inline{
-      display: flex;
-      gap: 8px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .form-inline input,
-    .form-inline textarea{
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #e9e9e9;
-    }
-
-    .note{
-      font-size: 13px;
-      color: #666;
-      text-align: center;
-      margin-top: 8px;
-    }
-
-    /* ---------------------------------------------------------
-       FINAL (WHATSAPP + CALENDARIO)
-       --------------------------------------------------------- */
-    .final-msg{
-      font-family: 'Playfair Display', serif;
-      font-size: 26px;
-    }
-
-    .final-sub{
-      margin-top: 8px;
-      color: #666;
-    }
-
-    .wa-row{
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-      margin-top: 14px;
-      flex-wrap: wrap;
-    }
-
+    /* ========= FINAL ========= */
+    .final-title{font-family:'Playfair Display',serif; font-size:26px}
+    .final-sub{margin-top:8px; color:#666}
+    .wa-row{display:flex; gap:12px; justify-content:center; margin-top:14px; flex-wrap:wrap}
     .wa-btn{
-      display: inline-flex;
-      gap: 8px;
-      align-items: center;
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: var(--wa);
-      color: #fff;
-      text-decoration: none;
-      font-weight: 700;
-      box-shadow: 0 10px 30px rgba(0,0,0,.12);
+      display:inline-flex; gap:8px; align-items:center; padding:10px 14px; border-radius:999px;
+      background:var(--wa); color:#fff; text-decoration:none; font-weight:700; box-shadow:0 10px 30px rgba(0,0,0,.12)
     }
+    .wa-svg{width:18px; height:18px; display:inline-block; vertical-align:middle; fill:#fff}
 
-    .wa-svg{
-      width: 18px;
-      height: 18px;
-      display: inline-block;
-      vertical-align: middle;
-      fill: #fff;
+    /* ========= LIGHTBOX ========= */
+    .lb{position:fixed; inset:0; background:rgba(0,0,0,.85); display:none; align-items:center; justify-content:center; z-index:3000}
+    .lb.open{display:flex}
+    .lb img{max-width:94%; max-height:86%; border-radius:10px; box-shadow:0 20px 60px rgba(0,0,0,.6); transition:opacity .45s ease, transform .45s ease}
+    .close-lb{position:fixed; right:18px; top:18px; background:rgba(255,255,255,.92); border-radius:999px; padding:8px; border:0; cursor:pointer}
+    .lb-nav{position:fixed; left:6px; right:6px; top:50%; display:flex; justify-content:space-between; pointer-events:none}
+    .lb-nav button{pointer-events:all; background:rgba(255,255,255,.92); border-radius:999px; padding:10px 12px; border:0; cursor:pointer}
+
+    /* ========= FLECHAS NAVEGACIÓN ========= */
+    .nav{position:fixed; top:50%; left:0; right:0; display:flex; justify-content:space-between; pointer-events:none; z-index:990; transform:translateY(-50%)}
+    .nav button{pointer-events:all; background:rgba(255,255,255,.95); border:0; padding:10px 12px; border-radius:999px; font-size:28px; cursor:pointer; margin:8px; box-shadow:0 10px 30px rgba(0,0,0,.12)}
+
+    /* ========= MENÚ FLOTANTE LATERAL ========= */
+    .side-menu{
+      position:fixed; right:18px; top:50%; transform:translateY(-50%);
+      background:var(--menu-bg);
+      border-radius:16px;
+      box-shadow: var(--menu-shadow);
+      padding:10px 8px;
+      z-index: 995;
+      backdrop-filter: blur(6px);
     }
-
-    /* ---------------------------------------------------------
-       NAVEGACIÓN ENTRE SECCIONES
-       --------------------------------------------------------- */
-    .nav{
-      position: fixed;
-      top: 50%;
-      left: 0;
-      right: 0;
-      display: flex;
-      justify-content: space-between;
-      pointer-events: none;
-      z-index: 999;
-      transform: translateY(-50%);
+    .side-menu a{
+      display:flex; align-items:center; gap:8px;
+      padding:10px 12px; border-radius:12px; margin:6px 0;
+      font-weight:700; color:#233;
+      transition: background .2s, transform .2s;
+      white-space: nowrap;
     }
+    .side-menu a:hover{ background: rgba(35,117,255,.08); transform: translateX(-1px); }
+    .side-menu a.active{ background: rgba(35,117,255,.16); }
+    .side-menu .icon{ width:18px; text-align:center }
 
-    .nav button{
-      pointer-events: all;
-      background: rgba(255,255,255,.95);
-      border: 0;
-      padding: 10px 12px;
-      border-radius: 999px;
-      font-size: 28px;
-      cursor: pointer;
-      margin: 8px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.12);
+    /* Toggle para móviles */
+    .menu-toggle{
+      position:fixed; right:18px; bottom:18px;
+      width:48px; height:48px; border-radius:50%;
+      background: linear-gradient(135deg,var(--accent),var(--accent2));
+      color:#fff; display:flex; align-items:center; justify-content:center;
+      font-size:20px; border:0; box-shadow: var(--menu-shadow);
+      z-index: 996; cursor:pointer;
     }
+    .side-menu.compact{ display:none; }
+    .side-menu.open{ display:block; }
 
-    .nav .hidden{
-      display: none;
-    }
-
-    /* ---------------------------------------------------------
-       LIGHTBOX
-       --------------------------------------------------------- */
-    .lb{
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.85);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 3000;
-    }
-
-    .lb.open{
-      display: flex;
-    }
-
-    .lb img{
-      max-width: 94%;
-      max-height: 86%;
-      border-radius: 10px;
-      box-shadow: 0 20px 60px rgba(0,0,0,.6);
-      transition: opacity .45s ease, transform .45s ease;
-    }
-
-    .close-lb{
-      position: fixed;
-      right: 18px;
-      top: 18px;
-      background: rgba(255,255,255,.92);
-      border-radius: 999px;
-      padding: 8px;
-      border: 0;
-      cursor: pointer;
-    }
-
-    .lb-nav{
-      position: fixed;
-      left: 6px;
-      right: 6px;
-      top: 50%;
-      display: flex;
-      justify-content: space-between;
-      pointer-events: none;
-    }
-
-    .lb-nav button{
-      pointer-events: all;
-      background: rgba(255,255,255,.92);
-      border-radius: 999px;
-      padding: 10px 12px;
-      border: 0;
-      cursor: pointer;
-    }
-
-    /* ---------------------------------------------------------
-       OVERLAY INICIO (AUTOPLAY MÓVILES)
-       --------------------------------------------------------- */
+    /* ========= OVERLAY INICIO (AUTOPLAY MÓVIL) ========= */
     #startOverlay{
-      position: fixed;
-      left: 50%;
-      top: 45%;
-      transform: translate(-50%,-50%);
-      z-index: 4000;
-      background: rgba(255,255,255,.98);
-      padding: 18px;
-      border-radius: 12px;
-      box-shadow: 0 18px 60px rgba(0,0,0,.18);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .45s, transform .45s;
+      position:fixed; left:50%; top:45%; transform:translate(-50%,-50%);
+      z-index:4000; background:rgba(255,255,255,.98);
+      padding:18px; border-radius:12px; box-shadow:0 18px 60px rgba(0,0,0,.18);
+      opacity:0; pointer-events:none; transition:opacity .45s, transform .45s;
+      text-align:center;
     }
+    #startOverlay.show{opacity:1; pointer-events:auto}
+    .start-cta{padding:10px 14px; border-radius:10px; background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff; border:0; cursor:pointer; font-weight:700}
 
-    #startOverlay.show{
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .start-cta{
-      padding: 10px 14px;
-      border-radius: 10px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color: #fff;
-      border: 0;
-      cursor: pointer;
-      font-weight: 700;
-    }
-
-    /* ---------------------------------------------------------
-       CURSOR MÁGICO (CORAZONES)
-       --------------------------------------------------------- */
+    /* ========= CURSOR MÁGICO ========= */
     .magicHeart{
-      position: fixed;
-      pointer-events: none;
-      z-index: 99999;
-      width: 22px;
-      height: 22px;
-      opacity: 0;
-      transform: translate(-50%,-50%) scale(1);
-      animation: heartFade 1000ms forwards;
+      position:fixed; pointer-events:none; z-index:99999;
+      width:22px; height:22px; opacity:0; transform:translate(-50%,-50%) scale(1);
+      animation:heartFade 1000ms forwards;
     }
+    @keyframes heartFade{0%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-120%) scale(.6)}}
 
-    @keyframes heartFade{
-      0%{
-        opacity: 1;
-        transform: translate(-50%,-50%) scale(1);
-      }
-      100%{
-        opacity: 0;
-        transform: translate(-50%,-120%) scale(.6);
-      }
+    /* ========= RESPONSIVE ========= */
+    @media (max-width: 1000px){
+      .side-menu{ right:12px }
     }
-
-    /* ---------------------------------------------------------
-       RESPONSIVE
-       --------------------------------------------------------- */
-    @media (max-width: 900px){
-      .title-top{ font-size: 36px; }
-      .title-script{ font-size: 28px; }
-      .ring-svg{ width: 160px; height: 160px; }
-      .parent-names{ font-size: 20px; }
-      .couple .names{ font-size: 24px; }
-      .photo{ width: 280px; }
-      .gallery-grid img{ width: 44vw; height: 32vw; }
-      .flip{ width: 84px; height: 78px; }
-      .flip-mini{ width: 64px; height: 64px; }
-      .card{ padding: 16px; border-radius: 12px; }
-      .nav button{ padding: 8px 10px; }
-      #startOverlay{ top: 55%; }
+    @media (max-width: 880px){
+      .side-menu.compact{ display:block; }
+      .side-menu{ display:none; right:12px; top:auto; bottom:78px; transform:none; }
+    }
+    @media (max-width:900px){
+      .title-top{font-size:36px}
+      .title-acepto{font-size:28px}
+      .ring-svg{width:160px;height:160px}
+      .parent-names{font-size:20px}
+      .couple-names{font-size:24px}
+      .photo-romantic{width:300px}
+      .gallery-grid img{width:44vw;height:32vw}
+      .flip{width:84px;height:78px}
+      .flip-mini{width:64px;height:64px}
+      .card{padding:16px;border-radius:12px}
+      #startOverlay{top:55%}
     }
   </style>
 </head>
 <body>
   <!-- =========================================================
-       AUDIO (MISMA CARPETA DEL REPO)
+       AUDIOS
        ========================================================= -->
   <audio id="marcha" src="marcha_nupcial.mp3" preload="auto" loop></audio>
   <audio id="eternamente" src="eternamente.mp3" preload="auto"></audio>
 
   <!-- =========================================================
-       CONTENEDOR PRINCIPAL
+       CONTENEDOR
        ========================================================= -->
   <div class="viewport">
     <div class="sections" id="sections">
 
-      <!-- =====================================================
-           1) PORTADA
-           ===================================================== -->
+      <!-- ============= PORTADA (0) ============= -->
       <section id="sec-portada" class="section bg-portada active" aria-label="Portada">
         <div class="overlay"></div>
-
         <div class="card center">
-          <!-- Título superior -->
-          <h1 class="title-top">
-            Abril &amp; Pablo
-          </h1>
+          <h1 class="title-top">Abril &amp; Pablo</h1>
+          <div class="title-acepto">Sí, ¡acepto!</div>
 
-          <!-- Subtítulo Disney/romántico -->
-          <div class="title-script">
-            Sí, ¡acepto!
-          </div>
-
-          <!-- Anillo con giro + brillo -->
+          <!-- Anillo animado -->
           <button class="ring-button" id="ringBtn" aria-label="Anillo">
             <div class="ring-spark" id="ringSpark"></div>
-
             <svg class="ring-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <defs>
                 <radialGradient id="ringMetal" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%"  stop-color="#e9eef2" />
-                  <stop offset="60%" stop-color="#c9ccd0" />
-                  <stop offset="100%" stop-color="var(--rose)" />
+                  <stop offset="0%" stop-color="#e9eef2"/>
+                  <stop offset="60%" stop-color="#c9ccd0"/>
+                  <stop offset="100%" stop-color="var(--rose)"/>
                 </radialGradient>
-
                 <radialGradient id="blueGem" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%"  stop-color="#dff6ff" />
-                  <stop offset="60%" stop-color="#66c9ff" />
-                  <stop offset="100%" stop-color="#004c99" />
+                  <stop offset="0%" stop-color="#dff6ff"/>
+                  <stop offset="60%" stop-color="#66c9ff"/>
+                  <stop offset="100%" stop-color="#004c99"/>
                 </radialGradient>
               </defs>
-
               <g class="ring-rotate">
-                <ellipse
-                  cx="100"
-                  cy="100"
-                  rx="40"
-                  ry="12"
-                  stroke="url(#ringMetal)"
-                  stroke-width="12"
-                  fill="none" />
-
-                <path
-                  d="M100 58 L110 70 L100 86 L90 70 Z"
-                  fill="url(#blueGem)"
-                  stroke="#fff"
-                  stroke-opacity="0.4"
-                  stroke-width="0.6">
-                  <animateTransform
-                    attributeName="transform"
-                    type="scale"
-                    values="1;1.05;1"
-                    dur="2.6s"
-                    repeatCount="indefinite" />
+                <ellipse cx="100" cy="100" rx="40" ry="12" stroke="url(#ringMetal)" stroke-width="12" fill="none"/>
+                <path d="M100 58 L110 70 L100 86 L90 70 Z" fill="url(#blueGem)" stroke="#fff" stroke-opacity="0.4" stroke-width="0.6">
+                  <animateTransform attributeName="transform" type="scale" values="1;1.05;1" dur="2.6s" repeatCount="indefinite"/>
                 </path>
-
-                <circle
-                  cx="100"
-                  cy="60"
-                  r="2"
-                  fill="#fff"
-                  opacity="0.9">
-                  <animate
-                    attributeName="r"
-                    values="2;4;2"
-                    dur="1.6s"
-                    repeatCount="indefinite" />
+                <circle cx="100" cy="60" r="2" fill="#fff" opacity="0.9">
+                  <animate attributeName="r" values="2;4;2" dur="1.6s" repeatCount="indefinite"/>
                 </circle>
               </g>
             </svg>
           </button>
 
-          <!-- Contador minimal (flip) solo números -->
+          <!-- Contador minimal -->
           <div class="mini-flip" id="miniFlip">
-            <div class="flip-mini" data-k="d">
-              <div class="face top">00</div>
-              <div class="face bottom">00</div>
-            </div>
-
-            <div class="flip-mini" data-k="h">
-              <div class="face top">00</div>
-              <div class="face bottom">00</div>
-            </div>
-
-            <div class="flip-mini" data-k="m">
-              <div class="face top">00</div>
-              <div class="face bottom">00</div>
-            </div>
-
-            <div class="flip-mini" data-k="s">
-              <div class="face top">00</div>
-              <div class="face bottom">00</div>
-            </div>
+            <div class="flip-mini" data-k="d"><div class="face top">00</div><div class="face bottom">00</div></div>
+            <div class="flip-mini" data-k="h"><div class="face top">00</div><div class="face bottom">00</div></div>
+            <div class="flip-mini" data-k="m"><div class="face top">00</div><div class="face bottom">00</div></div>
+            <div class="flip-mini" data-k="s"><div class="face top">00</div><div class="face bottom">00</div></div>
           </div>
 
-          <!-- Frase bíblica -->
-          <p class="verse" aria-label="Cita bíblica">
-            "Quien halla esposa halla el bien" — <strong>Proverbios 18:22</strong>
-          </p>
+          <!-- Versículo -->
+          <p class="verse">"Quien halla esposa halla el bien" — <strong>Proverbios 18:22</strong></p>
 
-          <!-- Botones mágicos -->
+          <!-- Botones clave (por si se prefiere usar además del menú) -->
           <div class="btns">
-            <button class="magicBtn" data-target="sec-padres">Descubre nuestra historia</button>
+            <button class="magicBtn" data-target="sec-familias">Nuestras familias</button>
             <button class="magicBtn" data-target="sec-itinerario">Itinerario</button>
             <button class="magicBtn" data-target="sec-galeria">Galería</button>
             <button class="magicBtn" data-target="sec-rsvp">Confirmar asistencia</button>
-            <button class="magicBtn" data-target="sec-final">Página final</button>
           </div>
         </div>
       </section>
 
-      <!-- =====================================================
-           2) PADRES + NOVIOS
-           ===================================================== -->
-      <section id="sec-padres" class="section bg-padres" aria-label="Padres y novios">
+      <!-- ============= PÁGINA 1 — FAMILIAS (1) ============= -->
+      <section id="sec-familias" class="section bg-p1" aria-label="Familias">
         <div class="overlay"></div>
-
         <div class="card center">
-          <h2 style="font-family:'Playfair Display',serif;font-size:28px">
-            Padres de los novios
-          </h2>
+          <h2 style="font-family:'Playfair Display',serif">Padres de los novios</h2>
 
-          <!-- Nombres de los padres centrados y al mismo nivel -->
           <div class="parents-grid" style="margin-top:16px">
             <div class="parent-col">
               <div class="parent-names">
@@ -923,7 +416,6 @@
                 Pedro Pérez Hernández
               </div>
             </div>
-
             <div class="parent-col">
               <div class="parent-names">
                 Saray Hernández Santana<br />
@@ -932,212 +424,105 @@
             </div>
           </div>
 
-          <!-- Frase romántica -->
-          <div
-            style="
-              margin-top:18px;
-              font-family:'Playfair Display',serif;
-              font-size:18px;
-            ">
+          <div style="margin-top:18px;font-family:'Playfair Display',serif;font-size:18px">
             Tienen el honor de compartir la dicha que enlaza a sus amados hijos.
           </div>
 
-          <!-- Nombres de los novios + foto -->
-          <div class="couple" style="margin-top:18px">
-            <div class="names">
-              Abril Pérez Aguilar &amp; Pablo Eliel Tinoco Hernández
-            </div>
-
-            <img
-              src="foto1.jpg"
-              alt="Abril y Pablo"
-              class="photo lb-target"
-              data-src="foto1.jpg"
-              id="foto1" />
-          </div>
+          <div class="couple-names">Abril Pérez Aguilar &amp; Pablo Eliel Tinoco Hernández</div>
         </div>
       </section>
 
-      <!-- =====================================================
-           3) ITINERARIO + CONTADOR PROTAGONISTA
-           ===================================================== -->
-      <section id="sec-itinerario" class="section bg-itinerario" aria-label="Itinerario">
+      <!-- ============= PÁGINA 2 — FOTO1 + MATEO 19:6 (2) ============= -->
+      <section id="sec-foto-verse" class="section bg-p2" aria-label="Foto y versículo">
         <div class="overlay"></div>
+        <div class="card center">
+          <img src="foto1.jpg" alt="Abril y Pablo" class="photo-romantic lb-target" data-src="foto1.jpg">
+          <p class="verse-big">
+            “Así que no son ya más dos, sino una sola carne; por tanto, lo que Dios juntó, no lo separe el hombre.” — <strong>Mateo 19:6</strong>
+          </p>
+        </div>
+      </section>
 
+      <!-- ============= PÁGINA 3 — ITINERARIO + CONTADOR (3) ============= -->
+      <section id="sec-itinerario" class="section bg-p3" aria-label="Itinerario">
+        <div class="overlay"></div>
         <div class="card">
-          <h2 style="font-family:'Playfair Display',serif">
-            Itinerario
-          </h2>
+          <h2 style="font-family:'Playfair Display',serif">Itinerario</h2>
 
-          <!-- Lista de eventos con aire y fade in up -->
           <div class="itinerary" id="itineraryList">
-            <!-- Ceremonia -->
+            <div class="it-item">
+              <div class="it-icon">📅</div>
+              <div class="it-info">
+                <strong>Fecha del evento</strong>
+                <div>28 de diciembre del 2025</div>
+              </div>
+            </div>
+
             <div class="it-item">
               <div class="it-icon">⛪</div>
-
               <div class="it-info">
-                <strong>
-                  Ceremonia Religiosa — 2:00 p.m.
-                </strong>
-
-                <div>
-                  Iglesia Cristiana "Palabra de vida AD"
-                </div>
-
-                <div>
-                  Rodeo #35, Gabriel Tepepa, CP. 62980, Tlaquiltenango, Morelos
-                </div>
-
-                <a
-                  class="map-link"
-                  href="https://maps.app.goo.gl/AWYkNZ44jyshjRUG6"
-                  target="_blank"
-                  rel="noopener">
-                  Ver mapa
-                </a>
+                <strong>Ceremonia Religiosa — 2:00 p.m.</strong>
+                <div>Iglesia cristiana "Palabra de vida AD"</div>
+                <div>Rodeo #35, Gabriel Tepepa, CP. 62980, Tlaquiltenango, Morelos</div>
+                <a class="map-link" href="https://maps.app.goo.gl/AWYkNZ44jyshjRUG6" target="_blank" rel="noopener">Mapa de ubicación</a>
               </div>
             </div>
 
-            <!-- Recepción -->
             <div class="it-item">
               <div class="it-icon">🎉</div>
-
               <div class="it-info">
-                <strong>
-                  Recepción — 4:00 p.m.
-                </strong>
-
-                <div>
-                  Jardín Los Abuelos
-                </div>
-
-                <div>
-                  Insurgentes #819, Gabriel Tepepa, CP. 62980, Tlaquiltenango, Morelos
-                </div>
-
-                <a
-                  class="map-link"
-                  href="https://maps.app.goo.gl/B2W65gnaMnyodGh56"
-                  target="_blank"
-                  rel="noopener">
-                  Ver mapa
-                </a>
+                <strong>Recepción — 4:00 p.m.</strong>
+                <div>Jardín Los Abuelos</div>
+                <div>Insurgentes #819, Gabriel Tepepa, CP. 62980, Tlaquiltenango, Morelos</div>
+                <a class="map-link" href="https://maps.app.goo.gl/B2W65gnaMnyodGh56" target="_blank" rel="noopener">Mapa de ubicación</a>
               </div>
             </div>
 
-            <!-- Duración -->
-            <div class="it-item">
-              <div class="it-icon">⏳</div>
-
-              <div class="it-info">
-                <strong>
-                  Duración estimada
-                </strong>
-
-                <div>
-                  Inicio 4:00 p.m. — Se estima evento hasta las 11:00 p.m. aprox.
-                </div>
-              </div>
-            </div>
-
-            <!-- Dress code -->
             <div class="it-item">
               <div class="it-icon">👗</div>
-
               <div class="it-info">
                 <strong>Código de vestimenta</strong>
-
-                <div>
-                  Formal — tonos recomendados:
-                  celestes, beige, verde, gris, rosa
+                <div>Formal — Tonos recomendados: celestes, beige, verde, gris, rosa</div>
+                <div class="palette">
+                  <div class="chip" style="background:var(--chip-celeste)" title="Celeste"></div>
+                  <div class="chip" style="background:var(--chip-beige)"  title="Beige"></div>
+                  <div class="chip" style="background:var(--chip-verde)"  title="Verde"></div>
+                  <div class="chip" style="background:var(--chip-gris)"   title="Gris"></div>
+                  <div class="chip" style="background:var(--chip-rosa)"   title="Rosa"></div>
                 </div>
-
-                <div style="display:flex;gap:8px;margin-top:8px">
-                  <div title="Celeste" style="width:22px;height:22px;border-radius:6px;background:var(--chip-celeste)"></div>
-                  <div title="Beige"  style="width:22px;height:22px;border-radius:6px;background:var(--chip-beige)"></div>
-                  <div title="Verde"  style="width:22px;height:22px;border-radius:6px;background:var(--chip-verde)"></div>
-                  <div title="Gris"   style="width:22px;height:22px;border-radius:6px;background:var(--chip-gris)"></div>
-                  <div title="Rosa"   style="width:22px;height:22px;border-radius:6px;background:var(--chip-rosa)"></div>
-                </div>
-
-                <div style="margin-top:6px;font-style:italic;color:#666">
-                  Dejemos el blanco para la novia.
-                </div>
+                <div style="margin-top:6px;font-style:italic;color:#666">Dejemos el blanco para la novia.</div>
               </div>
             </div>
           </div>
 
-          <!-- Contador Flip destacado -->
+          <!-- Contador Flip grande -->
           <div style="margin-top:18px;text-align:center">
-            <div
-              style="
-                font-family:'Playfair Display',serif;
-                font-size:18px;
-                color:#333;
-              ">
-              Faltan para nuestro gran día
-            </div>
-
+            <div style="font-family:'Playfair Display',serif;font-size:18px;color:#333">Faltan para nuestro gran día</div>
             <div class="flip-grid" id="mainFlip">
-              <div class="flip" data-key="days">
-                <div class="panel top">00</div>
-                <div class="panel bottom">00</div>
-                <div class="label">Días</div>
-              </div>
-
-              <div class="flip" data-key="hours">
-                <div class="panel top">00</div>
-                <div class="panel bottom">00</div>
-                <div class="label">Horas</div>
-              </div>
-
-              <div class="flip" data-key="mins">
-                <div class="panel top">00</div>
-                <div class="panel bottom">00</div>
-                <div class="label">Minutos</div>
-              </div>
-
-              <div class="flip" data-key="secs">
-                <div class="panel top">00</div>
-                <div class="panel bottom">00</div>
-                <div class="label">Segundos</div>
-              </div>
+              <div class="flip" data-key="days"><div class="panel top">00</div><div class="panel bottom">00</div><div class="label">Días</div></div>
+              <div class="flip" data-key="hours"><div class="panel top">00</div><div class="panel bottom">00</div><div class="label">Horas</div></div>
+              <div class="flip" data-key="mins"><div class="panel top">00</div><div class="panel bottom">00</div><div class="label">Minutos</div></div>
+              <div class="flip" data-key="secs"><div class="panel top">00</div><div class="panel bottom">00</div><div class="label">Segundos</div></div>
             </div>
-
-            <div style="margin-top:8px;color:#666">
-              28 de diciembre del 2025 — 2:00 p.m.
-            </div>
-          </div>
-
-          <!-- Acciones -->
-          <div class="btns">
-            <button class="magicBtn" data-target="sec-rsvp">Confirmar asistencia</button>
-            <button class="magicBtn" data-target="sec-galeria">Ver galería</button>
+            <div style="margin-top:8px;color:#666">28 de diciembre del 2025 — 2:00 p.m.</div>
           </div>
         </div>
       </section>
 
-      <!-- =====================================================
-           4) GALERÍA — NOVIOS (con Lightbox)
-           ===================================================== -->
-      <section id="sec-galeria" class="section bg-galeria" aria-label="Galería">
+      <!-- ============= PÁGINA 4 — GALERÍA NOVIOS (4) ============= -->
+      <section id="sec-galeria" class="section bg-p4" aria-label="Galería novios">
         <div class="overlay"></div>
-
         <div class="card">
-          <h2 style="font-family:'Playfair Display',serif">
-            Galería — Los novios
-          </h2>
-
+          <h2 style="font-family:'Playfair Display',serif">Galería — Los novios</h2>
           <div class="gallery-grid" id="galleryGrid">
-            <img src="momento1.jpg" alt="momento1" class="lb-target" data-src="momento1.jpg" />
-            <img src="momento2.jpg" alt="momento2" class="lb-target" data-src="momento2.jpg" />
-            <img src="momento3.jpg" alt="momento3" class="lb-target" data-src="momento3.jpg" />
-            <img src="momento4.jpg" alt="momento4" class="lb-target" data-src="momento4.jpg" />
-            <img src="momento5.jpg" alt="momento5" class="lb-target" data-src="momento5.jpg" />
-            <img src="momento6.jpg" alt="momento6" class="lb-target" data-src="momento6.jpg" />
-            <img src="momento7.jpg" alt="momento7" class="lb-target" data-src="momento7.jpg" />
+            <img src="momento1.jpg" alt="momento1" class="lb-target" data-src="momento1.jpg">
+            <img src="momento2.jpg" alt="momento2" class="lb-target" data-src="momento2.jpg">
+            <img src="momento3.jpg" alt="momento3" class="lb-target" data-src="momento3.jpg">
+            <img src="momento4.jpg" alt="momento4" class="lb-target" data-src="momento4.jpg">
+            <img src="momento5.jpg" alt="momento5" class="lb-target" data-src="momento5.jpg">
+            <img src="momento6.jpg" alt="momento6" class="lb-target" data-src="momento6.jpg">
+            <img src="momento7.jpg" alt="momento7" class="lb-target" data-src="momento7.jpg">
           </div>
-
           <div class="gallery-controls">
             <button id="prevGallery" class="magicBtn">Anterior</button>
             <button id="nextGallery" class="magicBtn">Siguiente</button>
@@ -1145,343 +530,280 @@
         </div>
       </section>
 
-      <!-- =====================================================
-           5) MOMENTOS DE INVITADOS (COLAB) + momento8 + frase
-           ===================================================== -->
-      <section id="sec-collab" class="section bg-collab" aria-label="Momentos de los invitados">
+      <!-- ============= PÁGINA 5 — RSVP + DESEOS (5) ============= -->
+      <section id="sec-rsvp" class="section bg-p5" aria-label="RSVP y Buenos Deseos">
         <div class="overlay"></div>
+        <div class="card">
+          <h2 style="font-family:'Playfair Display',serif">Confirmación de asistencia</h2>
+          <p class="note">Se abrirá en una pestaña nueva. Tu confirmación se guarda en Google Sheets.</p>
+          <form action="https://script.google.com/macros/s/AKfycbyDEgVJzj-vGvwxFE1eqTmKb4pO4__lXB9gX8gMKGc2yGhlzR15AFPY8vQMvnjoNs01Vg/exec" method="post" target="_blank" style="margin-top:12px">
+            <div class="form-inline">
+              <input name="name" type="text" placeholder="Nombre completo" required>
+              <input name="email" type="email" placeholder="Correo (opcional)">
+              <input name="guests" type="number" min="0" value="0" style="width:140px" placeholder="Acompañantes">
+            </div>
+            <div style="text-align:center;margin-top:12px">
+              <button type="submit" class="magicBtn">Confirmar (abrir en pestaña nueva)</button>
+            </div>
+          </form>
 
+          <hr style="margin:18px 0;border:none;border-top:1px solid rgba(0,0,0,.06)">
+
+          <h2 style="font-family:'Playfair Display',serif">Buenos deseos</h2>
+          <p class="note">Se abrirá en pestaña nueva. Tus palabras se guardarán en Google Sheets.</p>
+          <form action="https://script.google.com/macros/s/AKfycbwY2G6aHz1-W9Sk3CUspgJYNf2EhEchr_gNk4mvaZS4wXn7sKIfIV3Qy-Wje2UCKdgC/exec" method="post" target="_blank" style="margin-top:12px">
+            <div class="form-inline" style="flex-direction:column;align-items:center">
+              <input name="name" type="text" placeholder="Tu nombre (opcional)" style="max-width:560px">
+              <textarea name="message" placeholder="Escribe tu mensaje..." rows="4" required style="max-width:560px"></textarea>
+            </div>
+            <div style="text-align:center;margin-top:12px">
+              <button type="submit" class="magicBtn">Enviar deseo (abrir en pestaña nueva)</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- ============= PÁGINA 6 — COLABORATIVA + MOMENTO9 + FORM (6) ============= -->
+      <section id="sec-colaborativa" class="section bg-p6" aria-label="Galería colaborativa">
+        <div class="overlay"></div>
         <div class="card center">
-          <h2 style="font-family:'Playfair Display',serif">
-            Momentos de los invitados
-          </h2>
-
-          <img
-            src="momento8.jpg"
-            alt="momento8"
-            class="collab-photo lb-target"
-            data-src="momento8.jpg"
-            id="momento8" />
-
-          <p
-            style="
-              margin-top:12px;
-              font-family:'Playfair Display',serif;
-              font-size:18px;
-            ">
-            "Tu amor es lo que he anhelado y el regalo que Dios me ha dado"
-          </p>
-
-          <div class="gallery-grid" style="margin-top:12px">
-            <img
-              src="momento9.jpg"
-              alt="momento9"
-              class="lb-target"
-              data-src="momento9.jpg" />
-          </div>
-
+          <h2 style="font-family:'Playfair Display',serif">Galería colaborativa</h2>
+          <img src="momento9.jpg" alt="momento9" class="collab-photo lb-target" data-src="momento9.jpg">
           <div style="margin-top:12px">
-            <a
-              class="magicBtn"
-              href="https://docs.google.com/forms/d/e/1FAIpQLSfDX9Ky8YrQ962Uxh5ibEYGDk2WsyyVUxUPC09IcwrBKlHx7A/viewform?usp=header"
-              target="_blank"
-              rel="noopener">
-              Subir momento (Formulario)
+            <a class="magicBtn" href="https://docs.google.com/forms/d/e/1FAIpQLSfDX9Ky8YrQ962Uxh5ibEYGDk2WsyyVUxUPC09IcwrBKlHx7A/viewform?usp=header" target="_blank" rel="noopener">
+              Subir tus fotos o videos
             </a>
           </div>
         </div>
       </section>
 
-      <!-- =====================================================
-           6) CONFIRMACIONES (RSVP) + BUENOS DESEOS
-           ===================================================== -->
-      <section id="sec-rsvp" class="section bg-rsvp" aria-label="RSVP y Buenos Deseos">
+      <!-- ============= PÁGINA 7 — MOMENTO8 + FRASE (7) ============= -->
+      <section id="sec-momento8" class="section bg-p7" aria-label="Momento 8">
         <div class="overlay"></div>
-
-        <div class="card">
-          <!-- RSVP -->
-          <h2 style="font-family:'Playfair Display',serif">
-            Confirmación de asistencia
-          </h2>
-
-          <p class="note">
-            Haz clic para abrir el formulario en una pestaña nueva.
-            Tu confirmación se guardará en Google Sheets.
-          </p>
-
-          <form
-            action="https://script.google.com/macros/s/AKfycbyDEgVJzj-vGvwxFE1eqTmKb4pO4__lXB9gX8gMKGc2yGhlzR15AFPY8vQMvnjoNs01Vg/exec"
-            method="post"
-            target="_blank"
-            style="margin-top:12px">
-
-            <div class="form-inline">
-              <input name="name"   type="text"   placeholder="Nombre completo" required />
-              <input name="email"  type="email"  placeholder="Correo (opcional)" />
-              <input name="guests" type="number" min="0" value="0" style="width:140px" placeholder="Acompañantes" />
-            </div>
-
-            <div style="text-align:center;margin-top:12px">
-              <button type="submit" class="magicBtn">
-                Confirmar (abrir en pestaña nueva)
-              </button>
-            </div>
-          </form>
-
-          <hr style="margin:18px 0;border:none;border-top:1px solid rgba(0,0,0,.06)" />
-
-          <!-- BUENOS DESEOS -->
-          <h2 style="font-family:'Playfair Display',serif">
-            Buenos deseos
-          </h2>
-
-          <p class="note">
-            Escribe tus palabras para los novios. Se mostrarán públicamente y se guardarán en Google Sheets.
-          </p>
-
-          <form
-            action="https://script.google.com/macros/s/AKfycbwY2G6aHz1-W9Sk3CUspgJYNf2EhEchr_gNk4mvaZS4wXn7sKIfIV3Qy-Wje2UCKdgC/exec"
-            method="post"
-            target="_blank"
-            style="margin-top:12px">
-
-            <div class="form-inline" style="flex-direction:column;align-items:center">
-              <input
-                name="name"
-                type="text"
-                placeholder="Tu nombre (opcional)"
-                style="max-width:560px" />
-
-              <textarea
-                name="message"
-                placeholder="Escribe tu mensaje..."
-                rows="4"
-                required
-                style="max-width:560px"></textarea>
-            </div>
-
-            <div style="text-align:center;margin-top:12px">
-              <button type="submit" class="magicBtn">
-                Enviar deseo (abrir en pestaña nueva)
-              </button>
-            </div>
-          </form>
-        </div>
-      </section>
-
-      <!-- =====================================================
-           7) MOMENTO 9 + FRASE “Y así comienza…”
-           ===================================================== -->
-      <section id="sec-momento9" class="section bg-momento9" aria-label="Momento 9">
-        <div class="overlay"></div>
-
         <div class="card center">
-          <img
-            src="momento9.jpg"
-            alt="momento9"
-            class="collab-photo lb-target"
-            data-src="momento9.jpg" />
-
-          <p
-            style="
-              margin-top:12px;
-              font-family:'Playfair Display',serif;
-              font-size:18px;
-            ">
-            "Y así comienza nuestra historia de amor para siempre"
+          <img src="momento8.jpg" alt="momento8" class="collab-photo lb-target" data-src="momento8.jpg">
+          <p style="margin-top:12px;font-family:'Playfair Display',serif;font-size:18px">
+            "Tu amor es lo que he anhelado y el regalo que Dios me ha dado"
           </p>
         </div>
       </section>
 
-      <!-- =====================================================
-           8) FINAL — WHATSAPP + CALENDARIO
-           ===================================================== -->
-      <section id="sec-final" class="section bg-final" aria-label="Final">
+      <!-- ============= PÁGINA 8 — FINAL (8) ============= -->
+      <section id="sec-final" class="section bg-p8" aria-label="Final">
         <div class="overlay"></div>
-
         <div class="card center">
-          <div class="final-msg">
-            Con amor eterno
-          </div>
-
-          <div
-            style="
-              font-family:'Waltograph',cursive;
-              font-size:28px;
-              margin-top:8px;
-            ">
-            Abril &amp; Pablo
-          </div>
-
-          <div class="final-sub">
-            Gracias por acompañarnos en este día especial
-          </div>
+          <img src="momento5.jpg" alt="momento5" class="collab-photo lb-target" data-src="momento5.jpg" style="margin-bottom:12px">
+          <div class="final-title">Con amor eterno</div>
+          <div style="font-family:'Playfair Display',serif;font-size:22px;margin-top:6px">Abril &amp; Pablo</div>
+          <div class="final-sub">Gracias por ser parte de nuestro día especial</div>
 
           <div class="wa-row">
-            <!-- WhatsApp Abril -->
-            <a
-              class="wa-btn"
-              href="https://wa.me/5217774914500"
-              target="_blank"
-              rel="noopener"
-              aria-label="WhatsApp Abril">
+            <a class="wa-btn" href="https://wa.me/5217774914500" target="_blank" rel="noopener" aria-label="WhatsApp Abril">
               <svg class="wa-svg" viewBox="0 0 24 24" aria-hidden="true">
-                <path
-                  d="M20.52 3.48A11.85 11.85 0 0 0 12 0C5.37 0 .01 5.37.01 12.01 0 14.22.52 16.29 1.48 18.08L0 24l6.15-1.6A11.9 11.9 0 0 0 12 24c6.63 0 12-5.37 12-11.99 0-3.2-1.25-6.17-3.48-8.53zM12 21.6c-1.78 0-3.45-.46-4.94-1.31l-.35-.2-3.66.95.98-3.56-.23-.36A8.3 8.3 0 0 1 3.6 12.01C3.6 7.05 7.04 3.6 12 3.6s8.4 3.45 8.4 8.41S16.96 21.6 12 21.6z"
-                  fill="#fff" />
+                <path d="M20.52 3.48A11.85 11.85 0 0 0 12 0C5.37 0 .01 5.37.01 12.01 0 14.22.52 16.29 1.48 18.08L0 24l6.15-1.6A11.9 11.9 0 0 0 12 24c6.63 0 12-5.37 12-11.99 0-3.2-1.25-6.17-3.48-8.53zM12 21.6c-1.78 0-3.45-.46-4.94-1.31l-.35-.2-3.66.95.98-3.56-.23-.36A8.3 8.3 0 0 1 3.6 12.01C3.6 7.05 7.04 3.6 12 3.6s8.4 3.45 8.4 8.41S16.96 21.6 12 21.6z" fill="#fff"/>
               </svg>
               WhatsApp Abril
             </a>
-
-            <!-- WhatsApp Pablo -->
-            <a
-              class="wa-btn"
-              href="https://wa.me/5217341123645"
-              target="_blank"
-              rel="noopener"
-              aria-label="WhatsApp Pablo">
+            <a class="wa-btn" href="https://wa.me/5217341123645" target="_blank" rel="noopener" aria-label="WhatsApp Pablo">
               <svg class="wa-svg" viewBox="0 0 24 24" aria-hidden="true">
-                <path
-                  d="M20.52 3.48A11.85 11.85 0 0 0 12 0C5.37 0 .01 5.37.01 12.01 0 14.22.52 16.29 1.48 18.08L0 24l6.15-1.6A11.9 11.9 0 0 0 12 24c6.63 0 12-5.37 12-11.99 0-3.2-1.25-6.17-3.48-8.53zM12 21.6c-1.78 0-3.45-.46-4.94-1.31l-.35-.2-3.66.95.98-3.56-.23-.36A8.3 8.3 0 0 1 3.6 12.01C3.6 7.05 7.04 3.6 12 3.6s8.4 3.45 8.4 8.41S16.96 21.6 12 21.6z"
-                  fill="#fff" />
+                <path d="M20.52 3.48A11.85 11.85 0 0 0 12 0C5.37 0 .01 5.37.01 12.01 0 14.22.52 16.29 1.48 18.08L0 24l6.15-1.6A11.9 11.9 0 0 0 12 24c6.63 0 12-5.37 12-11.99 0-3.2-1.25-6.17-3.48-8.53zM12 21.6c-1.78 0-3.45-.46-4.94-1.31l-.35-.2-3.66.95.98-3.56-.23-.36A8.3 8.3 0 0 1 3.6 12.01C3.6 7.05 7.04 3.6 12 3.6s8.4 3.45 8.4 8.41S16.96 21.6 12 21.6z" fill="#fff"/>
               </svg>
               WhatsApp Pablo
             </a>
           </div>
 
           <div style="margin-top:12px">
-            <a class="magicBtn" href="#" id="addCalendar">
-              Agregar al calendario
-            </a>
+            <a class="magicBtn" href="#" id="addCalendar">Agregar al calendario</a>
           </div>
+        </div>
+      </section>
+
+      <!-- ============= PÁGINA 9 — FONDO DECORATIVO (9) ============= -->
+      <section id="sec-fondo-final" class="section bg-p9" aria-label="Fondo final">
+        <div class="overlay"></div>
+        <div class="card center">
+          <p style="font-family:'Playfair Display',serif">¡Gracias por visitar nuestra invitación!</p>
         </div>
       </section>
 
     </div>
 
-    <!-- =====================================================
-         NAVEGACIÓN (FLECHAS) — OCULTAS EN PORTADA
-         ===================================================== -->
+    <!-- =========================================================
+         FLECHAS NAVEGACIÓN (ocultas en portada)
+         ========================================================= -->
     <div class="nav" id="navArrows">
-      <div>
-        <button id="prevBtn" aria-label="Anterior">‹</button>
-      </div>
-      <div>
-        <button id="nextBtn" aria-label="Siguiente">›</button>
-      </div>
+      <div><button id="prevBtn" aria-label="Anterior">‹</button></div>
+      <div><button id="nextBtn" aria-label="Siguiente">›</button></div>
     </div>
 
-    <!-- =====================================================
-         LIGHTBOX (MODAL)
-         ===================================================== -->
+    <!-- =========================================================
+         MENÚ FLOTANTE LATERAL (discreto)
+         - En móviles: botón FAB para abrir/cerrar
+         ========================================================= -->
+    <nav class="side-menu compact" id="sideMenu" aria-label="Navegación rápida">
+      <a href="#sec-portada"       data-goto="sec-portada"><span class="icon">🏠</span> Portada</a>
+      <a href="#sec-familias"      data-goto="sec-familias"><span class="icon">👪</span> Familias</a>
+      <a href="#sec-foto-verse"    data-goto="sec-foto-verse"><span class="icon">💞</span> Foto &amp; Verso</a>
+      <a href="#sec-itinerario"    data-goto="sec-itinerario"><span class="icon">🗓️</span> Itinerario</a>
+      <a href="#sec-galeria"       data-goto="sec-galeria"><span class="icon">📸</span> Galería</a>
+      <a href="#sec-rsvp"          data-goto="sec-rsvp"><span class="icon">💌</span> Confirmación</a>
+      <a href="#sec-colaborativa"  data-goto="sec-colaborativa"><span class="icon">🤳</span> Colaborativa</a>
+      <a href="#sec-momento8"      data-goto="sec-momento8"><span class="icon">💚</span> Momento 8</a>
+      <a href="#sec-final"         data-goto="sec-final"><span class="icon">🌟</span> Final</a>
+    </nav>
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">☰</button>
+
+    <!-- =========================================================
+         LIGHTBOX
+         ========================================================= -->
     <div class="lb" id="lightbox" aria-hidden="true" role="dialog">
       <button class="close-lb" id="lbClose" aria-label="Cerrar">✕</button>
-
       <div class="lb-nav">
         <button id="lbPrev">‹</button>
         <button id="lbNext">›</button>
       </div>
-
-      <img id="lbImg" src="" alt="" />
+      <img id="lbImg" src="" alt="">
     </div>
 
-    <!-- =====================================================
+    <!-- =========================================================
          OVERLAY INICIAL (AUTOPLAY MÓVILES)
-         ===================================================== -->
+         ========================================================= -->
     <div id="startOverlay" class="show" role="dialog" aria-modal="true">
-      <h3 style="font-family:'Waltograph',cursive;margin-bottom:6px">
-        Toca para comenzar 💍
-      </h3>
-
-      <p style="color:#666;margin-bottom:12px">
-        Pulsa para iniciar la música y explorar la invitación.
-      </p>
-
-      <div style="text-align:center">
-        <button id="startBtn" class="start-cta">
-          Toca para comenzar
-        </button>
-      </div>
+      <h3 style="font-family:'Playfair Display',serif;margin-bottom:6px">Toca para comenzar 💍</h3>
+      <p style="color:#666;margin-bottom:12px">Pulsa para iniciar la música y explorar la invitación.</p>
+      <div style="text-align:center"><button id="startBtn" class="start-cta">Toca para comenzar</button></div>
     </div>
   </div>
 
   <!-- =========================================================
-       SCRIPTS (JS)
+       JS EMBEBIDO
        ========================================================= -->
   <script>
-    /************************************************************
-     * NAVEGACIÓN ENTRE SECCIONES
-     ************************************************************/
+    /* =========================================================
+       ORDEN DE SECCIONES
+       ========================================================= */
     const order = [
       'sec-portada',
-      'sec-padres',
+      'sec-familias',
+      'sec-foto-verse',
       'sec-itinerario',
       'sec-galeria',
-      'sec-collab',
       'sec-rsvp',
-      'sec-momento9',
-      'sec-final'
+      'sec-colaborativa',
+      'sec-momento8',
+      'sec-final',
+      'sec-fondo-final'
     ];
-
     const sections = order.map(id => document.getElementById(id));
-    const arrows   = document.getElementById('navArrows');
-
     let current = 0;
+
+    /* =========================================================
+       NAVEGACIÓN CON SCROLL SUAVE SIMULADO + FADE
+       ========================================================= */
+    const arrows = document.getElementById('navArrows');
 
     function show(i){
       i = ((i % sections.length) + sections.length) % sections.length;
 
+      const prev = sections[current];
+      const next = sections[i];
+      if(!next) return;
+
+      if(prev){
+        prev.style.transition = 'transform .55s var(--ease), opacity .45s ease';
+        prev.style.transform  = 'translateY(-12px) scale(.995)';
+        prev.style.opacity    = '0';
+      }
+
       sections.forEach(s => s.classList.remove('active'));
+      next.classList.add('active');
+      next.style.transform = 'translateY(24px) scale(.995)';
+      requestAnimationFrame(() => {
+        next.style.transition = 'transform .7s var(--ease), opacity .45s ease';
+        next.style.transform  = 'translateY(0) scale(1)';
+        next.style.opacity    = '1';
+      });
 
-      const el = sections[i];
-      if(!el) return;
-
-      el.classList.add('active');
       current = i;
 
       // Oculta flechas en portada
       const hide = (order[i] === 'sec-portada');
-      arrows.querySelectorAll('button').forEach(b => {
-        b.style.display = hide ? 'none' : 'block';
-      });
+      arrows.querySelectorAll('button').forEach(b => b.style.display = hide ? 'none' : 'block');
 
-      // Anima los items del itinerario al entrar
+      // Marca activo en side-menu
+      markActiveInMenu(order[i]);
+
+      // Animar itinerario al entrar
       if(order[i] === 'sec-itinerario'){
-        document
-          .querySelectorAll('#sec-itinerario .it-item')
-          .forEach((it, idx) => {
-            setTimeout(() => it.classList.add('show'), idx * 120);
-          });
+        document.querySelectorAll('#sec-itinerario .it-item').forEach((it, idx) => {
+          setTimeout(() => it.classList.add('show'), idx * 120);
+        });
       }
     }
 
-    // Mostrar portada inicialmente
+    // Inicial
     show(0);
 
-    // Botones de flecha
+    // Flechas
     document.getElementById('prevBtn').addEventListener('click', () => show(current - 1));
     document.getElementById('nextBtn').addEventListener('click', () => show(current + 1));
 
-    // Teclado (izq/der)
+    // Teclado
     window.addEventListener('keydown', (e) => {
       if(e.key === 'ArrowRight') show(current + 1);
       if(e.key === 'ArrowLeft')  show(current - 1);
     });
 
-    // Botones mágicos que saltan a secciones
-    document
-      .querySelectorAll('.magicBtn[data-target]')
-      .forEach(btn => {
-        btn.addEventListener('click', () => {
-          const tgt = btn.getAttribute('data-target');
-          const i   = order.indexOf(tgt);
-          if(i >= 0) show(i);
-        });
+    // Botones mágicos de portada
+    document.querySelectorAll('.magicBtn[data-target]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tgt = btn.getAttribute('data-target');
+        const i   = order.indexOf(tgt);
+        if(i >= 0) {
+          show(i);
+          closeMenuOnMobile();
+        }
       });
+    });
 
-    /************************************************************
-     * AUDIO — CROSSFADE ENTRE MARCHA Y ETERNAMENTE
-     ************************************************************/
+    /* =========================================================
+       MENÚ FLOTANTE LATERAL
+       ========================================================= */
+    const sideMenu  = document.getElementById('sideMenu');
+    const menuToggle= document.getElementById('menuToggle');
+
+    function goToSectionById(id){
+      const idx = order.indexOf(id);
+      if(idx >= 0){
+        show(idx);
+        closeMenuOnMobile();
+      }
+    }
+
+    function markActiveInMenu(id){
+      sideMenu.querySelectorAll('a').forEach(a => {
+        a.classList.toggle('active', a.getAttribute('data-goto') === id);
+      });
+    }
+
+    sideMenu.querySelectorAll('a[data-goto]').forEach(a => {
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        goToSectionById(a.getAttribute('data-goto'));
+      });
+    });
+
+    function closeMenuOnMobile(){
+      sideMenu.classList.remove('open');
+    }
+
+    menuToggle.addEventListener('click', () => {
+      sideMenu.classList.toggle('open');
+    });
+
+    /* =========================================================
+       AUDIO CON CROSSFade (marcha → eternamente)
+       ========================================================= */
     const marcha       = document.getElementById('marcha');
     const eternamente  = document.getElementById('eternamente');
     const startOverlay = document.getElementById('startOverlay');
@@ -1493,10 +815,10 @@
       return ('ontouchstart' in window) || /Mobi|Android/i.test(navigator.userAgent);
     }
 
-    function fadeAudio(audio, from, to, duration = 700){
-      const steps    = 30;
+    function fadeAudio(audio, from, to, duration=700){
+      const steps = 30;
       const stepTime = duration / steps;
-      let step       = 0;
+      let step = 0;
 
       audio.volume = Math.max(0, Math.min(1, from));
 
@@ -1504,7 +826,6 @@
         const id = setInterval(() => {
           step++;
           audio.volume = Math.max(0, Math.min(1, from + (to - from) * (step / steps)));
-
           if(step >= steps){
             clearInterval(id);
             audio.volume = Math.max(0, Math.min(1, to));
@@ -1514,172 +835,125 @@
       });
     }
 
-    // Autoplay escritorio (intento), overlay para móviles
+    // Intento de autoplay + overlay para móviles
     window.addEventListener('load', async () => {
       try{
         await marcha.play();
         await fadeAudio(marcha, 0, 1, 700);
-      }catch(e){ /* Silencio: móviles requieren interacción */ }
-
+      }catch(e){/* móviles requieren interacción */}
       if(isTouch()){
         startOverlay.classList.add('show');
-      } else {
-        // Breve aparición también en desktop (bonito efecto)
+      }else{
+        // Mostrar breve overlay también en desktop (efecto bonito)
         startOverlay.classList.add('show');
-        setTimeout(() => startOverlay.classList.remove('show'), 3600);
+        setTimeout(() => startOverlay.classList.remove('show'), 3200);
       }
     });
 
-    // Botón "Toca para comenzar"
+    // Botón “Toca para comenzar”
     startBtn.addEventListener('click', async () => {
       try{
         startBtn.disabled = true;
         startBtn.textContent = 'Iniciando...';
-
         await marcha.play();
         await fadeAudio(marcha, 0, 1, 600);
       }catch(e){}
-
       startOverlay.classList.remove('show');
     });
 
-    // Al tocar el anillo: crossfade a eternamente
+    // Clic en anillo → crossfade
     ringBtn.addEventListener('click', async () => {
-      // Efecto chispa
+      // Chispa visual
       ringSpark.style.opacity = 1;
       ringSpark.style.transition = 'opacity .9s ease';
       setTimeout(() => ringSpark.style.opacity = 0, 900);
 
-      // Crossfade
+      // Crossfade: pausa marcha y arranca eternamente
       try{
         if(!marcha.paused){
           await fadeAudio(marcha, marcha.volume || 1, 0, 600);
           marcha.pause();
         }
       }catch(e){}
-
       try{
         eternamente.currentTime = 0;
-        eternamente.volume      = 0;
-
+        eternamente.volume = 0;
         await eternamente.play();
         await fadeAudio(eternamente, 0, 1, 800);
       }catch(e){}
     });
 
-    /************************************************************
-     * CONTADOR — PORTADA (MINI FLIP)
-     ************************************************************/
+    /* =========================================================
+       CONTADORES
+       ========================================================= */
     const target = new Date('2025-12-28T14:00:00');
+    const pad = n => String(n).padStart(2,'0');
 
-    function pad(n){
-      return String(n).padStart(2,'0');
-    }
-
+    // Portada (mini)
     function animateMini(flipEl, newVal){
-      const top = flipEl.querySelector('.face.top');
-      const bot = flipEl.querySelector('.face.bottom');
-
+      const top = flipEl.querySelector('.top');
+      const bot = flipEl.querySelector('.bottom');
       if(top.textContent === newVal) return;
-
       bot.textContent = newVal;
-
-      flipEl.classList.remove('animate');
-      void flipEl.offsetWidth; // reflow para reiniciar animación
-      flipEl.classList.add('animate');
-
-      setTimeout(() => {
-        top.textContent = newVal;
-        flipEl.classList.remove('animate');
-      }, 700);
+      flipEl.classList.remove('animate'); void flipEl.offsetWidth; flipEl.classList.add('animate');
+      setTimeout(() => { top.textContent = newVal; flipEl.classList.remove('animate'); }, 700);
     }
-
     function tickMini(){
       const now = new Date();
-
       let diff = Math.max(0, target - now);
-
-      const d = Math.floor(diff / 86400000); diff -= d * 86400000;
-      const h = Math.floor(diff /  3600000); diff -= h *  3600000;
-      const m = Math.floor(diff /    60000); diff -= m *    60000;
-      const s = Math.floor(diff /     1000);
-
+      const d = Math.floor(diff/86400000); diff -= d*86400000;
+      const h = Math.floor(diff/3600000);  diff -= h*3600000;
+      const m = Math.floor(diff/60000);    diff -= m*60000;
+      const s = Math.floor(diff/1000);
       const flips = document.querySelectorAll('#miniFlip .flip-mini');
-      const vals  = [ String(d), pad(h), pad(m), pad(s) ];
-
-      flips.forEach((f, i) => animateMini(f, vals[i]));
+      const vals  = [String(d), pad(h), pad(m), pad(s)];
+      flips.forEach((f,i) => animateMini(f, vals[i]));
     }
+    tickMini(); setInterval(tickMini, 1000);
 
-    tickMini();
-    setInterval(tickMini, 1000);
-
-    /************************************************************
-     * CONTADOR — ITINERARIO (FLIP GRANDE)
-     ************************************************************/
+    // Itinerario (grande)
     function animateFlip(flipEl, newVal){
-      const top = flipEl.querySelector('.panel.top');
-      const bottom = flipEl.querySelector('.panel.bottom');
-
+      const top = flipEl.querySelector('.top');
+      const bottom = flipEl.querySelector('.bottom');
       if(top.textContent.trim() === newVal) return;
-
       bottom.textContent = newVal;
-
-      flipEl.classList.remove('animate');
-      void flipEl.offsetWidth; // reflow
-      flipEl.classList.add('animate');
-
-      setTimeout(() => {
-        top.textContent = newVal;
-        flipEl.classList.remove('animate');
-      }, 700);
+      flipEl.classList.remove('animate'); void flipEl.offsetWidth; flipEl.classList.add('animate');
+      setTimeout(() => { top.textContent = newVal; flipEl.classList.remove('animate'); }, 700);
     }
-
     function tickMain(){
       const now = new Date();
-      let diff  = Math.max(0, target - now);
-
-      const days  = Math.floor(diff / 86400000); diff -= days  * 86400000;
-      const hours = Math.floor(diff /  3600000); diff -= hours *  3600000;
-      const mins  = Math.floor(diff /    60000); diff -= mins  *    60000;
-      const secs  = Math.floor(diff /     1000);
-
-      const flips = Array.from(document.querySelectorAll('#mainFlip .flip'));
-      const vals  = [ String(days), pad(hours), pad(mins), pad(secs) ];
-
+      let diff = Math.max(0, target - now);
+      const days  = Math.floor(diff/86400000); diff -= days*86400000;
+      const hours = Math.floor(diff/3600000);  diff -= hours*3600000;
+      const mins  = Math.floor(diff/60000);    diff -= mins*60000;
+      const secs  = Math.floor(diff/1000);
+      const flips = [...document.querySelectorAll('#mainFlip .flip')];
+      const vals  = [String(days), pad(hours), pad(mins), pad(secs)];
       flips.forEach((f, i) => animateFlip(f, vals[i]));
     }
+    tickMain(); setInterval(tickMain, 1000);
 
-    tickMain();
-    setInterval(tickMain, 1000);
-
-    /************************************************************
-     * LIGHTBOX — TODAS LAS .lb-target
-     *   - Transición alternada: fade / slide
-     ************************************************************/
-    const lb     = document.getElementById('lightbox');
-    const lbImg  = document.getElementById('lbImg');
-    const lbClose= document.getElementById('lbClose');
+    /* =========================================================
+       LIGHTBOX (fade/slide alternado)
+       ========================================================= */
+    const lb = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lbImg');
+    const lbClose = document.getElementById('lbClose');
     const lbPrev = document.getElementById('lbPrev');
     const lbNext = document.getElementById('lbNext');
 
-    const lbTargets = Array.from(document.querySelectorAll('.lb-target'));
+    const lbTargets = [...document.querySelectorAll('.lb-target')];
     const lbSrcs    = lbTargets.map(t => t.dataset.src || t.getAttribute('src'));
-
     let lbIndex = 0;
 
-    lbTargets.forEach((t, i) => {
-      t.addEventListener('click', () => openLb(i));
-    });
+    lbTargets.forEach((t, i) => t.addEventListener('click', () => openLb(i)));
 
     function openLb(i){
       lbIndex = i;
-
       lbImg.style.opacity = 0;
       lbImg.src = lbSrcs[lbIndex];
-
       lb.classList.add('open');
       lb.setAttribute('aria-hidden','false');
-
       setTimeout(() => {
         lbImg.style.transition = 'opacity .45s ease, transform .45s ease';
         lbImg.style.opacity = 1;
@@ -1695,146 +969,79 @@
 
     function lbShow(dir){
       lbIndex = (lbIndex + (dir > 0 ? 1 : -1) + lbSrcs.length) % lbSrcs.length;
-
       const useFade = (lbIndex % 2 === 0);
-
       if(useFade){
         lbImg.style.opacity = 0;
-
-        setTimeout(() => {
-          lbImg.src = lbSrcs[lbIndex];
-          lbImg.style.opacity = 1;
-        }, 260);
-      }else{
+        setTimeout(() => { lbImg.src = lbSrcs[lbIndex]; lbImg.style.opacity = 1; }, 260);
+      } else {
         lbImg.style.transform = dir > 0 ? 'translateX(-15%)' : 'translateX(15%)';
-        lbImg.style.opacity   = 0;
-
+        lbImg.style.opacity = 0;
         setTimeout(() => {
           lbImg.src = lbSrcs[lbIndex];
           lbImg.style.transform = 'translateX(0)';
-          lbImg.style.opacity   = 1;
+          lbImg.style.opacity = 1;
         }, 260);
       }
     }
 
     lbClose.addEventListener('click', closeLb);
     lbPrev .addEventListener('click', () => lbShow(-1));
-    lbNext .addEventListener('click', () => lbShow( 1));
+    lbNext .addEventListener('click', () => lbShow(1));
 
     window.addEventListener('keydown', (e) => {
       if(!lb.classList.contains('open')) return;
-
-      if(e.key === 'Escape')     closeLb();
+      if(e.key === 'Escape') closeLb();
       if(e.key === 'ArrowLeft')  lbShow(-1);
-      if(e.key === 'ArrowRight') lbShow( 1);
+      if(e.key === 'ArrowRight') lbShow(1);
     });
+    lb.addEventListener('click', (e) => { if(e.target === lb) closeLb(); });
 
-    lb.addEventListener('click', (e) => {
-      if(e.target === lb) closeLb();
-    });
-
-    /************************************************************
-     * GALERÍA — AUTO + PREV/NEXT (destaca imagen actual)
-     ************************************************************/
-    const galleryImgs = Array.from(document.querySelectorAll('#galleryGrid img'));
+    // Auto-play de la galería (resaltado del elemento actual)
+    const galleryImgs = [...document.querySelectorAll('#galleryGrid img')];
     let gIdx = 0;
-
-    function paintGallery(){
-      galleryImgs.forEach((im, i) => {
-        im.style.opacity = (i === gIdx ? 1 : .46);
-      });
-    }
-
-    function gNext(){
-      gIdx = (gIdx + 1) % galleryImgs.length;
-      paintGallery();
-    }
-
+    function paintGallery(){ galleryImgs.forEach((im, i) => im.style.opacity = (i === gIdx ? 1 : .46)); }
+    function gNext(){ gIdx = (gIdx + 1) % galleryImgs.length; paintGallery(); }
     paintGallery();
-
     let gAuto = setInterval(gNext, 4200);
+    document.getElementById('prevGallery').addEventListener('click', () => { gIdx = (gIdx - 1 + galleryImgs.length) % galleryImgs.length; paintGallery(); });
+    document.getElementById('nextGallery').addEventListener('click', () => gNext());
+    document.getElementById('galleryGrid').addEventListener('mouseenter', () => { clearInterval(gAuto); gAuto = null; });
+    document.getElementById('galleryGrid').addEventListener('mouseleave', () => { if(!gAuto) gAuto = setInterval(gNext, 4200); });
 
-    document.getElementById('prevGallery').addEventListener('click', () => {
-      gIdx = (gIdx - 1 + galleryImgs.length) % galleryImgs.length;
-      paintGallery();
-    });
-
-    document.getElementById('nextGallery').addEventListener('click', () => {
-      gNext();
-    });
-
-    document.getElementById('galleryGrid').addEventListener('mouseenter', () => {
-      clearInterval(gAuto);
-      gAuto = null;
-    });
-
-    document.getElementById('galleryGrid').addEventListener('mouseleave', () => {
-      if(!gAuto) gAuto = setInterval(gNext, 4200);
-    });
-
-    /************************************************************
-     * AGREGAR AL CALENDARIO — GOOGLE CALENDAR
-     *   - Fecha: 28/12/2025 14:00 a 23:00
-     ************************************************************/
+    /* =========================================================
+       GOOGLE CALENDAR
+       ========================================================= */
     document.getElementById('addCalendar').addEventListener('click', (e) => {
       e.preventDefault();
-
-      const start   = '20251228T140000';
-      const end     = '20251228T230000';
-      const title   = encodeURIComponent('Boda — Abril & Pablo');
-      const details = encodeURIComponent('Ceremonia y recepción — Abril & Pablo');
-      const location= encodeURIComponent('Iglesia Cristiana Palabra de Vida AD / Jardín Los Abuelos, Tlaquiltenango, Morelos');
-
-      const url = `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&location=${location}`;
-
-      window.open(url, '_blank', 'noopener');
+      const start='20251228T140000', end='20251228T230000';
+      const title=encodeURIComponent('Boda — Abril & Pablo');
+      const details=encodeURIComponent('Ceremonia y recepción — Abril & Pablo');
+      const location=encodeURIComponent('Iglesia Cristiana Palabra de Vida AD / Jardín Los Abuelos, Tlaquiltenango, Morelos');
+      const url=`https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${start}/${end}&details=${details}&location=${location}`;
+      window.open(url,'_blank','noopener');
     });
 
-    /************************************************************
-     * CURSOR MÁGICO — CORAZONES (BLANCO, AZUL, PLATA, VERDE)
-     ************************************************************/
+    /* =========================================================
+       CURSOR MÁGICO (corazones)
+       ========================================================= */
     function spawnHeart(x, y){
       const heart = document.createElement('div');
-
       heart.className = 'magicHeart';
-
       const size = 12 + Math.random() * 18;
-      heart.style.width  = size + 'px';
-      heart.style.height = size + 'px';
-
-      heart.style.left = (x + (Math.random() * 24 - 12)) + 'px';
-      heart.style.top  = (y + (Math.random() * 24 - 12)) + 'px';
-
+      heart.style.width = heart.style.height = size + 'px';
+      heart.style.left = (x + (Math.random()*24 - 12)) + 'px';
+      heart.style.top  = (y + (Math.random()*24 - 12)) + 'px';
       const r = Math.random();
-      if(r < 0.25){
-        heart.style.background = 'radial-gradient(circle,#ffffff,#f0f0f0)';  /* blanco */
-      }else if(r < 0.5){
-        heart.style.background = 'radial-gradient(circle,#4dc3ff,#bfeeff)';  /* azul */
-      }else if(r < 0.75){
-        heart.style.background = 'radial-gradient(circle,#c8c8c8,#ffffff)';  /* plata */
-      }else{
-        heart.style.background = 'radial-gradient(circle,#a7ffcf,#eafff0)';  /* verde */
-      }
-
-      /* corazón con clip-path */
+      if(r < 0.25) heart.style.background = 'radial-gradient(circle,#ffffff,#f0f0f0)';   /* blanco */
+      else if(r < 0.5) heart.style.background = 'radial-gradient(circle,#4dc3ff,#bfeeff)'; /* azul */
+      else if(r < 0.75) heart.style.background = 'radial-gradient(circle,#c8c8c8,#ffffff)';/* plata */
+      else heart.style.background = 'radial-gradient(circle,#a7ffcf,#eafff0)';             /* verde */
       heart.style.clipPath = 'polygon(50% 0%,61% 15%,75% 15%,84% 27%,84% 45%,75% 60%,50% 80%,25% 60%,16% 45%,16% 27%,25% 15%,39% 15%)';
-
       document.body.appendChild(heart);
-
-      setTimeout(() => heart.remove(), 900 + Math.random() * 600);
+      setTimeout(() => heart.remove(), 900 + Math.random()*600);
     }
-
-    document.addEventListener('mousemove', (e) => {
-      if(Math.random() > 0.6) return;
-      spawnHeart(e.clientX, e.clientY);
-    });
-
-    document.addEventListener('touchmove', (e) => {
-      const t = e.touches[0];
-      if(!t) return;
-      if(Math.random() > 0.6) return;
-      spawnHeart(t.clientX, t.clientY);
-    }, {passive: true});
+    document.addEventListener('mousemove', (e) => { if(Math.random() > 0.6) return; spawnHeart(e.clientX, e.clientY); });
+    document.addEventListener('touchmove', (e) => { const t = e.touches[0]; if(!t) return; if(Math.random()>0.6) return; spawnHeart(t.clientX, t.clientY); }, {passive:true});
   </script>
 </body>
 </html>
