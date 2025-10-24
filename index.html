@@ -2,12 +2,12 @@
 <html lang="es">
 <head>
   <!-- =========================================================
-       Boda de Abril & Pablo — Invitación | index.html (completo)
+       Boda de Abril & Pablo — Invitación | index.html (FINAL)
        =========================================================
-       - Todo en un solo archivo (HTML + CSS + JS embebidos)
+       - HTML + CSS + JS EMBEBIDOS (una sola página)
        - Optimizado para GitHub Pages
-       - Fondos y medios desde la misma carpeta del repositorio
-       - Diseño vertical responsivo (móvil, tablet, desktop)
+       - Imágenes y audios desde la MISMA carpeta del repo
+       - Formato vertical, responsivo (móvil / tablet / desktop)
        ========================================================= -->
 
   <!-- ==================== META ==================== -->
@@ -326,9 +326,6 @@
 
       <!-- =======================================================
            PORTADA (0)
-           Fondo: fondo_floral.jpg
-           Contiene: Título, “Sí, ¡acepto!” Disney, anillo, instrucción,
-                     contador mini flip, versículo, botones mágicos.
            ======================================================= -->
       <section id="sec-portada" class="section bg-portada active" aria-label="Portada">
         <div class="overlay"></div>
@@ -336,7 +333,7 @@
           <h1 class="title-top">Abril &amp; Pablo</h1>
           <div class="title-acepto">Sí, ¡acepto!</div>
 
-          <!-- Anillo con instrucción (abre música eternamente y navega) -->
+          <!-- Anillo con instrucción -->
           <button class="ring-button" id="ringBtn" aria-label="Anillo: abrir invitación">
             <svg class="ring-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <defs>
@@ -375,7 +372,7 @@
           <!-- Versículo portada -->
           <p class="verse">"Quien halla esposa halla el bien" — <strong>Proverbios 18:22</strong></p>
 
-          <!-- Botones mágicos (enlaces rápidos a secciones) -->
+          <!-- Botones mágicos -->
           <div class="btns">
             <button class="magicBtn" data-target="sec-familias">Nuestras familias</button>
             <button class="magicBtn" data-target="sec-itinerario">Itinerario</button>
@@ -387,11 +384,6 @@
 
       <!-- =======================================================
            PÁGINA 1 — FAMILIAS (1)
-           Fondo: fondo_floral1.png
-           - Padres izquierda/derecha, mismo tamaño/jerarquía.
-           - Frase central romántica.
-           - Nombres de los novios al final (romántico).
-           - Sin foto aquí (la foto va en página 2).
            ======================================================= -->
       <section id="sec-familias" class="section bg-p1" aria-label="Familias">
         <div class="overlay"></div>
@@ -425,8 +417,6 @@
 
       <!-- =======================================================
            PÁGINA 2 — FOTO + VERSÍCULO (2)
-           Fondo: fondo_floral2.jpg
-           - foto1.jpg + Mateo 19:6
            ======================================================= -->
       <section id="sec-foto-verse" class="section bg-p2" aria-label="Foto y versículo">
         <div class="overlay"></div>
@@ -438,8 +428,6 @@
 
       <!-- =======================================================
            PÁGINA 3 — ITINERARIO + CONTADOR GRANDE (3)
-           Fondo: fondo_floral3.jpg
-           - Información actualizada + mapa + dress code + contador flip
            ======================================================= -->
       <section id="sec-itinerario" class="section bg-p3" aria-label="Itinerario">
         <div class="overlay"></div>
@@ -508,8 +496,6 @@
 
       <!-- =======================================================
            PÁGINA 4 — GALERÍA NOVIOS (4)
-           Fondo: fondo_floral4.png
-           - momento1..momento7 con lightbox (fade/slide alternados)
            ======================================================= -->
       <section id="sec-galeria" class="section bg-p4" aria-label="Galería novios">
         <div class="overlay"></div>
@@ -533,8 +519,6 @@
 
       <!-- =======================================================
            PÁGINA 5 — RSVP + DESEOS (5)
-           Fondo: fondo_floral5.jpg
-           - Botones que abren en pestaña nueva (Apps Script)
            ======================================================= -->
       <section id="sec-rsvp" class="section bg-p5" aria-label="RSVP y Buenos Deseos">
         <div class="overlay"></div>
@@ -557,8 +541,6 @@
 
       <!-- =======================================================
            PÁGINA 6 — COLABORATIVA + MOMENTO9 (6)
-           Fondo: fondo_floral6.jpg
-           - momento9.jpg + enlace a Google Form colaborativo
            ======================================================= -->
       <section id="sec-colaborativa" class="section bg-p6" aria-label="Galería colaborativa">
         <div class="overlay"></div>
@@ -575,8 +557,6 @@
 
       <!-- =======================================================
            PÁGINA 7 — MOMENTO8 + FRASE (7)
-           Fondo: fondo_floral7.jpg
-           - momento8.jpg + frase romántica
            ======================================================= -->
       <section id="sec-momento8" class="section bg-p7" aria-label="Momento 8">
         <div class="overlay"></div>
@@ -590,9 +570,6 @@
 
       <!-- =======================================================
            PÁGINA 8 — FINAL (8)
-           Fondo: fondo_floral9.jpg
-           - momento5.jpg + “Con amor eterno” + nombres + agradecimiento
-           - WhatsApp (dos botones, SVG verde) + Agregar al calendario
            ======================================================= -->
       <section id="sec-final" class="section bg-p8" aria-label="Final">
         <div class="overlay"></div>
@@ -625,7 +602,6 @@
 
       <!-- =======================================================
            PÁGINA 9 — FONDO DECORATIVO (9)
-           Fondo: fondo_floral8.png
            ======================================================= -->
       <section id="sec-fondo-final" class="section bg-p9" aria-label="Fondo final">
         <div class="overlay"></div>
@@ -774,6 +750,18 @@
     const audioMsg=document.getElementById('audioMsg');
     const ringBtn=document.getElementById('ringBtn');
 
+    // Función explícita de inicio (para tu observación: asegura apertura)
+    async function iniciarInvitacion(){
+      try{
+        marcha.currentTime=0; marcha.volume=0;
+        await marcha.play();
+        await fadeAudio(marcha,0,1,800);
+        startOverlay.classList.add('hide');
+      }catch(e){
+        audioMsg.style.display='block';
+      }
+    }
+
     async function fadeAudio(audio, from, to, duration=700){
       const steps=24, stepTime=duration/steps;
       audio.volume=Math.max(0,Math.min(1,from));
@@ -787,27 +775,26 @@
       });
     }
 
-    // Mostrar overlay de inicio (para habilitar audio en móviles) al cargar
+    // Mostrar overlay al cargar
     window.addEventListener('load', ()=> {
       startOverlay.classList.remove('hide');
+      // Iniciamos inmediatamente los contadores para evitar "ceros"
+      tickMini(); tickMain();
     });
 
-    // Botón "Toca para comenzar"
+    // Botón "Toca para comenzar": llama a iniciarInvitacion()
     startBtn.addEventListener('click', async ()=>{
       startBtn.disabled = true;
-      try{
-        marcha.currentTime=0;
-        await marcha.play();
-        await fadeAudio(marcha,0,1,700);
-        startOverlay.classList.add('hide');
-      }catch(e){
-        audioMsg.style.display='block';
-        startBtn.disabled = false;
-      }
+      await iniciarInvitacion();
+      startBtn.disabled = false;
     });
 
-    // Clic en el anillo: crossfade a "eternamente.mp3" y pasar a Familias
+    // Clic en el anillo: crossfade a eternamente y navegar a Familias
     ringBtn.addEventListener('click', async ()=>{
+      // Si overlay aún visible, ciérralo y asegúrate que marcha haya sonado antes
+      if(!startOverlay.classList.contains('hide')){
+        await iniciarInvitacion();
+      }
       try{
         if(!marcha.paused){ await fadeAudio(marcha, marcha.volume||1, 0, 550); marcha.pause(); }
       }catch(e){}
@@ -824,7 +811,8 @@
     /* ============================================================
        Contadores (portada mini + itinerario grande)
        ============================================================ */
-    const target=new Date('2025-12-28T14:00:00');
+    // IMPORTANTE: fecha fija "28 de diciembre de 2025 14:00"
+    const target=new Date('2025-12-28T14:00:00'); // hora local
     const pad=n=>String(n).padStart(2,'0');
 
     // Mini (portada)
@@ -845,7 +833,7 @@
       const vals=[String(d), pad(h), pad(m), pad(s)];
       flips.forEach((f,i)=>animateMini(f, vals[i]));
     }
-    tickMini(); setInterval(tickMini,1000);
+    setInterval(tickMini,1000);
 
     // Grande (itinerario)
     function animateFlip(flipEl,newVal){
@@ -865,7 +853,7 @@
       const vals=[String(days), pad(hours), pad(mins), pad(secs)];
       flips.forEach((f,i)=>animateFlip(f, vals[i]));
     }
-    tickMain(); setInterval(tickMain,1000);
+    setInterval(tickMain,1000);
 
     /* ============================================================
        Lightbox (todas las imágenes con clase .lb-target)
