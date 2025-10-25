@@ -2,13 +2,18 @@
 <html lang="es">
 <head>
   <!-- ================================================================
-       Boda de Abril & Pablo — Invitación FINAL
-       - HTML, CSS y JS embebidos en un único archivo
-       - Optimizado para GitHub Pages, móviles y escritorio
-       - Fondos, imágenes y audios cargan desde la misma carpeta
-       - Efecto libro bidireccional + sonido flip (WebAudio, "libro real")
-       - Cursor mágico (3–4 corazones simultáneos) más notorio
-       - "Toca para comenzar 💍" funcional, con brillo dorado (1.5 s)
+       Boda de Abril & Pablo — Invitación FINAL INTEGRADA
+       - HTML, CSS y JS embebidos (archivo único)
+       - Optimizado para GitHub Pages
+       - Fondos, imágenes y audios desde la misma carpeta del repo
+       - Portada con Playfair (título) + Waltograph (sí, ¡acepto!)
+       - Anillo: pausa marcha_nupcial y activa eternamente con crossfade
+       - Contadores "flip" (portada mini + itinerario grande)
+       - Cursor mágico (3–4 corazones simultáneos, blanco/azul/plata/verde)
+       - Flipbook bidireccional + sonido WebAudio "flip"
+       - Lightbox con fade/slide intercalado
+       - RSVP y Buenos Deseos: abren en pestaña nueva (Google Apps Script)
+       - WhatsApp y botón "Agregar al calendario" (28/12/2025)
        ================================================================= -->
 
   <meta charset="utf-8" />
@@ -327,6 +332,7 @@
       transform:translateY(4px); opacity:0; pointer-events:none; transition:opacity .25s, transform .25s;
     }
     #musicRetry:hover::after{ opacity:1; transform:translateY(0) }
+
     @keyframes pulseGlow{
       0%,100%{ box-shadow:0 10px 32px rgba(0,0,0,.18), 0 0 0 0 rgba(103,210,204,.22) }
       50%{ box-shadow:0 12px 40px rgba(0,0,0,.24), 0 0 0 12px rgba(103,210,204,.04) }
@@ -353,9 +359,9 @@
 </head>
 <body>
   <!-- ========================= AUDIOS ========================= -->
-  <!-- Preload nativo + precarga por JS (ver script) -->
-  <audio id="marcha" src="marcha_nupcial.mp3" preload="auto" loop></audio>
-  <audio id="eternamente" src="eternamente.mp3" preload="auto"></audio>
+  <!-- playsinline para iOS; preload + JS para respuesta inmediata -->
+  <audio id="marcha" src="marcha_nupcial.mp3" preload="auto" loop playsinline></audio>
+  <audio id="eternamente" src="eternamente.mp3" preload="auto" playsinline></audio>
 
   <div class="viewport">
     <div class="sections" id="sections">
@@ -680,7 +686,7 @@
     }
     function show(i, playSound=true){
       i = ((i % sections.length) + sections.length) % sections.length;
-      if (i !== current && firstNavDone && playSound) playFlipSoundBook(); // sonido más notorio
+      if (i !== current && firstNavDone && playSound) playFlipSoundBook(); // sonido flip
       setStates(i);
       current = i;
       const hide = (order[i] === 'sec-portada');
@@ -749,11 +755,10 @@
     const musicRetry=document.getElementById('musicRetry');
 
     // Precarga explícita de audio (para respuesta instantánea)
-    // Cargamos la marcha en silencio y lista, pero NO la reproducimos hasta que el usuario toque el botón
     try { marcha.load(); } catch(e) {}
     try { eternamente.load(); } catch(e) {}
 
-    // Detecta si el audio está "listo" para mostrar el brillo dorado en el botón
+    // Brillo del botón cuando el audio está listo
     function setReadyGlow(){ startBtn.classList.add('ready-glow'); setTimeout(()=>startBtn.classList.remove('ready-glow'),1500); }
     function whenAudioReadyShowGlow(){
       if (marcha.readyState >= 2) setReadyGlow();
@@ -764,7 +769,7 @@
     }
     whenAudioReadyShowGlow();
 
-    // Fader para crossfade (usado al cambiar a "eternamente")
+    // Fader (crossfade)
     async function fadeAudio(audio, from, to, duration=700){
       const steps=24, stepTime=duration/steps;
       audio.volume=Math.max(0,Math.min(1,from));
@@ -866,20 +871,20 @@
       if(idx>=0) show(idx);
     });
 
-    // Mostrar overlay de inicio y arrancar contadores al cargar
+    // Mostrar overlay e iniciar contadores al cargar
     window.addEventListener('load', ()=> {
       startOverlay.classList.remove('hide');
       tickMini(); tickMain();
     });
 
-    /* ============================ SONIDO FLIP (WebAudio, "libro real") ============================ */
+    /* ============================ SONIDO FLIP (WebAudio) ============================ */
     function playFlipSoundBook(){
       try{
         const ctx = window._audioCtx || new (window.AudioContext||window.webkitAudioContext)();
         window._audioCtx = ctx;
         const t = ctx.currentTime;
 
-        // Capa 1: "golpe" grave corto
+        // Capa 1: golpe grave corto
         const o1 = ctx.createOscillator();
         const g1 = ctx.createGain();
         o1.type='sawtooth';
@@ -891,7 +896,7 @@
         o1.connect(g1).connect(ctx.destination);
         o1.start(t); o1.stop(t+0.16);
 
-        // Capa 2: "paso" medio con chasquido breve
+        // Capa 2: chasquido medio breve
         const o2 = ctx.createOscillator();
         const g2 = ctx.createGain();
         o2.type='triangle';
@@ -1019,7 +1024,7 @@
       window.open(url,'_blank','noopener');
     });
 
-    /* ============================ CURSOR MÁGICO (MEJORADO 3–4 corazones) ============================ */
+    /* ============================ CURSOR MÁGICO (3–4 corazones) ============================ */
     function createHeartAt(x,y){
       const heart=document.createElement('div');
       heart.className='magicHeart';
@@ -1036,10 +1041,10 @@
 
       // color aleatorio: blanco, azul, plata, verde
       const r=Math.random();
-      if(r<0.25)      heart.style.background='radial-gradient(circle,#ffffff,#f0f0f0)';     // blanco
-      else if(r<0.5)  heart.style.background='radial-gradient(circle,#4dc3ff,#bfeeff)';     // azul
-      else if(r<0.75) heart.style.background='radial-gradient(circle,#c8c8c8,#ffffff)';     // plata
-      else            heart.style.background='radial-gradient(circle,#a7ffcf,#eafff0)';     // verde
+      if(r<0.25)      heart.style.background='radial-gradient(circle,#ffffff,#f0f0f0)';
+      else if(r<0.5)  heart.style.background='radial-gradient(circle,#4dc3ff,#bfeeff)';
+      else if(r<0.75) heart.style.background='radial-gradient(circle,#c8c8c8,#ffffff)';
+      else            heart.style.background='radial-gradient(circle,#a7ffcf,#eafff0)';
 
       // forma de corazón
       heart.style.clipPath='polygon(50% 0%,61% 15%,75% 15%,84% 27%,84% 45%,75% 60%,50% 80%,25% 60%,16% 45%,16% 27%,25% 15%,39% 15%)';
@@ -1054,8 +1059,7 @@
     function spawnHearts(x,y,countMin=3,countMax=4){
       const n = Math.floor(countMin + Math.random()*(countMax-countMin+1));
       for(let i=0;i<n;i++){
-        // pequeño retraso para que salgan escalonados
-        setTimeout(()=>createHeartAt(x,y), i*60);
+        setTimeout(()=>createHeartAt(x,y), i*60); // escalonados
       }
     }
 
