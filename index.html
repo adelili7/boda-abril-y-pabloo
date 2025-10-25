@@ -6,8 +6,9 @@
        - HTML, CSS y JS embebidos en un único archivo
        - Optimizado para GitHub Pages, móviles y escritorio
        - Fondos, imágenes y audios cargan desde la misma carpeta
-       - Efecto libro bidireccional + sonido flip (WebAudio)
+       - Efecto libro bidireccional + sonido flip (WebAudio, "libro real")
        - Cursor mágico (3–4 corazones simultáneos) más notorio
+       - "Toca para comenzar 💍" funcional, con brillo dorado (1.5 s)
        ================================================================= -->
 
   <meta charset="utf-8" />
@@ -15,7 +16,7 @@
   <meta name="theme-color" content="#ffffff" />
   <title>Boda de Abril & Pablo 💍</title>
 
-  <!-- Fuentes: Waltograph (solo “Sí, ¡acepto!”) + Playfair/Quicksand -->
+  <!-- Fuentes: Waltograph (solo “Sí, ¡acepto!”) + Playfair/Quicksand (románticas) -->
   <link href="https://fonts.cdnfonts.com/css/waltograph" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Quicksand:wght@300;400;600&display=swap" rel="stylesheet" />
 
@@ -273,6 +274,23 @@
     }
     .start-btn:hover{ transform:translateY(-1px); filter:brightness(1.02); box-shadow:0 16px 42px rgba(227,199,146,.36) }
 
+    /* Brillo dorado de 1.5s cuando el audio está listo */
+    .start-btn.ready-glow{
+      position:relative; overflow:hidden;
+    }
+    .start-btn.ready-glow::after{
+      content:"";
+      position:absolute; top:0; left:-150%;
+      width:150%; height:100%;
+      background:linear-gradient(120deg, transparent 0%, rgba(255,255,255,.9) 25%, rgba(255,240,200,.7) 45%, transparent 60%);
+      transform:skewX(-15deg);
+      animation:btnShine 1.5s ease-in-out 1 forwards;
+    }
+    @keyframes btnShine{
+      0%{ left:-150% }
+      100%{ left:150% }
+    }
+
     /* ========================= CURSOR MÁGICO (mejorado) ========================= */
     .magicHeart{
       position:fixed;
@@ -281,7 +299,7 @@
       width:22px; height:22px;
       opacity:0;
       transform:translate(-50%,-50%) scale(1);
-      animation:heartFade 1500ms ease-out forwards; /* ↑ 1.5s */
+      animation:heartFade 1500ms ease-out forwards; /* 1.5 s */
       filter:drop-shadow(0 4px 10px rgba(0,0,0,.15));
     }
     @keyframes heartFade{
@@ -335,6 +353,7 @@
 </head>
 <body>
   <!-- ========================= AUDIOS ========================= -->
+  <!-- Preload nativo + precarga por JS (ver script) -->
   <audio id="marcha" src="marcha_nupcial.mp3" preload="auto" loop></audio>
   <audio id="eternamente" src="eternamente.mp3" preload="auto"></audio>
 
@@ -661,7 +680,7 @@
     }
     function show(i, playSound=true){
       i = ((i % sections.length) + sections.length) % sections.length;
-      if (i !== current && firstNavDone && playSound) playFlipSound();
+      if (i !== current && firstNavDone && playSound) playFlipSoundBook(); // sonido más notorio
       setStates(i);
       current = i;
       const hide = (order[i] === 'sec-portada');
@@ -729,7 +748,23 @@
     const ringBtn=document.getElementById('ringBtn');
     const musicRetry=document.getElementById('musicRetry');
 
-    // Fader para crossfade
+    // Precarga explícita de audio (para respuesta instantánea)
+    // Cargamos la marcha en silencio y lista, pero NO la reproducimos hasta que el usuario toque el botón
+    try { marcha.load(); } catch(e) {}
+    try { eternamente.load(); } catch(e) {}
+
+    // Detecta si el audio está "listo" para mostrar el brillo dorado en el botón
+    function setReadyGlow(){ startBtn.classList.add('ready-glow'); setTimeout(()=>startBtn.classList.remove('ready-glow'),1500); }
+    function whenAudioReadyShowGlow(){
+      if (marcha.readyState >= 2) setReadyGlow();
+      else {
+        const onReady = ()=>{ setReadyGlow(); marcha.removeEventListener('canplaythrough', onReady); };
+        marcha.addEventListener('canplaythrough', onReady, {once:true});
+      }
+    }
+    whenAudioReadyShowGlow();
+
+    // Fader para crossfade (usado al cambiar a "eternamente")
     async function fadeAudio(audio, from, to, duration=700){
       const steps=24, stepTime=duration/steps;
       audio.volume=Math.max(0,Math.min(1,from));
@@ -753,8 +788,9 @@
         return false;
       }
     }
+
     async function unlockByInteraction(){
-      // Desbloquear audio y preparar sonido flip
+      // Desbloquear contexto de audio para iOS/Android
       try{
         if(!window._audioCtx){
           window._audioCtx = new (window.AudioContext||window.webkitAudioContext)();
@@ -762,33 +798,46 @@
         if(_audioCtx.state==='suspended'){ await _audioCtx.resume(); }
       }catch(e){}
     }
+
     function showMusicRetry(show){
       musicRetry.setAttribute('aria-hidden', show ? 'false' : 'true');
     }
+
+    // Inicia invitación: reproduce marcha al volumen normal inmediatamente
     async function iniciarInvitacion(){
       await unlockByInteraction();
-      marcha.currentTime=0; marcha.volume=0;
-      const ok = await tryPlay(marcha);
-      if(ok){
-        await fadeAudio(marcha,0,1,800);
-        startOverlay.classList.add('hide');
-        showMusicRetry(false);
-      }else{
+      try{
+        marcha.currentTime = 0;
+        marcha.volume = 1; // volumen normal inmediato
+        const ok = await tryPlay(marcha);
+        if(ok){
+          startOverlay.classList.add('hide');
+          showMusicRetry(false);
+        }else{
+          audioMsg.style.display='block';
+          showMusicRetry(true);
+        }
+      }catch(err){
         audioMsg.style.display='block';
         showMusicRetry(true);
       }
     }
-    startBtn.addEventListener('click', async ()=>{
+
+    // Soportar pointerdown (mejor para móvil) + click como fallback
+    const startHandler = async (e) => {
+      e.preventDefault();
       startBtn.disabled = true;
       await iniciarInvitacion();
       startBtn.disabled = false;
-    });
+    };
+    startBtn.addEventListener('pointerdown', startHandler);
+    startBtn.addEventListener('click', startHandler);
+
     musicRetry.addEventListener('click', async ()=>{
       await unlockByInteraction();
-      marcha.volume=0;
+      marcha.volume=1;
       const ok = await tryPlay(marcha);
       if(ok){
-        await fadeAudio(marcha,0,1,800);
         showMusicRetry(false);
         if(!startOverlay.classList.contains('hide')) startOverlay.classList.add('hide');
       }else{
@@ -823,22 +872,37 @@
       tickMini(); tickMain();
     });
 
-    /* ============================ SONIDO FLIP (WebAudio) ============================ */
-    function playFlipSound(){
+    /* ============================ SONIDO FLIP (WebAudio, "libro real") ============================ */
+    function playFlipSoundBook(){
       try{
         const ctx = window._audioCtx || new (window.AudioContext||window.webkitAudioContext)();
         window._audioCtx = ctx;
-        const o = ctx.createOscillator();
-        const g = ctx.createGain();
-        o.type='triangle';
         const t = ctx.currentTime;
-        o.frequency.setValueAtTime(420, t);
-        o.frequency.exponentialRampToValueAtTime(680, t+0.10);
-        g.gain.setValueAtTime(0.0001, t);
-        g.gain.exponentialRampToValueAtTime(0.12, t+0.03);
-        g.gain.exponentialRampToValueAtTime(0.0001, t+0.18);
-        o.connect(g).connect(ctx.destination);
-        o.start(t); o.stop(t+0.20);
+
+        // Capa 1: "golpe" grave corto
+        const o1 = ctx.createOscillator();
+        const g1 = ctx.createGain();
+        o1.type='sawtooth';
+        o1.frequency.setValueAtTime(180, t);
+        o1.frequency.exponentialRampToValueAtTime(120, t+0.08);
+        g1.gain.setValueAtTime(0.0001, t);
+        g1.gain.exponentialRampToValueAtTime(0.18, t+0.02);
+        g1.gain.exponentialRampToValueAtTime(0.0001, t+0.14);
+        o1.connect(g1).connect(ctx.destination);
+        o1.start(t); o1.stop(t+0.16);
+
+        // Capa 2: "paso" medio con chasquido breve
+        const o2 = ctx.createOscillator();
+        const g2 = ctx.createGain();
+        o2.type='triangle';
+        o2.frequency.setValueAtTime(520, t+0.04);
+        o2.frequency.exponentialRampToValueAtTime(340, t+0.16);
+        g2.gain.setValueAtTime(0.0001, t);
+        g2.gain.exponentialRampToValueAtTime(0.20, t+0.06);
+        g2.gain.exponentialRampToValueAtTime(0.0001, t+0.22);
+        o2.connect(g2).connect(ctx.destination);
+        o2.start(t+0.02); o2.stop(t+0.24);
+
       }catch(e){}
     }
 
@@ -956,8 +1020,6 @@
     });
 
     /* ============================ CURSOR MÁGICO (MEJORADO 3–4 corazones) ============================ */
-    // Genera 3–4 corazones por interacción, con colores azul, blanco, plata, verde
-    // Funciona en mousemove, click, touchstart, touchmove
     function createHeartAt(x,y){
       const heart=document.createElement('div');
       heart.className='magicHeart';
@@ -999,8 +1061,7 @@
 
     // Desktop: mousemove y click
     document.addEventListener('mousemove',(e)=>{
-      // limitar tasa: ~60% probabilidad para no sobrecargar
-      if(Math.random()>0.6) return;
+      if(Math.random()>0.6) return; // limitar tasa para rendimiento
       spawnHearts(e.clientX,e.clientY,3,4);
     });
     document.addEventListener('click',(e)=>{
@@ -1014,13 +1075,11 @@
     },{passive:true});
     document.addEventListener('touchmove',(e)=>{
       const t=e.touches[0]; if(!t) return;
-      // probabilidad para rendimiento
       if(Math.random()>0.6) return;
       spawnHearts(t.clientX,t.clientY,3,4);
     },{passive:true});
 
     /* ============================ INICIO CONTADORES ============================ */
-    // Asegura que el contador no quede en cero en carga
     tickMini(); tickMain();
   </script>
 </body>
