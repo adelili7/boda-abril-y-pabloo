@@ -2,13 +2,16 @@
 <html lang="es">
 <head>
   <!-- ================================================================
-       Boda de Abril & Pablo — Invitación FINAL (todo en un archivo)
-       - Fondos: fondo_floral.jpg, fondo_floral1.png ... fondo_floral9.jpg, fondo_floral8.png
-       - Imágenes: foto1.jpg, momento1..9.jpg (según secciones)
-       - Audios: marcha_nupcial.mp3 (auto al abrir), eternamente.mp3 (al dar clic en el anillo)
-       - Efectos: libro bidireccional + sonido flip, cursor mágico 3–4 corazones, lightbox, contadores flip
-       - Menú lateral flotante, botones mágicos, WhatsApp, Agregar al calendario
-       - Todo responsivo móvil/tablet/escritorio
+       Boda de Abril & Pablo — Invitación FINAL (GitHub Pages)
+       - HTML, CSS y JS embebidos en un único archivo
+       - Optimizado para móviles, tablets y escritorio (vertical)
+       - Fondos/imágenes/audios: mismos nombres que tu repositorio
+       - Audio: marcha_nupcial.mp3 (inicio inmediato si el navegador lo permite)
+                al hacer clic en el anillo → crossfade a eternamente.mp3 (2s)
+       - Efecto libro bidireccional + sonido flip
+       - Cursor mágico (3–4 corazones simultáneos) más notorio
+       - Contador con efecto flip (portada mini + página itinerario grande)
+       - Lightbox con transiciones fade/slide
        ================================================================= -->
 
   <meta charset="utf-8" />
@@ -255,27 +258,7 @@
     .side-menu.compact{ display:none; }
     .side-menu.open{ display:block; }
 
-    /* ========================= INDICACIÓN PORTADA (sin overlay obligatorio) ========================= */
-    .ring-instruction{opacity:.9}
-
-    /* ========================= CURSOR MÁGICO (mejorado) ========================= */
-    .magicHeart{
-      position:fixed;
-      pointer-events:none;
-      z-index:99999;
-      width:22px; height:22px;
-      opacity:0;
-      transform:translate(-50%,-50%) scale(1);
-      animation:heartFade 1500ms ease-out forwards; /* 1.5 s */
-      filter:drop-shadow(0 4px 10px rgba(0,0,0,.15));
-    }
-    @keyframes heartFade{
-      0%  {opacity:.88; transform:translate(-50%,-50%) scale(1)}
-      70% {opacity:.55; transform:translate(-50%,-120%) scale(.82)}
-      100%{opacity:0;   transform:translate(-50%,-160%) scale(.68)}
-    }
-
-    /* ========================= BOTÓN MUSICAL FLOTANTE ========================= */
+    /* ========================= BOTÓN MUSICAL FLOTANTE (fallback) ========================= */
     #musicRetry{
       position:fixed; right:16px; bottom:16px; z-index:3500;
       width:48px; height:48px; border-radius:50%;
@@ -294,7 +277,6 @@
       transform:translateY(4px); opacity:0; pointer-events:none; transition:opacity .25s, transform .25s;
     }
     #musicRetry:hover::after{ opacity:1; transform:translateY(0) }
-
     @keyframes pulseGlow{
       0%,100%{ box-shadow:0 10px 32px rgba(0,0,0,.18), 0 0 0 0 rgba(103,210,204,.22) }
       50%{ box-shadow:0 12px 40px rgba(0,0,0,.24), 0 0 0 12px rgba(103,210,204,.04) }
@@ -317,13 +299,21 @@
       .side-menu.compact{ display:block; }
       .side-menu{ display:none; right:12px; top:auto; bottom:78px; transform:none; }
     }
+
+    /* ========================= GESTO INVISIBLE PARA DESBLOQUEAR AUDIO ========================= */
+    #tapUnlock {
+      position: fixed; inset: 0; z-index: 5000;
+      background: transparent; display: none; /* se muestra solo si autoplay falla */
+    }
   </style>
 </head>
 <body>
   <!-- ========================= AUDIOS ========================= -->
-  <!-- Autoplay directo: intentamos iniciar al cargar; si el navegador bloquea, se muestra botón 🎵 para reintentar -->
   <audio id="marcha" src="marcha_nupcial.mp3" preload="auto" loop></audio>
   <audio id="eternamente" src="eternamente.mp3" preload="auto"></audio>
+
+  <!-- Gesto invisible para desbloquear audio en móviles si el autoplay falla -->
+  <div id="tapUnlock" aria-hidden="true"></div>
 
   <div class="viewport">
     <div class="sections" id="sections">
@@ -616,7 +606,7 @@
       <img id="lbImg" src="" alt="Imagen ampliada">
     </div>
 
-    <!-- Botón musical flotante (solo si se bloquea el audio) -->
+    <!-- Botón musical flotante (solo si el navegador bloquea autoplay) -->
     <button id="musicRetry" aria-label="Reproducir música" title="Reproducir música" aria-hidden="true">🎵</button>
   </div>
 
@@ -640,7 +630,7 @@
     }
     function show(i, playSound=true){
       i = ((i % sections.length) + sections.length) % sections.length;
-      if (i !== current && firstNavDone && playSound) playFlipSoundBook(); // sonido flip de libro
+      if (i !== current && firstNavDone && playSound) playFlipSoundBook();
       setStates(i);
       current = i;
       const hide = (order[i] === 'sec-portada');
@@ -699,17 +689,45 @@
     function closeMenuOnMobile(){ sideMenu.classList.remove('open'); }
     menuToggle.addEventListener('click',()=> sideMenu.classList.toggle('open'));
 
-    /* ============================ AUDIO ============================ */
+    /* ============================ AUDIO / AUTOPLAY INMEDIATO + FALLBACK ============================ */
     const marcha=document.getElementById('marcha');
     const eternamente=document.getElementById('eternamente');
-    const ringBtn=document.getElementById('ringBtn');
     const musicRetry=document.getElementById('musicRetry');
+    const tapUnlock=document.getElementById('tapUnlock');
 
-    // Precarga
-    try { marcha.load(); } catch(e) {}
-    try { eternamente.load(); } catch(e) {}
+    // Intenta reproducir de inmediato al máximo volumen (pedido expreso)
+    async function tryPlay(audio){
+      try{
+        const p = audio.play();
+        if(p && typeof p.then==='function'){ await p; }
+        return true;
+      }catch(err){
+        console.warn('Reproducción bloqueada:', err);
+        return false;
+      }
+    }
 
-    // Crossfade genérico (para el cambio a eternamente)
+    function showMusicRetry(show){
+      musicRetry.setAttribute('aria-hidden', show ? 'false' : 'true');
+      tapUnlock.style.display = show ? 'block' : 'none';
+    }
+
+    async function startMarchaImmediate(){
+      try {
+        marcha.currentTime = 0;
+        marcha.volume = 1; // SIN fade-in (inmediato)
+        const ok = await tryPlay(marcha);
+        showMusicRetry(!ok);
+        if(!ok){
+          // Mostrar capa invisible para desbloquear con el primer toque (móviles)
+          tapUnlock.style.display = 'block';
+        }
+      } catch (e) {
+        showMusicRetry(true);
+      }
+    }
+
+    // Fader para crossfade (2s al cambiar a "eternamente")
     async function fadeAudio(audio, from, to, duration=2000){
       const steps=40, stepTime=duration/steps;
       audio.volume=Math.max(0,Math.min(1,from));
@@ -723,54 +741,30 @@
       });
     }
 
-    async function tryPlay(audio){
-      try{
-        const p = audio.play();
-        if(p && typeof p.then==='function'){ await p; }
-        return true;
-      }catch(err){
-        console.warn('Reproducción bloqueada:', err);
-        return false;
-      }
-    }
+    // Intento de autoplay temprano (antes de interacción)
+    document.addEventListener('DOMContentLoaded', startMarchaImmediate);
 
-    async function unlockByInteraction(){
-      try{
-        if(!window._audioCtx){
-          window._audioCtx = new (window.AudioContext||window.webkitAudioContext)();
-        }
-        if(_audioCtx.state==='suspended'){ await _audioCtx.resume(); }
-      }catch(e){}
-    }
-
-    function showMusicRetry(show){
-      musicRetry.setAttribute('aria-hidden', show ? 'false' : 'true');
-    }
-
-    // Autoplay inmediato al cargar (si el navegador lo permite). Si se bloquea, mostrar botón 🎵
-    async function autoStartMarcha(){
-      try{
-        await unlockByInteraction(); // en algunos navegadores no hace daño llamarlo temprano
-      }catch(e){}
-      marcha.currentTime = 0.0;         // desde el primer segundo visible
-      marcha.volume = 1;                // sin fade-in (pedido)
-      const ok = await tryPlay(marcha);
-      if(!ok) showMusicRetry(true);
-    }
-
-    // Intento inicial de reproducción
-    window.addEventListener('load', autoStartMarcha);
-
-    // Botón de reintento musical (si bloqueo de autoplay)
+    // Fallback 1: botón flotante 🎵
     musicRetry.addEventListener('click', async ()=>{
-      await unlockByInteraction();
-      marcha.volume=1;
       const ok = await tryPlay(marcha);
-      showMusicRetry(!ok);
+      if(ok){ showMusicRetry(false); }
     });
 
-    // Clic en el anillo: pausa marcha con fade-out (2s) y entra eternamente con fade-in (2s)
-    ringBtn.addEventListener('click', async ()=>{
+    // Fallback 2: primer toque/clic en cualquier parte de la pantalla
+    const unlockOnce = async () => {
+      const ok = await tryPlay(marcha);
+      if(ok){ showMusicRetry(false); }
+      tapUnlock.style.display = 'none';
+      window.removeEventListener('pointerdown', unlockOnce, true);
+      window.removeEventListener('touchstart', unlockOnce, true);
+      window.removeEventListener('click', unlockOnce, true);
+    };
+    window.addEventListener('pointerdown', unlockOnce, true);
+    window.addEventListener('touchstart', unlockOnce, true);
+    window.addEventListener('click', unlockOnce, true);
+
+    // Clic en el anillo: pausa marcha (fade out 2s) e inicia eternamente (fade in 2s) y navega a Familias
+    document.getElementById('ringBtn').addEventListener('click', async ()=>{
       try{
         if(!marcha.paused){ await fadeAudio(marcha, marcha.volume||1, 0, 2000); marcha.pause(); }
       }catch(e){}
@@ -780,19 +774,22 @@
         if(ok){ await fadeAudio(eternamente,0,1,2000); }
         else { showMusicRetry(true); }
       }catch(e){}
-      // Chispa del anillo y navegar a Familias
-      ringBtn.classList.add('clicked'); setTimeout(()=>ringBtn.classList.remove('clicked'),900);
+      // Navegación a Familias
       const idx = order.indexOf('sec-familias');
       if(idx>=0) show(idx);
+      // Efecto chispa
+      const ringBtn=document.getElementById('ringBtn');
+      ringBtn.classList.add('clicked'); setTimeout(()=>ringBtn.classList.remove('clicked'),900);
     });
 
-    /* ============================ SONIDO FLIP (WebAudio) ============================ */
+    /* ============================ SONIDO FLIP (WebAudio, "libro real") ============================ */
     function playFlipSoundBook(){
       try{
         const ctx = window._audioCtx || new (window.AudioContext||window.webkitAudioContext)();
         window._audioCtx = ctx;
         const t = ctx.currentTime;
 
+        // Capa 1
         const o1 = ctx.createOscillator();
         const g1 = ctx.createGain();
         o1.type='sawtooth';
@@ -804,6 +801,7 @@
         o1.connect(g1).connect(ctx.destination);
         o1.start(t); o1.stop(t+0.16);
 
+        // Capa 2
         const o2 = ctx.createOscillator();
         const g2 = ctx.createGain();
         o2.type='triangle';
@@ -814,6 +812,7 @@
         g2.gain.exponentialRampToValueAtTime(0.0001, t+0.22);
         o2.connect(g2).connect(ctx.destination);
         o2.start(t+0.02); o2.stop(t+0.24);
+
       }catch(e){}
     }
 
@@ -930,59 +929,38 @@
       window.open(url,'_blank','noopener');
     });
 
-    /* ============================ CURSOR MÁGICO (3–4 corazones simultáneos) ============================ */
+    /* ============================ CURSOR MÁGICO (MEJORADO 3–4 corazones) ============================ */
     function createHeartAt(x,y){
       const heart=document.createElement('div');
       heart.className='magicHeart';
-
       const size=16 + Math.random()*14;
       heart.style.width = size+'px';
       heart.style.height= size+'px';
-
       const jitter=18;
       heart.style.left=(x + (Math.random()*jitter - jitter/2))+'px';
       heart.style.top =(y + (Math.random()*jitter - jitter/2))+'px';
-
       const r=Math.random();
-      if(r<0.25)      heart.style.background='radial-gradient(circle,#ffffff,#f0f0f0)';     // blanco
-      else if(r<0.5)  heart.style.background='radial-gradient(circle,#4dc3ff,#bfeeff)';     // azul
-      else if(r<0.75) heart.style.background='radial-gradient(circle,#c8c8c8,#ffffff)';     // plata
-      else            heart.style.background='radial-gradient(circle,#a7ffcf,#eafff0)';     // verde
-
+      if(r<0.25)      heart.style.background='radial-gradient(circle,#ffffff,#f0f0f0)';
+      else if(r<0.5)  heart.style.background='radial-gradient(circle,#4dc3ff,#bfeeff)';
+      else if(r<0.75) heart.style.background='radial-gradient(circle,#c8c8c8,#ffffff)';
+      else            heart.style.background='radial-gradient(circle,#a7ffcf,#eafff0)';
       heart.style.clipPath='polygon(50% 0%,61% 15%,75% 15%,84% 27%,84% 45%,75% 60%,50% 80%,25% 60%,16% 45%,16% 27%,25% 15%,39% 15%)';
-
       document.body.appendChild(heart);
-
       const life=1500 + Math.random()*400;
       setTimeout(()=>heart.remove(), life);
     }
-
     function spawnHearts(x,y,countMin=3,countMax=4){
       const n = Math.floor(countMin + Math.random()*(countMax-countMin+1));
-      for(let i=0;i<n;i++){
-        setTimeout(()=>createHeartAt(x,y), i*60);
-      }
+      for(let i=0;i<n;i++){ setTimeout(()=>createHeartAt(x,y), i*60); }
     }
+    document.addEventListener('mousemove',(e)=>{ if(Math.random()>0.6) return; spawnHearts(e.clientX,e.clientY,3,4); });
+    document.addEventListener('click',(e)=>{ spawnHearts(e.clientX,e.clientY,3,4); });
+    document.addEventListener('touchstart',(e)=>{ const t=e.touches[0]; if(!t) return; spawnHearts(t.clientX,t.clientY,3,4); },{passive:true});
+    document.addEventListener('touchmove',(e)=>{ const t=e.touches[0]; if(!t) return; if(Math.random()>0.6) return; spawnHearts(t.clientX,t.clientY,3,4); },{passive:true});
 
-    // Desktop: mousemove y click
-    document.addEventListener('mousemove',(e)=>{
-      if(Math.random()>0.6) return;
-      spawnHearts(e.clientX,e.clientY,3,4);
-    });
-    document.addEventListener('click',(e)=>{
-      spawnHearts(e.clientX,e.clientY,3,4);
-    });
-
-    // Móviles: touchstart y touchmove
-    document.addEventListener('touchstart',(e)=>{
-      const t=e.touches[0]; if(!t) return;
-      spawnHearts(t.clientX,t.clientY,3,4);
-    },{passive:true});
-    document.addEventListener('touchmove',(e)=>{
-      const t=e.touches[0]; if(!t) return;
-      if(Math.random()>0.6) return;
-      spawnHearts(t.clientX,t.clientY,3,4);
-    },{passive:true});
+    /* ============================ INICIO CONTADORES ============================ */
+    function initCounters(){ tickMini(); tickMain(); }
+    window.addEventListener('load', initCounters);
   </script>
 </body>
 </html>
