@@ -1,32 +1,37 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <!-- ================================================================
-       Boda de Abril & Pablo — Invitación FINAL INTEGRADA
-       - HTML, CSS y JS embebidos (archivo único)
-       - Optimizado para GitHub Pages
-       - Fondos, imágenes y audios desde la misma carpeta del repo
-       - Portada con Playfair (título) + Waltograph (sí, ¡acepto!)
-       - Anillo: pausa marcha_nupcial y activa eternamente con crossfade
-       - Contadores "flip" (portada mini + itinerario grande)
-       - Cursor mágico (3–4 corazones simultáneos, blanco/azul/plata/verde)
-       - Flipbook bidireccional + sonido WebAudio "flip"
-       - Lightbox con fade/slide intercalado
-       - RSVP y Buenos Deseos: abren en pestaña nueva (Google Apps Script)
-       - WhatsApp y botón "Agregar al calendario" (28/12/2025)
-       ================================================================= -->
+  <!-- =====================================================================
+       Boda de Abril & Pablo — Invitación FINAL (versión extensa)
+       ---------------------------------------------------------------------
+       - Archivo único (HTML + CSS + JS) para GitHub Pages
+       - Compatible con móvil / tablet / escritorio (vertical first)
+       - Inicio inmediato de "marcha_nupcial.mp3" al pulsar "Toca para comenzar 💍"
+       - Crossfade 2 s al cambiar a "eternamente.mp3" al hacer clic en el anillo
+       - Efecto tipo libro (flip 3D) bidireccional con sonido "flip" (WebAudio)
+       - Cursor mágico con corazones (blanco, azul, plata y verde) abundantes
+       - Contador mini (portada) + contador grande (Itinerario)
+       - Menú lateral flotante + flechas + swipe en móvil
+       - Lightbox con transición intercalada fade/slide
+       - Fondos florales por sección (carga desde misma carpeta del repo)
+       - Formularios RSVP y Buenos deseos en pestaña nueva (Google Apps Script)
+       - WhatsApp de Abril y Pablo + botón "Agregar al calendario"
+       - Fuentes: Playfair Display (romántica), Quicksand (texto), Waltograph (solo “Sí, ¡acepto!”)
+       ===================================================================== -->
 
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#ffffff" />
   <title>Boda de Abril & Pablo 💍</title>
 
-  <!-- Fuentes: Waltograph (solo “Sí, ¡acepto!”) + Playfair/Quicksand (románticas) -->
+  <!-- Fuentes -->
   <link href="https://fonts.cdnfonts.com/css/waltograph" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Quicksand:wght@300;400;600&display=swap" rel="stylesheet" />
 
   <style>
-    /* ========================= VARIABLES ========================= */
+    /* =====================================================================
+       VARIABLES DE TEMA
+       ===================================================================== */
     :root{
       --bg-cream:#F8F5F0;
       --deep:#2B2A2F;
@@ -53,15 +58,20 @@
       --music-grad: linear-gradient(135deg, #ffffff 0%, #9fd7ff 28%, #cfcfcf 64%, #a7ffcf 100%);
     }
 
-    /* ========================= BASE ========================= */
+    /* =====================================================================
+       RESETEO / BASE
+       ===================================================================== */
     *{box-sizing:border-box}
     html,body{height:100%;margin:0;background:var(--bg-cream);color:var(--deep);font-family:Quicksand,system-ui,Arial;-webkit-font-smoothing:antialiased}
     img{max-width:100%;height:auto;display:block}
     a{color:inherit;text-decoration:none}
     button{font-family:inherit;cursor:pointer;outline:none}
     .center{text-align:center}
+    .visually-hidden{position:absolute !important; clip:rect(1px,1px,1px,1px); clip-path:inset(50%); height:1px; width:1px; overflow:hidden; white-space:nowrap; padding:0; border:0; margin:-1px;}
 
-    /* ========================= LAYOUT SECCIONES (flipbook) ========================= */
+    /* =====================================================================
+       CONTENEDOR GENERAL / PÁGINAS (flipbook 3D)
+       ===================================================================== */
     .viewport{height:100vh;overflow:hidden;position:relative;background:var(--bg-cream)}
     .sections{height:100%;width:100%;position:relative;perspective:1200px;}
 
@@ -70,16 +80,22 @@
       display:flex; align-items:center; justify-content:center;
       padding:26px;
       background-size:cover; background-position:center; background-attachment:fixed; /* parallax simple */
-      opacity:0; transform:rotateY(90deg) translateZ(-200px); transform-origin:center;
+      opacity:0; transform:rotateY(90deg) translateZ(-220px); transform-origin:center;
       transition:transform .9s var(--ease), opacity .6s ease; backface-visibility:hidden;
       will-change:transform,opacity;
     }
+    .section::before{
+      /* sombreado tipo libro */
+      content:""; position:absolute; inset:0; pointer-events:none;
+      background: radial-gradient(1200px 600px at 50% 10%, rgba(0,0,0,.18), transparent 60%);
+      opacity:.05; mix-blend-mode:multiply;
+    }
     .section.active{opacity:1; transform:rotateY(0) translateZ(0)}
-    .section.prev  {opacity:0; transform:rotateY(-90deg) translateZ(-200px)}
-    .section.next  {opacity:0; transform:rotateY( 90deg) translateZ(-200px)}
+    .section.prev  {opacity:0; transform:rotateY(-90deg) translateZ(-220px)}
+    .section.next  {opacity:0; transform:rotateY( 90deg) translateZ(-220px)}
     .overlay{position:absolute; inset:0; background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,.6)); pointer-events:none}
 
-    /* ========================= FONDOS POR PÁGINA ========================= */
+    /* Fondos por página (cargan desde el repo) */
     .bg-portada {background-image:url('fondo_floral.jpg')}
     .bg-p1      {background-image:url('fondo_floral1.png')}
     .bg-p2      {background-image:url('fondo_floral2.jpg')}
@@ -91,7 +107,7 @@
     .bg-p8      {background-image:url('fondo_floral9.jpg')}
     .bg-p9      {background-image:url('fondo_floral8.png')}
 
-    /* ========================= CARD ========================= */
+    /* Tarjeta central de cada sección */
     .card{
       position:relative; z-index:2;
       max-width:980px; width:100%;
@@ -99,11 +115,13 @@
       border-radius:16px; padding:28px; box-shadow:var(--shadow);
     }
 
-    /* ========================= TIPOGRAFÍA ========================= */
+    /* =====================================================================
+       TIPOGRAFÍA / TITULARES
+       ===================================================================== */
     h1,h2,h3,h4{font-family:'Playfair Display',serif;margin:0 0 8px}
     .title-top{font-size:46px; letter-spacing:.6px; text-align:center}
     .title-acepto{
-      font-family:'Waltograph',cursive;
+      font-family:'Waltograph',cursive; /* SOLO ESTA línea usa Waltograph */
       font-size:42px; margin-top:6px; text-align:center;
       background:linear-gradient(135deg,#fff,#f7e8c5 45%,#e3c792 70%,#fff);
       -webkit-background-clip:text; background-clip:text; color:transparent;
@@ -122,16 +140,21 @@
     }
     .note{color:#555; font-size:14px}
 
-    /* ========================= BOTONES MÁGICOS ========================= */
+    /* =====================================================================
+       BOTONES MÁGICOS (navegación de portada y acciones)
+       ===================================================================== */
     .btns{margin-top:14px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap}
     .magicBtn{
       padding:10px 14px; border-radius:12px; border:0;
       background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff; font-weight:700;
-      box-shadow:0 10px 30px rgba(74,143,231,.18); transition:filter .2s, transform .2s, box-shadow .2s;
+      box-shadow:0 10px 30px rgba(74,143,231,.18);
+      transition:filter .2s, transform .2s, box-shadow .2s;
     }
     .magicBtn:hover{filter:brightness(1.05); transform:translateY(-1px); box-shadow:0 12px 36px rgba(74,143,231,.26)}
 
-    /* ========================= ANILLO ========================= */
+    /* =====================================================================
+       ANILLO (portada) — giro + chispa al hacer clic
+       ===================================================================== */
     .ring-button{background:transparent; border:0; padding:0; cursor:pointer; display:block; margin:12px auto; position:relative}
     .ring-svg{width:220px; height:220px; display:block}
     .ring-rotate{animation:ringSpin 14s linear infinite; transform-origin:110px 110px}
@@ -141,7 +164,9 @@
     @keyframes spark{0%{opacity:0; transform:translate(-50%,-50%) scale(.6)} 30%{opacity:1; transform:translate(-50%,-50%) scale(1.05)} 100%{opacity:0; transform:translate(-50%,-50%) scale(1.6)}}
     .ring-instruction{font-size:13px;color:#333;margin-top:6px;text-align:center}
 
-    /* ========================= CONTADOR MINI (PORTADA) ========================= */
+    /* =====================================================================
+       CONTADOR MINI (PORTADA)
+       ===================================================================== */
     .mini-flip{display:flex; gap:10px; justify-content:center; margin-top:12px; align-items:center}
     .flip-mini{width:72px; height:72px; perspective:800px; position:relative}
     .flip-mini .face{
@@ -156,7 +181,9 @@
     .flip-mini.animate .top{animation:flipTop .7s forwards}
     .flip-mini.animate .bottom{animation:flipBottom .7s forwards}
 
-    /* ========================= CONTADOR GRANDE ========================= */
+    /* =====================================================================
+       CONTADOR GRANDE (ITINERARIO)
+       ===================================================================== */
     .flip-grid{display:flex; gap:12px; justify-content:center; align-items:center; margin-top:18px; flex-wrap:wrap}
     .flip{width:100px; height:96px; perspective:900px; position:relative}
     .flip .panel{
@@ -172,13 +199,17 @@
     @keyframes flipTop{0%{transform:rotateX(0)}100%{transform:rotateX(-180deg)}}
     @keyframes flipBottom{0%{transform:rotateX(180deg)}100%{transform:rotateX(0)}}
 
-    /* ========================= FAMILIAS ========================= */
+    /* =====================================================================
+       FAMILIAS (PÁGINA 2)
+       ===================================================================== */
     .parents-grid{display:flex; gap:20px; align-items:stretch; justify-content:space-between; margin-top:16px}
     .parent-col{flex:1; min-width:220px; display:flex; align-items:center; justify-content:center}
     .parent-names{font-family:'Playfair Display',serif; font-size:22px; line-height:1.25; text-align:center}
     .couple-names{font-family:'Playfair Display',serif; font-size:28px; margin-top:18px; text-align:center}
 
-    /* ========================= FOTO + VERSO ========================= */
+    /* =====================================================================
+       FOTO + VERSÍCULO (PÁGINA 3)
+       ===================================================================== */
     .photo-romantic{
       width:420px; max-width:92%; border-radius:16px; box-shadow:0 16px 42px rgba(0,0,0,.16);
       object-fit:cover; transition:transform .45s var(--ease), opacity .45s var(--ease);
@@ -186,7 +217,9 @@
     .photo-romantic:hover{transform:scale(1.03)}
     .verse-big{font-family:'Playfair Display',serif; font-size:18px; margin-top:12px; text-align:center}
 
-    /* ========================= ITINERARIO ========================= */
+    /* =====================================================================
+       ITINERARIO (PÁGINA 4)
+       ===================================================================== */
     .itinerary{display:flex; flex-direction:column; gap:14px; margin-top:12px}
     .it-item{
       display:flex; gap:12px; align-items:flex-start; padding:14px; border-radius:12px;
@@ -200,7 +233,9 @@
     .palette{display:flex; gap:8px; margin-top:8px}
     .chip{width:22px; height:22px; border-radius:6px}
 
-    /* ========================= GALERÍA ========================= */
+    /* =====================================================================
+       GALERÍA NOVIOS (PÁGINA 5)
+       ===================================================================== */
     .gallery-grid{display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:12px}
     .gallery-grid img{
       width:260px; height:176px; object-fit:cover; border-radius:12px;
@@ -209,7 +244,9 @@
     .gallery-grid img:hover{transform:scale(1.03); opacity:.96}
     .gallery-controls{margin-top:12px; text-align:center}
 
-    /* ========================= COLABORATIVA / FINALES ========================= */
+    /* =====================================================================
+       COLABORATIVA / MOMENTOS (PÁGINAS 6 a 9)
+       ===================================================================== */
     .collab-photo{
       width:100%; max-width:860px; border-radius:14px; box-shadow:0 14px 40px rgba(0,0,0,.14);
       object-fit:cover; transition:transform .45s var(--ease);
@@ -224,7 +261,9 @@
     }
     .wa-svg{width:18px; height:18px; display:inline-block; vertical-align:middle; fill:#fff}
 
-    /* ========================= LIGHTBOX ========================= */
+    /* =====================================================================
+       LIGHTBOX (todas las imágenes)
+       ===================================================================== */
     .lb{position:fixed; inset:0; background:rgba(0,0,0,.85); display:none; align-items:center; justify-content:center; z-index:3000}
     .lb.open{display:flex}
     .lb img{max-width:94%; max-height:86%; border-radius:10px; box-shadow:0 20px 60px rgba(0,0,0,.6); transition:opacity .45s ease, transform .45s ease}
@@ -232,11 +271,15 @@
     .lb-nav{position:fixed; left:6px; right:6px; top:50%; display:flex; justify-content:space-between; pointer-events:none}
     .lb-nav button{pointer-events:all; background:rgba(255,255,255,.92); border-radius:999px; padding:10px 12px; border:0; cursor:pointer}
 
-    /* ========================= FLECHAS ========================= */
+    /* =====================================================================
+       FLECHAS DE NAVEGACIÓN
+       ===================================================================== */
     .nav{position:fixed; top:50%; left:0; right:0; display:flex; justify-content:space-between; pointer-events:none; z-index:990; transform:translateY(-50%)}
     .nav button{pointer-events:all; background:rgba(255,255,255,.95); border:0; padding:10px 12px; border-radius:999px; font-size:28px; cursor:pointer; margin:8px; box-shadow:0 10px 30px rgba(0,0,0,.12)}
 
-    /* ========================= MENÚ LATERAL ========================= */
+    /* =====================================================================
+       MENÚ LATERAL FLOTANTE (compacto en móviles)
+       ===================================================================== */
     .side-menu{
       position:fixed; right:18px; top:50%; transform:translateY(-50%);
       background:var(--menu-bg); border-radius:16px; box-shadow: var(--menu-shadow);
@@ -260,7 +303,9 @@
     .side-menu.compact{ display:none; }
     .side-menu.open{ display:block; }
 
-    /* ========================= OVERLAY INICIO (AUTOPLAY SEGURO) ========================= */
+    /* =====================================================================
+       OVERLAY INICIO (AUTOPLAY SEGURO)
+       ===================================================================== */
     #startOverlay{
       position:fixed; left:50%; top:50%; transform:translate(-50%,-50%);
       z-index:4000; background:rgba(255,255,255,.98);
@@ -296,7 +341,9 @@
       100%{ left:150% }
     }
 
-    /* ========================= CURSOR MÁGICO (mejorado) ========================= */
+    /* =====================================================================
+       CURSOR MÁGICO (corazones abundantes y notorios)
+       ===================================================================== */
     .magicHeart{
       position:fixed;
       pointer-events:none;
@@ -308,12 +355,14 @@
       filter:drop-shadow(0 4px 10px rgba(0,0,0,.15));
     }
     @keyframes heartFade{
-      0%  {opacity:.88; transform:translate(-50%,-50%) scale(1)}
-      70% {opacity:.55; transform:translate(-50%,-120%) scale(.82)}
-      100%{opacity:0;   transform:translate(-50%,-160%) scale(.68)}
+      0%  {opacity:.95; transform:translate(-50%,-50%) scale(1)}
+      70% {opacity:.60; transform:translate(-50%,-120%) scale(.85)}
+      100%{opacity:0;   transform:translate(-50%,-160%) scale(.72)}
     }
 
-    /* ========================= BOTÓN MUSICAL FLOTANTE ========================= */
+    /* =====================================================================
+       BOTÓN MUSICAL FLOTANTE (fallback si autoplay falla)
+       ===================================================================== */
     #musicRetry{
       position:fixed; right:16px; bottom:16px; z-index:3500;
       width:48px; height:48px; border-radius:50%;
@@ -332,13 +381,14 @@
       transform:translateY(4px); opacity:0; pointer-events:none; transition:opacity .25s, transform .25s;
     }
     #musicRetry:hover::after{ opacity:1; transform:translateY(0) }
-
     @keyframes pulseGlow{
       0%,100%{ box-shadow:0 10px 32px rgba(0,0,0,.18), 0 0 0 0 rgba(103,210,204,.22) }
       50%{ box-shadow:0 12px 40px rgba(0,0,0,.24), 0 0 0 12px rgba(103,210,204,.04) }
     }
 
-    /* ========================= RESPONSIVE ========================= */
+    /* =====================================================================
+       RESPONSIVE
+       ===================================================================== */
     @media (max-width:900px){
       .title-top{font-size:36px}
       .title-acepto{font-size:28px}
@@ -358,22 +408,25 @@
   </style>
 </head>
 <body>
-  <!-- ========================= AUDIOS ========================= -->
-  <!-- playsinline para iOS; preload + JS para respuesta inmediata -->
-  <audio id="marcha" src="marcha_nupcial.mp3" preload="auto" loop playsinline></audio>
-  <audio id="eternamente" src="eternamente.mp3" preload="auto" playsinline></audio>
+  <!-- =====================================================================
+       AUDIOS (cargan del mismo folder del repo)
+       ===================================================================== -->
+  <audio id="marcha" src="marcha_nupcial.mp3" preload="auto" loop></audio>
+  <audio id="eternamente" src="eternamente.mp3" preload="auto"></audio>
 
   <div class="viewport">
     <div class="sections" id="sections">
 
-      <!-- ========== PORTADA (fondo_floral.jpg) ========== -->
+      <!-- ==============================================================
+           PORTADA — Fondo: fondo_floral.jpg
+           ============================================================== -->
       <section id="sec-portada" class="section bg-portada active" aria-label="Portada" data-name="portada">
         <div class="overlay"></div>
         <div class="card center">
           <h1 class="title-top">Abril &amp; Pablo</h1>
           <div class="title-acepto">Sí, ¡acepto!</div>
 
-          <!-- Anillo -->
+          <!-- Anillo (click = crossfade a eternamente + pasar página) -->
           <button class="ring-button" id="ringBtn" aria-label="Anillo: abrir invitación">
             <div class="ring-spark"></div>
             <svg class="ring-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -403,18 +456,18 @@
           <div class="ring-instruction"><em>Da clic en el anillo para abrir</em></div>
 
           <!-- Contador mini (números flotando/flip) -->
-          <div class="mini-flip" id="miniFlip">
-            <div class="flip-mini" data-k="d"><div class="face top">00</div><div class="face bottom">00</div></div>
-            <div class="flip-mini" data-k="h"><div class="face top">00</div><div class="face bottom">00</div></div>
-            <div class="flip-mini" data-k="m"><div class="face top">00</div><div class="face bottom">00</div></div>
-            <div class="flip-mini" data-k="s"><div class="face top">00</div><div class="face bottom">00</div></div>
+          <div class="mini-flip" id="miniFlip" aria-label="Cuenta regresiva">
+            <div class="flip-mini" data-k="d" aria-label="Días"><div class="face top">00</div><div class="face bottom">00</div></div>
+            <div class="flip-mini" data-k="h" aria-label="Horas"><div class="face top">00</div><div class="face bottom">00</div></div>
+            <div class="flip-mini" data-k="m" aria-label="Minutos"><div class="face top">00</div><div class="face bottom">00</div></div>
+            <div class="flip-mini" data-k="s" aria-label="Segundos"><div class="face top">00</div><div class="face bottom">00</div></div>
           </div>
 
           <!-- Versículo -->
           <p class="verse">"Quien halla esposa halla el bien" — <strong>Proverbios 18:22</strong></p>
 
-          <!-- Botones mágicos -->
-          <div class="btns">
+          <!-- Botones mágicos (scroll a secciones) -->
+          <div class="btns" role="navigation" aria-label="Accesos rápidos">
             <button class="magicBtn" data-target="sec-familias">Nuestras familias</button>
             <button class="magicBtn" data-target="sec-itinerario">Itinerario</button>
             <button class="magicBtn" data-target="sec-galeria">Galería</button>
@@ -423,7 +476,9 @@
         </div>
       </section>
 
-      <!-- ========== P1 — FAMILIAS (fondo_floral1.png) ========== -->
+      <!-- ==============================================================
+           PÁGINA 2 — Familias — Fondo: fondo_floral1.png
+           ============================================================== -->
       <section id="sec-familias" class="section bg-p1" aria-label="Familias" data-name="familias">
         <div class="overlay"></div>
         <div class="card center">
@@ -451,7 +506,9 @@
         </div>
       </section>
 
-      <!-- ========== P2 — FOTO + VERSÍCULO (Mateo 19:6) (fondo_floral2.jpg) ========== -->
+      <!-- ==============================================================
+           PÁGINA 3 — Foto + Verso Mateo 19:6 — Fondo: fondo_floral2.jpg
+           ============================================================== -->
       <section id="sec-foto-verse" class="section bg-p2" aria-label="Foto y versículo" data-name="foto-verse">
         <div class="overlay"></div>
         <div class="card center">
@@ -460,7 +517,9 @@
         </div>
       </section>
 
-      <!-- ========== P3 — ITINERARIO + CONTADOR GRANDE (fondo_floral3.jpg) ========== -->
+      <!-- ==============================================================
+           PÁGINA 4 — Itinerario + Contador grande — Fondo: fondo_floral3.jpg
+           ============================================================== -->
       <section id="sec-itinerario" class="section bg-p3" aria-label="Itinerario" data-name="itinerario">
         <div class="overlay"></div>
         <div class="card">
@@ -496,7 +555,7 @@
               <div class="it-info">
                 <strong>Código de vestimenta</strong>
                 <div>Formal — Tonos recomendados: celestes, beige, verde, gris, rosa</div>
-                <div class="palette">
+                <div class="palette" aria-label="Paleta sugerida">
                   <div class="chip" style="background:var(--chip-celeste)" title="Celeste"></div>
                   <div class="chip" style="background:var(--chip-beige)"  title="Beige"></div>
                   <div class="chip" style="background:var(--chip-verde)"   title="Verde"></div>
@@ -511,7 +570,7 @@
           <!-- Contador grande -->
           <div style="margin-top:18px;text-align:center">
             <div style="font-family:'Playfair Display',serif;font-size:18px;color:#333">Faltan para nuestro gran día</div>
-            <div class="flip-grid" id="mainFlip">
+            <div class="flip-grid" id="mainFlip" aria-label="Cuenta regresiva grande">
               <div class="flip" data-key="days"><div class="panel top">00</div><div class="panel bottom">00</div><div class="label">Días</div></div>
               <div class="flip" data-key="hours"><div class="panel top">00</div><div class="panel bottom">00</div><div class="label">Horas</div></div>
               <div class="flip" data-key="mins"><div class="panel top">00</div><div class="panel bottom">00</div><div class="label">Minutos</div></div>
@@ -522,7 +581,9 @@
         </div>
       </section>
 
-      <!-- ========== P4 — GALERÍA NOVIOS (fondo_floral4.png) ========== -->
+      <!-- ==============================================================
+           PÁGINA 5 — Galería Novios — Fondo: fondo_floral4.png
+           ============================================================== -->
       <section id="sec-galeria" class="section bg-p4" aria-label="Galería novios" data-name="galeria">
         <div class="overlay"></div>
         <div class="card">
@@ -543,7 +604,9 @@
         </div>
       </section>
 
-      <!-- ========== P5 — RSVP + DESEOS (fondo_floral5.jpg) ========== -->
+      <!-- ==============================================================
+           PÁGINA 6 — Confirmación + Buenos deseos — Fondo: fondo_floral5.jpg
+           ============================================================== -->
       <section id="sec-rsvp" class="section bg-p5" aria-label="RSVP y Buenos Deseos" data-name="rsvp">
         <div class="overlay"></div>
         <div class="card">
@@ -561,7 +624,9 @@
         </div>
       </section>
 
-      <!-- ========== P6 — COLABORATIVA + MOMENTO9 (fondo_floral6.jpg) ========== -->
+      <!-- ==============================================================
+           PÁGINA 7 — Galería colaborativa + Momento9 — Fondo: fondo_floral6.jpg
+           ============================================================== -->
       <section id="sec-colaborativa" class="section bg-p6" aria-label="Galería colaborativa" data-name="colaborativa">
         <div class="overlay"></div>
         <div class="card center">
@@ -575,7 +640,9 @@
         </div>
       </section>
 
-      <!-- ========== P7 — MOMENTO8 + FRASE (fondo_floral7.jpg) ========== -->
+      <!-- ==============================================================
+           PÁGINA 8 — Momento8 + Frase — Fondo: fondo_floral7.jpg
+           ============================================================== -->
       <section id="sec-momento8" class="section bg-p7" aria-label="Momento 8" data-name="momento8">
         <div class="overlay"></div>
         <div class="card center">
@@ -586,7 +653,9 @@
         </div>
       </section>
 
-      <!-- ========== P8 — FINAL (WhatsApp + Calendario) (fondo_floral9.jpg) ========== -->
+      <!-- ==============================================================
+           PÁGINA 9 — Final (WhatsApp + Calendario) — Fondo: fondo_floral9.jpg
+           ============================================================== -->
       <section id="sec-final" class="section bg-p8" aria-label="Final" data-name="final">
         <div class="overlay"></div>
         <div class="card center">
@@ -594,7 +663,7 @@
           <div class="final-title">Con amor eterno</div>
           <div style="font-family:'Playfair Display',serif;font-size:22px;margin-top:6px">Abril &amp; Pablo</div>
           <div class="final-sub">Gracias por ser parte de nuestro día especial</div>
-          <div class="wa-row">
+          <div class="wa-row" role="group" aria-label="Contactos WhatsApp">
             <a class="wa-btn" href="https://wa.me/5217774914500" target="_blank" rel="noopener" aria-label="WhatsApp Abril">
               <svg class="wa-svg" viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M20.52 3.48A11.85 11.85 0 0 0 12 0C5.37 0 .01 5.37.01 12.01 0 14.22.52 16.29 1.48 18.08L0 24l6.15-1.6A11.9 11.9 0 0 0 12 24c6.63 0 12-5.37 12-11.99 0-3.2-1.25-6.17-3.48-8.53zM12 21.6c-1.78 0-3.45-.46-4.94-1.31l-.35-.2-3.66.95.98-3.56-.23-.36A8.3 8.3 0 0 1 3.6 12.01C3.6 7.05 7.04 3.6 12 3.6s8.4 3.45 8.4 8.41S16.96 21.6 12 21.6z" fill="#fff"/>
@@ -614,7 +683,9 @@
         </div>
       </section>
 
-      <!-- ========== P9 — FONDO DECORATIVO (fondo_floral8.png) ========== -->
+      <!-- ==============================================================
+           PÁGINA 10 — Fondo decorativo final — Fondo: fondo_floral8.png
+           ============================================================== -->
       <section id="sec-fondo-final" class="section bg-p9" aria-label="Fondo final" data-name="fondo-final">
         <div class="overlay"></div>
         <div class="card center">
@@ -625,7 +696,7 @@
     </div>
 
     <!-- Flechas (ocultas en portada) -->
-    <div class="nav" id="navArrows">
+    <div class="nav" id="navArrows" aria-hidden="true">
       <div><button id="prevBtn" aria-label="Anterior">‹</button></div>
       <div><button id="nextBtn" aria-label="Siguiente">›</button></div>
     </div>
@@ -645,7 +716,7 @@
     <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">☰</button>
 
     <!-- Lightbox -->
-    <div class="lb" id="lightbox" aria-hidden="true" role="dialog">
+    <div class="lb" id="lightbox" aria-hidden="true" role="dialog" aria-label="Visor de imágenes">
       <button class="close-lb" id="lbClose" aria-label="Cerrar">✕</button>
       <div class="lb-nav">
         <button id="lbPrev" aria-label="Anterior">‹</button>
@@ -655,7 +726,7 @@
     </div>
 
     <!-- Overlay inicio (autoplay seguro) -->
-    <div id="startOverlay" role="dialog" aria-modal="true">
+    <div id="startOverlay" role="dialog" aria-modal="true" aria-label="Iniciar invitación">
       <h3 style="font-family:'Playfair Display',serif;margin-bottom:6px">Toca para comenzar 💍</h3>
       <p style="color:#666;margin-bottom:12px">Pulsa para iniciar la música y explorar la invitación.</p>
       <div style="text-align:center"><button id="startBtn" class="start-btn">Toca para comenzar</button></div>
@@ -667,7 +738,9 @@
   </div>
 
   <script>
-    /* ============================ ORDEN DE SECCIONES ============================ */
+    /* =====================================================================
+       ORDEN DE SECCIONES / ESTADO
+       ===================================================================== */
     const order = [
       'sec-portada','sec-familias','sec-foto-verse','sec-itinerario',
       'sec-galeria','sec-rsvp','sec-colaborativa','sec-momento8',
@@ -691,6 +764,7 @@
       current = i;
       const hide = (order[i] === 'sec-portada');
       document.querySelectorAll('#navArrows button').forEach(b=>b.style.display = hide ? 'none':'block');
+      document.getElementById('navArrows').setAttribute('aria-hidden', hide ? 'true' : 'false');
       markActiveInMenu(order[i]);
       if(order[i] === 'sec-itinerario'){
         document.querySelectorAll('#sec-itinerario .it-item').forEach((it, idx) => { setTimeout(()=>it.classList.add('show'), idx*120); });
@@ -699,17 +773,16 @@
     }
     show(0,false);
 
-    /* ============================ FLECHAS & TECLAS ============================ */
+    /* Flechas y teclado */
     document.getElementById('prevBtn').addEventListener('click',()=>show(current-1));
     document.getElementById('nextBtn').addEventListener('click',()=>show(current+1));
-
     window.addEventListener('keydown', (e) => {
       if(e.key==='ArrowRight') show(current+1);
       if(e.key==='ArrowLeft')  show(current-1);
       if(e.key==='Escape' && lb.classList.contains('open')) closeLb();
     });
 
-    /* ============================ SWIPE (móvil) ============================ */
+    /* Swipe móvil */
     let touchStartX=0, touchEndX=0;
     document.addEventListener('touchstart', (e)=>{ if(e.touches[0]) touchStartX=e.touches[0].clientX; }, {passive:true});
     document.addEventListener('touchend',   (e)=>{
@@ -721,7 +794,7 @@
       }
     });
 
-    /* ============================ BOTONES MÁGICOS ============================ */
+    /* Botones mágicos (portada) */
     document.querySelectorAll('.magicBtn[data-target]').forEach(btn=>{
       btn.addEventListener('click',()=>{
         const tgt=btn.getAttribute('data-target');
@@ -730,7 +803,7 @@
       });
     });
 
-    /* ============================ MENÚ LATERAL ============================ */
+    /* Menú lateral */
     const sideMenu=document.getElementById('sideMenu');
     const menuToggle=document.getElementById('menuToggle');
     sideMenu.querySelectorAll('a[data-goto]').forEach(a=>{
@@ -745,7 +818,11 @@
     function closeMenuOnMobile(){ sideMenu.classList.remove('open'); }
     menuToggle.addEventListener('click',()=> sideMenu.classList.toggle('open'));
 
-    /* ============================ AUDIO / AUTOPLAY SEGURO ============================ */
+    /* =====================================================================
+       AUDIO / AUTOPLAY CONTROLADO
+       - Inicio inmediato de "marcha_nupcial.mp3" al pulsar "Toca para comenzar"
+       - Crossfade (2 s) a "eternamente.mp3" al hacer clic en el anillo
+       ===================================================================== */
     const marcha=document.getElementById('marcha');
     const eternamente=document.getElementById('eternamente');
     const startOverlay=document.getElementById('startOverlay');
@@ -754,11 +831,11 @@
     const ringBtn=document.getElementById('ringBtn');
     const musicRetry=document.getElementById('musicRetry');
 
-    // Precarga explícita de audio (para respuesta instantánea)
+    /* Precarga explícita */
     try { marcha.load(); } catch(e) {}
     try { eternamente.load(); } catch(e) {}
 
-    // Brillo del botón cuando el audio está listo
+    /* Brillo del botón cuando el audio está listo */
     function setReadyGlow(){ startBtn.classList.add('ready-glow'); setTimeout(()=>startBtn.classList.remove('ready-glow'),1500); }
     function whenAudioReadyShowGlow(){
       if (marcha.readyState >= 2) setReadyGlow();
@@ -769,9 +846,9 @@
     }
     whenAudioReadyShowGlow();
 
-    // Fader (crossfade)
-    async function fadeAudio(audio, from, to, duration=700){
-      const steps=24, stepTime=duration/steps;
+    /* Fade genérico (usado para crossfade de 2 s) */
+    async function fadeAudio(audio, from, to, duration=2000){
+      const steps=40, stepTime=duration/steps;
       audio.volume=Math.max(0,Math.min(1,from));
       return new Promise(res=>{
         let step=0;
@@ -795,7 +872,6 @@
     }
 
     async function unlockByInteraction(){
-      // Desbloquear contexto de audio para iOS/Android
       try{
         if(!window._audioCtx){
           window._audioCtx = new (window.AudioContext||window.webkitAudioContext)();
@@ -808,7 +884,7 @@
       musicRetry.setAttribute('aria-hidden', show ? 'false' : 'true');
     }
 
-    // Inicia invitación: reproduce marcha al volumen normal inmediatamente
+    /* Inicia invitación: reproduce marcha INMEDIATO (sin fade) */
     async function iniciarInvitacion(){
       await unlockByInteraction();
       try{
@@ -828,7 +904,7 @@
       }
     }
 
-    // Soportar pointerdown (mejor para móvil) + click como fallback
+    /* Soportar pointerdown (mejor en móviles) + click como fallback */
     const startHandler = async (e) => {
       e.preventDefault();
       startBtn.disabled = true;
@@ -838,6 +914,7 @@
     startBtn.addEventListener('pointerdown', startHandler);
     startBtn.addEventListener('click', startHandler);
 
+    /* Botón musical flotante (si el navegador bloqueó el audio) */
     musicRetry.addEventListener('click', async ()=>{
       await unlockByInteraction();
       marcha.volume=1;
@@ -850,41 +927,43 @@
       }
     });
 
-    // Clic en el anillo: pausa marcha (fade out) e inicia eternamente (fade in), y navega a Familias
+    /* Clic en el anillo: crossfade 2 s de marcha -> eternamente + navegar */
     ringBtn.addEventListener('click', async ()=>{
-      // Si aún está el overlay, lo iniciamos primero
       if(!startOverlay.classList.contains('hide')){
         await iniciarInvitacion();
       }
       try{
-        if(!marcha.paused){ await fadeAudio(marcha, marcha.volume||1, 0, 550); marcha.pause(); }
+        if(!marcha.paused){ await fadeAudio(marcha, marcha.volume||1, 0, 2000); marcha.pause(); }
       }catch(e){}
       try{
         eternamente.currentTime=0; eternamente.volume=0;
         const ok = await tryPlay(eternamente);
-        if(ok){ await fadeAudio(eternamente,0,1,800); }
+        if(ok){ await fadeAudio(eternamente,0,1,2000); }
         else { showMusicRetry(true); }
       }catch(e){}
-      // Efecto de chispa y navegación
+
+      /* efecto chispa y pasar a Familias */
       ringBtn.classList.add('clicked'); setTimeout(()=>ringBtn.classList.remove('clicked'),900);
       const idx = order.indexOf('sec-familias');
       if(idx>=0) show(idx);
     });
 
-    // Mostrar overlay e iniciar contadores al cargar
+    /* Mostrar overlay y arrancar contadores al cargar */
     window.addEventListener('load', ()=> {
       startOverlay.classList.remove('hide');
       tickMini(); tickMain();
     });
 
-    /* ============================ SONIDO FLIP (WebAudio) ============================ */
+    /* =====================================================================
+       SONIDO FLIP (efecto libro)
+       ===================================================================== */
     function playFlipSoundBook(){
       try{
         const ctx = window._audioCtx || new (window.AudioContext||window.webkitAudioContext)();
         window._audioCtx = ctx;
         const t = ctx.currentTime;
 
-        // Capa 1: golpe grave corto
+        // Capa grave corta
         const o1 = ctx.createOscillator();
         const g1 = ctx.createGain();
         o1.type='sawtooth';
@@ -896,7 +975,7 @@
         o1.connect(g1).connect(ctx.destination);
         o1.start(t); o1.stop(t+0.16);
 
-        // Capa 2: chasquido medio breve
+        // Chasquido medio
         const o2 = ctx.createOscillator();
         const g2 = ctx.createGain();
         o2.type='triangle';
@@ -911,7 +990,9 @@
       }catch(e){}
     }
 
-    /* ============================ CONTADORES ============================ */
+    /* =====================================================================
+       CONTADORES (mini portada / grande itinerario)
+       ===================================================================== */
     const target=new Date('2025-12-28T14:00:00'); // 28 dic 2025 2:00 p.m.
     const pad=n=>String(n).padStart(2,'0');
 
@@ -953,7 +1034,9 @@
     }
     setInterval(tickMain,1000);
 
-    /* ============================ LIGHTBOX ============================ */
+    /* =====================================================================
+       LIGHTBOX
+       ===================================================================== */
     const lb=document.getElementById('lightbox');
     const lbImg=document.getElementById('lbImg');
     const lbClose=document.getElementById('lbClose');
@@ -1001,7 +1084,9 @@
     lbNext.addEventListener('click', ()=>lbShow(1));
     lb.addEventListener('click', (e)=>{ if(e.target===lb) closeLb(); });
 
-    /* ============================ GALERÍA AUTO-FOCUS ============================ */
+    /* =====================================================================
+       GALERÍA: auto-focus suave
+       ===================================================================== */
     const galleryImgs=[...document.querySelectorAll('#galleryGrid img')];
     let gIdx=0;
     function paintGallery(){ galleryImgs.forEach((im,i)=>im.style.opacity=(i===gIdx?1:.46)); }
@@ -1013,7 +1098,9 @@
     document.getElementById('galleryGrid').addEventListener('mouseenter',()=>{ clearInterval(gAuto); gAuto=null; });
     document.getElementById('galleryGrid').addEventListener('mouseleave',()=>{ if(!gAuto) gAuto=setInterval(gNext,4200); });
 
-    /* ============================ CALENDARIO ============================ */
+    /* =====================================================================
+       CALENDARIO (Google Calendar, 28/12/2025)
+       ===================================================================== */
     document.getElementById('addCalendar').addEventListener('click',(e)=>{
       e.preventDefault();
       const start='20251228T140000', end='20251228T230000';
@@ -1024,55 +1111,46 @@
       window.open(url,'_blank','noopener');
     });
 
-    /* ============================ CURSOR MÁGICO (3–4 corazones) ============================ */
+    /* =====================================================================
+       CURSOR MÁGICO (3–4 corazones simultáneos, más notorios)
+       ===================================================================== */
     function createHeartAt(x,y){
       const heart=document.createElement('div');
       heart.className='magicHeart';
 
-      // tamaño entre 16 y 30 px
       const size=16 + Math.random()*14;
       heart.style.width = size+'px';
       heart.style.height= size+'px';
 
-      // posición con ligera variación
       const jitter=18;
       heart.style.left=(x + (Math.random()*jitter - jitter/2))+'px';
       heart.style.top =(y + (Math.random()*jitter - jitter/2))+'px';
 
-      // color aleatorio: blanco, azul, plata, verde
       const r=Math.random();
-      if(r<0.25)      heart.style.background='radial-gradient(circle,#ffffff,#f0f0f0)';
-      else if(r<0.5)  heart.style.background='radial-gradient(circle,#4dc3ff,#bfeeff)';
-      else if(r<0.75) heart.style.background='radial-gradient(circle,#c8c8c8,#ffffff)';
-      else            heart.style.background='radial-gradient(circle,#a7ffcf,#eafff0)';
+      if(r<0.25)      heart.style.background='radial-gradient(circle,#ffffff,#f0f0f0)';     // blanco
+      else if(r<0.5)  heart.style.background='radial-gradient(circle,#4dc3ff,#bfeeff)';     // azul
+      else if(r<0.75) heart.style.background='radial-gradient(circle,#c8c8c8,#ffffff)';     // plata
+      else            heart.style.background='radial-gradient(circle,#a7ffcf,#eafff0)';     // verde
 
-      // forma de corazón
       heart.style.clipPath='polygon(50% 0%,61% 15%,75% 15%,84% 27%,84% 45%,75% 60%,50% 80%,25% 60%,16% 45%,16% 27%,25% 15%,39% 15%)';
 
       document.body.appendChild(heart);
-
-      // eliminación tras 1.5s - 1.9s
       const life=1500 + Math.random()*400;
       setTimeout(()=>heart.remove(), life);
     }
-
     function spawnHearts(x,y,countMin=3,countMax=4){
       const n = Math.floor(countMin + Math.random()*(countMax-countMin+1));
       for(let i=0;i<n;i++){
-        setTimeout(()=>createHeartAt(x,y), i*60); // escalonados
+        setTimeout(()=>createHeartAt(x,y), i*60);
       }
     }
-
-    // Desktop: mousemove y click
     document.addEventListener('mousemove',(e)=>{
-      if(Math.random()>0.6) return; // limitar tasa para rendimiento
+      if(Math.random()>0.6) return;
       spawnHearts(e.clientX,e.clientY,3,4);
     });
     document.addEventListener('click',(e)=>{
       spawnHearts(e.clientX,e.clientY,3,4);
     });
-
-    // Móviles: touchstart y touchmove
     document.addEventListener('touchstart',(e)=>{
       const t=e.touches[0]; if(!t) return;
       spawnHearts(t.clientX,t.clientY,3,4);
@@ -1083,7 +1161,9 @@
       spawnHearts(t.clientX,t.clientY,3,4);
     },{passive:true});
 
-    /* ============================ INICIO CONTADORES ============================ */
+    /* =====================================================================
+       ARRANQUE DE CONTADORES
+       ===================================================================== */
     tickMini(); tickMain();
   </script>
 </body>
