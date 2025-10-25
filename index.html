@@ -7,6 +7,7 @@
        - Optimizado para GitHub Pages, móviles y escritorio
        - Fondos, imágenes y audios cargan desde la misma carpeta
        - Efecto libro bidireccional + sonido flip (WebAudio)
+       - Cursor mágico (3–4 corazones simultáneos) más notorio
        ================================================================= -->
 
   <meta charset="utf-8" />
@@ -272,9 +273,22 @@
     }
     .start-btn:hover{ transform:translateY(-1px); filter:brightness(1.02); box-shadow:0 16px 42px rgba(227,199,146,.36) }
 
-    /* ========================= CURSOR MÁGICO ========================= */
-    .magicHeart{position:fixed; pointer-events:none; z-index:99999; width:22px; height:22px; opacity:0; transform:translate(-50%,-50%) scale(1); animation:heartFade 1000ms forwards}
-    @keyframes heartFade{0%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-120%) scale(.6)}}
+    /* ========================= CURSOR MÁGICO (mejorado) ========================= */
+    .magicHeart{
+      position:fixed;
+      pointer-events:none;
+      z-index:99999;
+      width:22px; height:22px;
+      opacity:0;
+      transform:translate(-50%,-50%) scale(1);
+      animation:heartFade 1500ms ease-out forwards; /* ↑ 1.5s */
+      filter:drop-shadow(0 4px 10px rgba(0,0,0,.15));
+    }
+    @keyframes heartFade{
+      0%  {opacity:.88; transform:translate(-50%,-50%) scale(1)}
+      70% {opacity:.55; transform:translate(-50%,-120%) scale(.82)}
+      100%{opacity:0;   transform:translate(-50%,-160%) scale(.68)}
+    }
 
     /* ========================= BOTÓN MUSICAL FLOTANTE ========================= */
     #musicRetry{
@@ -941,23 +955,69 @@
       window.open(url,'_blank','noopener');
     });
 
-    /* ============================ CORAZONES (DESKTOP & MÓVIL) ============================ */
-    function spawnHeart(x,y){
+    /* ============================ CURSOR MÁGICO (MEJORADO 3–4 corazones) ============================ */
+    // Genera 3–4 corazones por interacción, con colores azul, blanco, plata, verde
+    // Funciona en mousemove, click, touchstart, touchmove
+    function createHeartAt(x,y){
       const heart=document.createElement('div');
       heart.className='magicHeart';
-      const size=12+Math.random()*18; heart.style.width=heart.style.height=size+'px';
-      heart.style.left=(x + (Math.random()*24-12))+'px'; heart.style.top=(y + (Math.random()*24-12))+'px';
+
+      // tamaño entre 16 y 30 px
+      const size=16 + Math.random()*14;
+      heart.style.width = size+'px';
+      heart.style.height= size+'px';
+
+      // posición con ligera variación
+      const jitter=18;
+      heart.style.left=(x + (Math.random()*jitter - jitter/2))+'px';
+      heart.style.top =(y + (Math.random()*jitter - jitter/2))+'px';
+
+      // color aleatorio: blanco, azul, plata, verde
       const r=Math.random();
-      if(r<0.25) heart.style.background='radial-gradient(circle,#ffffff,#f0f0f0)';     /* blanco */
-      else if(r<0.5) heart.style.background='radial-gradient(circle,#4dc3ff,#bfeeff)'; /* azul */
-      else if(r<0.75) heart.style.background='radial-gradient(circle,#c8c8c8,#ffffff)';/* plata */
-      else heart.style.background='radial-gradient(circle,#a7ffcf,#eafff0)';            /* verde */
+      if(r<0.25)      heart.style.background='radial-gradient(circle,#ffffff,#f0f0f0)';     // blanco
+      else if(r<0.5)  heart.style.background='radial-gradient(circle,#4dc3ff,#bfeeff)';     // azul
+      else if(r<0.75) heart.style.background='radial-gradient(circle,#c8c8c8,#ffffff)';     // plata
+      else            heart.style.background='radial-gradient(circle,#a7ffcf,#eafff0)';     // verde
+
+      // forma de corazón
       heart.style.clipPath='polygon(50% 0%,61% 15%,75% 15%,84% 27%,84% 45%,75% 60%,50% 80%,25% 60%,16% 45%,16% 27%,25% 15%,39% 15%)';
+
       document.body.appendChild(heart);
-      setTimeout(()=>heart.remove(), 900+Math.random()*600);
+
+      // eliminación tras 1.5s - 1.9s
+      const life=1500 + Math.random()*400;
+      setTimeout(()=>heart.remove(), life);
     }
-    document.addEventListener('mousemove',(e)=>{ if(Math.random()>0.6) return; spawnHeart(e.clientX,e.clientY); });
-    document.addEventListener('touchmove',(e)=>{ const t=e.touches[0]; if(!t) return; if(Math.random()>0.6) return; spawnHeart(t.clientX,t.clientY); },{passive:true});
+
+    function spawnHearts(x,y,countMin=3,countMax=4){
+      const n = Math.floor(countMin + Math.random()*(countMax-countMin+1));
+      for(let i=0;i<n;i++){
+        // pequeño retraso para que salgan escalonados
+        setTimeout(()=>createHeartAt(x,y), i*60);
+      }
+    }
+
+    // Desktop: mousemove y click
+    document.addEventListener('mousemove',(e)=>{
+      // limitar tasa: ~60% probabilidad para no sobrecargar
+      if(Math.random()>0.6) return;
+      spawnHearts(e.clientX,e.clientY,3,4);
+    });
+    document.addEventListener('click',(e)=>{
+      spawnHearts(e.clientX,e.clientY,3,4);
+    });
+
+    // Móviles: touchstart y touchmove
+    document.addEventListener('touchstart',(e)=>{
+      const t=e.touches[0]; if(!t) return;
+      spawnHearts(t.clientX,t.clientY,3,4);
+    },{passive:true});
+    document.addEventListener('touchmove',(e)=>{
+      const t=e.touches[0]; if(!t) return;
+      // probabilidad para rendimiento
+      if(Math.random()>0.6) return;
+      spawnHearts(t.clientX,t.clientY,3,4);
+    },{passive:true});
 
     /* ============================ INICIO CONTADORES ============================ */
     // Asegura que el contador no quede en cero en carga
@@ -965,5 +1025,4 @@
   </script>
 </body>
 </html>
- 
  
